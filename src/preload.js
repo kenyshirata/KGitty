@@ -1,0 +1,20 @@
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('api', {
+  git: (cwd, args, input) => ipcRenderer.invoke('git', cwd, args, input),
+  gitBlob: (repo, spec) => ipcRenderer.invoke('git-blob', repo, spec),
+  readFileB64: (repo, rel) => ipcRenderer.invoke('read-file-b64', repo, rel),
+  scanRepos: (root, depth) => ipcRenderer.invoke('scan-repos', root, depth),
+  pickFolder: () => ipcRenderer.invoke('pick-folder'),
+  initialRepo: () => ipcRenderer.invoke('initial-repo'),
+  readFile: (repo, rel) => ipcRenderer.invoke('read-file', repo, rel),
+  writeFile: (repo, rel, text) => ipcRenderer.invoke('write-file', repo, rel, text),
+  gitPathExists: (repo, name) => ipcRenderer.invoke('git-path-exists', repo, name),
+  rebaseInteractive: (repo, base, items) => ipcRenderer.invoke('rebase-interactive', repo, base, items),
+  setThemeSource: (pref) => ipcRenderer.invoke('set-theme-source', pref),
+  reveal: (p) => ipcRenderer.invoke('reveal', p),
+  onAskpass: (cb) => ipcRenderer.on('askpass', (_e, req) => cb(req)),
+  onAskpassCancel: (cb) => ipcRenderer.on('askpass-cancel', (_e, id) => cb(id)),
+  answerAskpass: (id, answer) => ipcRenderer.invoke('askpass-answer', id, answer),
+  setAuthOpts: (o) => ipcRenderer.invoke('set-auth-opts', o),
+});

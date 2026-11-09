@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://gravatar.com https://*.gravatar.com">
+  <title>KGitty</title>
+  <link id="hl-dark" rel="stylesheet" href="vendor/github-dark.min.css">
+  <link id="hl-light" rel="stylesheet" href="vendor/github.min.css" disabled>
+  <link rel="stylesheet" href="styles.css">
+  <script src="theme.js"></script>
+</head>
+<body>
+  <div id="welcome" class="welcome">
+    <h1>KGitty</h1>
+    <p>A simple Git client</p>
+    <div class="welcome-btns"><button id="btn-open" class="primary">Open repository…</button><button id="btn-clone">Clone repository…</button><button id="btn-repos">Repository manager…</button><button id="btn-theme" title="Theme">◐ Theme</button></div>
+    <div id="recent"></div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <div id="tabs" class="tabs"></div>
+    <header class="toolbar">
+      <div class="tb-group">
+        <button id="tb-repos" title="Repository manager (Ctrl+Shift+M)">🗂 Repos</button>
+        <button id="tb-open" title="Open repository">📂 Open</button>
+        <button id="tb-clone" title="Clone repository">⎘ Clone</button>
+      </div>
+      <div class="tb-group">
+        <button id="tb-fetch">⟳ Fetch</button>
+        <button id="tb-pull">⇣ Pull</button>
+        <button id="tb-push">⇡ Push</button>
+      </div>
+      <div class="tb-group">
+        <button id="tb-branch">⑂ Branch</button>
+        <button id="tb-stash">▤ Stash</button>
+        <button id="tb-undo" title="Undo" disabled>↶ Undo</button>
+        <button id="tb-redo" title="Redo" disabled>↷</button>
+        <button id="tb-reflog" title="Reflog">⟲ Reflog</button>
+      </div>
+      <div class="tb-spacer"></div>
+      <div id="repo-title" class="repo-title"></div>
+      <div class="tb-spacer"></div>
+      <button id="tb-prefs" title="Preferences (Ctrl+,)">⚙</button>
+      <button id="tb-theme" title="Theme">◐</button>
+      <button id="tb-keys" title="Keyboard shortcuts (F1)">⌨</button>
+      <input id="search" type="search" placeholder="Filter commits…">
+    </header>
+
+    <div class="body">
+      <aside id="sidebar" class="sidebar"></aside>
+      <main class="main" id="main">
+        <section id="commit-list" class="commit-list"></section>
+        <div id="dtabs" class="dtabs hidden"></div>
+        <section class="detail">
+          <div id="detail-left" class="detail-left"></div>
+          <div id="detail-right" class="detail-right"><div class="empty">Select a commit or file</div></div>
+        </section>
+      </main>
+    </div>
+    <footer id="statusbar" class="statusbar"></footer>
+  </div>
+
+  <div id="overlay" class="overlay hidden"></div>
+  <div id="overlay2" class="overlay hidden" style="z-index:60"></div>
+  <div id="ctx" class="ctx hidden"></div>
+  <script src="vendor/highlight.min.js"></script>
+  <script src="syntax.js"></script>
+  <script src="avatars.js"></script>
+  <script src="app.js"></script>
+  <script src="conflicts.js"></script>
+  <script src="rebase.js"></script>
+  <script src="filehistory.js"></script>
+  <script src="blame.js"></script>
+  <script src="reflog.js"></script>
+  <script src="branches.js"></script>
+  <script src="undo.js"></script>
+  <script src="views.js"></script>
+  <script src="stash.js"></script>
+  <script src="submodules.js"></script>
+  <script src="worktrees.js"></script>
+  <script src="lfs.js"></script>
+  <script src="imagediff.js"></script>
+  <script src="gitflow.js"></script>
+  <script src="palette.js"></script>
+  <script src="auth.js"></script>
+  <script src="repomgr.js"></script>
+  <script src="prefs.js"></script>
+  <script src="shortcuts.js"></script>
+  <script src="themeui.js"></script>
+</body>
+</html>
