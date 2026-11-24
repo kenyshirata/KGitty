@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
   git: (cwd, args, input) => ipcRenderer.invoke('git', cwd, args, input),
+  gitQuiet: (cwd, args) => ipcRenderer.invoke('git-quiet', cwd, args),
   gitBlob: (repo, spec) => ipcRenderer.invoke('git-blob', repo, spec),
   readFileB64: (repo, rel) => ipcRenderer.invoke('read-file-b64', repo, rel),
   scanRepos: (root, depth) => ipcRenderer.invoke('scan-repos', root, depth),
@@ -22,6 +23,10 @@ contextBridge.exposeInMainWorld('api', {
   setZoom: (f) => ipcRenderer.invoke('set-zoom', f),
   setThemeSource: (pref) => ipcRenderer.invoke('set-theme-source', pref),
   reveal: (p) => ipcRenderer.invoke('reveal', p),
+  openWithOptions: (repo) => ipcRenderer.invoke('open-with-options', repo),
+  openConsole: (repo) => ipcRenderer.invoke('open-console', repo),
+  openVsCode: (repo) => ipcRenderer.invoke('open-vscode', repo),
+  openSolution: (repo, rel) => ipcRenderer.invoke('open-solution', repo, rel),
   onAskpass: (cb) => ipcRenderer.on('askpass', (_e, req) => cb(req)),
   onAskpassCancel: (cb) => ipcRenderer.on('askpass-cancel', (_e, id) => cb(id)),
   answerAskpass: (id, answer) => ipcRenderer.invoke('askpass-answer', id, answer),

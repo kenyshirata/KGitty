@@ -1,10 +1,12 @@
 const { app, BrowserWindow, ipcMain, dialog, shell, Menu, nativeTheme } = require('electron');
-const { execFile } = require('child_process');
+const { execFile, spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const http = require('http');
 const crypto = require('crypto');
+
+const DEV_ICON = path.join(__dirname, '..', 'build', 'icon.png');
 
 function createWindow() {
   const win = (mainWin = new BrowserWindow({
@@ -14,6 +16,8 @@ function createWindow() {
     minHeight: 560,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1e1f22' : '#ffffff',
     title: 'KGitty',
+    // Packaged builds take the icon embedded in the .exe; running from source uses the one in build/.
+    ...(fs.existsSync(DEV_ICON) ? { icon: DEV_ICON } : {}),
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -131,6 +135,12 @@ function runGit(cwd, args, input, extraEnv) {
 
 ipcMain.handle('git', (_e, cwd, args, input) => runGit(cwd, args, input));
 
+// Background git (automatic fetch, status of other tabs): never asks for credentials, it just fails instead.
+ipcMain.handle('git-quiet', (_e, cwd, args) => runGit(cwd, args, null, {
+  GIT_ASKPASS: '', SSH_ASKPASS: '', SSH_ASKPASS_REQUIRE: 'never', GCM_INTERACTIVE: 'never', GIT_TERMINAL_PROMPT: '0',
+  ...(process.env.GIT_SSH_COMMAND ? {} : { GIT_SSH_COMMAND: 'ssh -o BatchMode=yes' }),
+}));
+
 // True if a path inside the git dir exists (e.g. "rebase-merge" while a rebase is running).
 ipcMain.handle('git-path-exists', async (_e, repo, name) => {
   const r = await runGit(repo, ['rev-parse', '--git-path', name]);
@@ -237,6 +247,74 @@ ipcMain.handle('pick-folder', async () => {
 ipcMain.handle('initial-repo', () => process.argv.slice(app.isPackaged ? 1 : 2).find((a) => !a.startsWith('-')) || null);
 
 ipcMain.handle('reveal', (_e, p) => shell.showItemInFolder(path.normalize(p)));
+
+/* ---------- open the repository in other programs ---------- */
+
+const whereAll = (cmd) => new Promise((resolve) => execFile('where', [cmd], { windowsHide: true }, (err, out) => resolve(err ? [] : out.split(/\r?\n/).filter(Boolean))));
+const firstExisting = (list) => list.find((p) => p && fs.existsSync(p)) || null;
+
+// Git Bash (MinGW64) sits in the root of the Git for Windows install, next to cmd\ and mingw64\.
+async function findGitBash() {
+  const fromPath = (await whereAll('git')).map((g) => {
+    const parts = path.normalize(g).split(path.sep);
+    const i = parts.findIndex((x) => /^(cmd|mingw64|bin)$/i.test(x));
+    return i > 0 ? path.join(parts.slice(0, i).join(path.sep), 'git-bash.exe') : null;
+  });
+  return firstExisting([...fromPath, path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Git', 'git-bash.exe'),
+    path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Git', 'git-bash.exe')]);
+}
+
+async function findVsCode() {
+  const fromPath = (await whereAll('code')).map((c) => path.join(path.dirname(c), '..', 'Code.exe'));
+  return firstExisting([path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Microsoft VS Code', 'Code.exe'),
+    path.join(process.env.ProgramFiles || '', 'Microsoft VS Code', 'Code.exe'), ...fromPath]);
+}
+
+// Visual Studio solutions in the repository root and up to two folders below it.
+async function findSolutions(repo) {
+  const found = [];
+  const skip = new Set(['node_modules', 'bin', 'obj', 'packages']);
+  const walk = async (dir, d) => {
+    let entries;
+    try { entries = await fs.promises.readdir(dir, { withFileTypes: true }); } catch { return; }
+    for (const x of entries) {
+      if (x.isFile() && /\.sln$/i.test(x.name)) found.push(path.relative(repo, path.join(dir, x.name)).split(path.sep).join('/'));
+      else if (x.isDirectory() && d < 2 && !x.name.startsWith('.') && !skip.has(x.name)) await walk(path.join(dir, x.name), d + 1);
+    }
+  };
+  await walk(repo, 0);
+  return found.sort().slice(0, 20);
+}
+
+const launch = (exe, args, cwd) => new Promise((resolve) => {
+  const child = spawn(exe, args, { cwd, detached: true, stdio: 'ignore', windowsHide: false });
+  child.on('error', (e) => resolve(e.message));
+  child.on('spawn', () => { child.unref(); resolve(null); });
+});
+
+ipcMain.handle('open-with-options', async (_e, repo) => {
+  const [bash, code, sln] = await Promise.all([findGitBash(), findVsCode(), findSolutions(path.resolve(repo))]);
+  return { console: !!bash, vscode: !!code, solutions: sln };
+});
+
+ipcMain.handle('open-console', async (_e, repo) => {
+  const bash = await findGitBash();
+  if (!bash) return 'Git Bash (git-bash.exe) was not found. Install Git for Windows.';
+  return launch(bash, ['--cd=' + path.resolve(repo)], path.resolve(repo));
+});
+
+ipcMain.handle('open-vscode', async (_e, repo) => {
+  const code = await findVsCode();
+  if (!code) return 'Visual Studio Code was not found.';
+  return launch(code, [path.resolve(repo)], path.resolve(repo));
+});
+
+// Opens a solution found by findSolutions with its default program (Visual Studio).
+ipcMain.handle('open-solution', async (_e, repo, rel) => {
+  if (!/\.sln$/i.test(rel) || !(await findSolutions(path.resolve(repo))).includes(rel)) return 'Not a solution of this repository.';
+  const err = await shell.openPath(repoPath(repo, rel));
+  return err || null;
+});
 
 app.whenReady().then(() => {
   startAskpass();

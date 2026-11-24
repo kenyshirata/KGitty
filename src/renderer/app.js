@@ -20,7 +20,7 @@ const tabs = [];
 let active = -1;
 
 function snapshot() {
-  if (active < 0) return;
+  if (active < 0 || tabs[active].mgr) return;
   state.draft = readDraft();
   const snap = {};
   for (const k of Object.keys(freshRepoState())) snap[k] = state[k];
@@ -28,13 +28,13 @@ function snapshot() {
 }
 
 function persistTabs() {
-  localStorage.setItem('tabs', JSON.stringify({ repos: tabs.map((t) => t.repo), active }));
+  localStorage.setItem('tabs', JSON.stringify({ repos: tabs.map((t) => (t.mgr ? '@mgr' : t.repo)), active }));
 }
 
 function renderTabs() {
   $('#tabs').innerHTML =
-    tabs.map((t, i) => `<div class="tab ${i === active ? 'active' : ''}" data-i="${i}" title="${esc(t.repo)}"><span class="tname">${esc(t.repo.split(/[\\/]/).pop())}</span><span class="x" data-close="${i}">✕</span></div>`).join('') +
-    '<button class="tab-add" id="tab-add" title="Open repository in a new tab">+</button>';
+    tabs.map((t, i) => `<div class="tab ${i === active ? 'active' : ''}${t.mgr ? ' mgr-tab' : ''}" data-i="${i}" title="${esc(t.mgr ? window.t('Repository Manager') : t.repo)}">${t.dirty && gitOpts().tabDirty ? `<span class="tab-dot" title="${esc(window.t('Uncommitted changes'))}">●</span>` : ''}<span class="tname">${esc(t.mgr ? window.t('Repository Manager') : t.repo.split(/[\\/]/).pop())}</span><span class="x" data-close="${i}">✕</span></div>`).join('') +
+    '<button class="tab-add" id="tab-add" title="New tab — repository manager">+</button>';
 }
 
 async function activate(i) {
@@ -42,9 +42,18 @@ async function activate(i) {
   snapshot();
   active = i;
   const t = tabs[i];
-  Object.assign(state, t.snap || freshRepoState(), { repo: t.repo });
   $('#welcome').classList.add('hidden');
   $('#app').classList.remove('hidden');
+  $('#app').classList.toggle('mgr-mode', !!t.mgr);
+  if (t.mgr) {
+    Object.assign(state, freshRepoState());
+    $('#repo-title').textContent = '';
+    renderTabs();
+    persistTabs();
+    return showMgr();
+  }
+  hideMgr();
+  Object.assign(state, t.snap || freshRepoState(), { repo: t.repo });
   $('#repo-title').textContent = t.repo.split(/[\\/]/).pop();
   $('#search').value = state.filter;
   $('#detail-left').innerHTML = '';
@@ -104,7 +113,7 @@ async function execRun(label, fn, track) {
     setStatus(e.message.split('\n')[0], true);
     const hint = errorHint(e.message);
     const again = await modal({ title: label + ' failed', body: `<pre>${esc(e.message)}</pre>${hint ? `<p class="hint">${esc(hint.text)}</p>` : ''}`, buttons: [{ label: 'Close', value: hint ? 'close' : true, primary: !hint }, ...(hint ? [{ label: hint.action, value: 'fix', primary: true }] : [])] });
-    if (again === 'fix') setTimeout(prefsDialog, 0);
+    if (again === 'fix') setTimeout(() => prefsDialog(hint.tab), 0);
     return false;
   } finally {
     state.busy = false;
@@ -174,7 +183,12 @@ async function openRepo(dir) {
   }
   saveRecent(top);
   let i = tabs.findIndex((t) => t.repo === top);
-  if (i < 0) { tabs.push({ repo: top, snap: null }); i = tabs.length - 1; }
+  // Opening a repository from the repository manager tab replaces that tab, as in a browser.
+  const mgrI = active >= 0 && tabs[active].mgr ? active : -1;
+  if (mgrI >= 0 && !state.busy) {
+    if (i < 0) { tabs[mgrI] = { repo: top, snap: null }; i = mgrI; } else { tabs.splice(mgrI, 1); if (i > mgrI) i--; }
+    active = -1;
+  } else if (i < 0) { tabs.push({ repo: top, snap: null }); i = tabs.length - 1; }
   await activate(i);
 }
 
@@ -191,6 +205,8 @@ async function refresh() {
     renderList();
     renderDetail();
     updateUndoUi();
+    markActiveTabDirty();
+    updateSyncBadges();
   } catch (e) {
     setStatus(e.message.split('\n')[0], true);
   }
@@ -313,19 +329,215 @@ function renderSidebar() {
   sb.innerHTML =
     `<div class="sb-item wc ${state.sel.type === 'wc' ? 'active' : ''}" data-act="wc">Local Changes${n ? `<span class="count">${n}</span>` : ''}</div>` +
     `<div class="sb-item wc ${['commit', 'log', 'stash'].includes(state.sel.type) ? 'active' : ''}" data-act="log">All Commits</div>` +
-    sect('Branches', state.branches.map((b) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}">${b.current ? '● ' : ''}${esc(b.name)}<span class="ab">${esc(trackText(b.track))}</span></div>`), true) +
-    sect('Remotes', state.remotes.map((b) => `<div class="sb-item" data-kind="remote" data-name="${esc(b.name)}">${esc(b.name)}</div>`)) +
-    sect('Tags', state.tags.map((b) => `<div class="sb-item" data-kind="tag" data-name="${esc(b.name)}">${esc(b.name)}</div>`)) +
-    sect('Stashes', state.stashes.map((b) => `<div class="sb-item ${state.sel.type === 'stash' && state.sel.ref === b.ref ? 'active' : ''}" data-kind="stash" data-name="${esc(b.ref)}" title="${esc(b.msg)}">${esc(b.msg)}</div>`)) +
+    sect('Branches', refTree('branch', state.branches, (b) => b.track === '[gone]', (b, label, d) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${branchIcon(b.track === '[gone]')}${esc(label)}<span class="ab">${esc(trackText(b.track))}</span></div>`), true) +
+    sect('Remotes', refTree('remote', state.remotes, null, (b, label, d) => `<div class="sb-item" data-kind="remote" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(BRANCH_SVG)}${esc(label)}</div>`)) +
+    sect('Tags', refTree('tag', state.tags, null, (b, label, d) => `<div class="sb-item" data-kind="tag" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(TAG_SVG)}${esc(label)}</div>`)) +
+    sect('Stashes', state.stashes.map((b) => `<div class="sb-item ${state.sel.type === 'stash' && state.sel.ref === b.ref ? 'active' : ''}" data-kind="stash" data-name="${esc(b.ref)}" title="${esc(b.msg)}">${icon(STASH_SVG)}${esc(b.msg)}</div>`)) +
     submoduleSection() +
     worktreeSection() +
     lfsSection() +
     flowSection();
+  applySbPicked();
+}
+
+const SVG = (body) => `<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+const BRANCH_SVG = SVG('<circle cx="4.5" cy="3.5" r="1.75"/><circle cx="4.5" cy="12.5" r="1.75"/><circle cx="11.5" cy="5.5" r="1.75"/><path d="M4.5 5.25v5.5M11.5 7.25c0 2.5-2 3-7 3.75"/>');
+const FOLDER_SVG = SVG('<path d="M1.75 4.25c0-.69.56-1.25 1.25-1.25h3l1.5 1.75h5.5c.69 0 1.25.56 1.25 1.25v6.25c0 .69-.56 1.25-1.25 1.25H3c-.69 0-1.25-.56-1.25-1.25z"/>');
+const FOLDER_OPEN_SVG = SVG('<path d="M1.75 12.25V4.25c0-.69.56-1.25 1.25-1.25h3l1.5 1.75h5c.69 0 1.25.56 1.25 1.25V7"/><path d="M1.75 12.25 3.6 7.6c.15-.37.5-.6.9-.6h9.4c.5 0 .85.5.67.97l-1.6 4.1c-.15.37-.5.6-.9.6H2.5"/>');
+const REMOTE_SVG = SVG('<path d="M4.5 12.5h7.25a2.75 2.75 0 0 0 .4-5.47A4 4 0 0 0 4.4 6.6 3 3 0 0 0 4.5 12.5z"/>');
+const TAG_SVG = SVG('<path d="M1.75 2.75v4.1c0 .33.13.65.37.88l6.15 6.15c.49.49 1.28.49 1.77 0l3.6-3.6c.49-.49.49-1.28 0-1.77L7.48 2.36a1.25 1.25 0 0 0-.88-.36H2.5a.75.75 0 0 0-.75.75z"/><circle cx="5" cy="5.25" r="1" fill="currentColor" stroke="none"/>');
+const STASH_SVG = SVG('<rect x="1.75" y="2.25" width="12.5" height="11.5" rx="1.25"/><path d="M1.75 8h12.5M6.5 5h3M6.5 10.75h3"/>');
+const CHEVRON_SVG = '<svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>';
+
+const icon = (svg, extra = '') => `<span class="sb-ico">${svg}${extra}</span>`;
+const indent = (depth) => ` style="padding-left:${22 + depth * 14}px"`;
+
+function branchIcon(gone) {
+  return `<span class="sb-ico${gone ? ' gone' : ''}">${BRANCH_SVG}${gone ? '<span class="br-alert" title="Remote branch no longer exists">!</span>' : ''}</span>`;
+}
+
+// Sidebar folders start collapsed; the ones the user opens are remembered across restarts as "kind:path/to/folder".
+const sbExpanded = (() => {
+  try { return new Set(JSON.parse(localStorage.getItem('sbExpanded') || '[]')); } catch { return new Set(); }
+})();
+function toggleSbFolder(key) {
+  if (!sbExpanded.delete(key)) sbExpanded.add(key);
+  try { localStorage.setItem('sbExpanded', JSON.stringify([...sbExpanded])); } catch { /* ignore */ }
+  renderSidebar();
+}
+
+// Lays refs out as a folder tree split on "/": folders first, then the refs directly inside, each alphabetical.
+// For remotes the top-level folder is the remote itself and gets a cloud icon. A collapsed folder holding a ref
+// for which `alert` is true shows the same small alert badge as the ref itself.
+function refTree(kind, refs, alert, leaf) {
+  const root = { dirs: new Map(), refs: [] };
+  for (const r of refs) {
+    const parts = r.name.split('/');
+    let node = root;
+    for (const p of parts.slice(0, -1)) {
+      if (!node.dirs.has(p)) node.dirs.set(p, { dirs: new Map(), refs: [] });
+      node = node.dirs.get(p);
+    }
+    node.refs.push({ r, label: parts[parts.length - 1] });
+  }
+  const cmp = (a, b) => a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true });
+  const hasAlert = (node) => !!alert && (node.refs.some((x) => alert(x.r)) || [...node.dirs.values()].some(hasAlert));
+  const out = [];
+  const walk = (node, path, depth) => {
+    for (const name of [...node.dirs.keys()].sort(cmp)) {
+      const full = path ? `${path}/${name}` : name;
+      const key = `${kind}:${full}`;
+      const open = sbExpanded.has(key);
+      const isRemote = kind === 'remote' && depth === 0;
+      const ico = isRemote ? REMOTE_SVG : open ? FOLDER_OPEN_SVG : FOLDER_SVG;
+      out.push(`<div class="sb-item sb-folder" data-act="sb-folder" data-key="${esc(key)}" title="${esc(full)}" style="padding-left:${8 + depth * 14}px"><span class="sb-chev${open ? ' open' : ''}">${CHEVRON_SVG}</span><span class="sb-ico${isRemote ? ' remote' : ''}">${ico}${!open && hasAlert(node.dirs.get(name)) ? '<span class="br-alert" title="Contains branches whose remote no longer exists">!</span>' : ''}</span><span data-no-i18n>${esc(name)}</span></div>`);
+      if (open) walk(node.dirs.get(name), full, depth + 1);
+    }
+    for (const x of node.refs.sort((a, b) => cmp(a.label, b.label))) out.push(leaf(x.r, x.label, depth));
+  };
+  walk(root, '', 0);
+  return out;
+}
+
+/* ---------- sidebar multi-select and drag & drop ---------- */
+
+// Branches (local and remote) picked with click / Ctrl+click / Shift+click, as "kind:name".
+const PICKABLE = ['branch', 'remote'];
+const DRAGGABLE = ['branch', 'remote', 'tag'];
+const sbPicked = new Set();
+let sbAnchor = null;
+const sbKey = (el) => `${el.dataset.kind}:${el.dataset.name}`;
+const sbPickable = (el) => PICKABLE.includes(el.dataset.kind);
+
+function applySbPicked() {
+  document.querySelectorAll('#sidebar .sb-item[data-kind]').forEach((el) => {
+    el.classList.toggle('picked', sbPicked.has(sbKey(el)));
+    if (DRAGGABLE.includes(el.dataset.kind)) el.draggable = true;
+  });
+}
+
+function pickSb(el, e) {
+  const key = sbKey(el);
+  if (e.shiftKey && sbAnchor) {
+    const items = [...document.querySelectorAll('#sidebar .sb-item[data-kind]')].filter(sbPickable);
+    const a = items.findIndex((x) => sbKey(x) === sbAnchor), b = items.indexOf(el);
+    if (a >= 0) {
+      if (!(e.ctrlKey || e.metaKey)) sbPicked.clear();
+      items.slice(Math.min(a, b), Math.max(a, b) + 1).forEach((x) => sbPicked.add(sbKey(x)));
+      return applySbPicked();
+    }
+  }
+  if (e.ctrlKey || e.metaKey) { if (!sbPicked.delete(key)) sbPicked.add(key); } else { sbPicked.clear(); sbPicked.add(key); }
+  sbAnchor = key;
+  applySbPicked();
+}
+
+function pickedRefs() {
+  const refs = [...sbPicked].map((k) => { const i = k.indexOf(':'); return { kind: k.slice(0, i), name: k.slice(i + 1) }; });
+  return {
+    locals: refs.filter((r) => r.kind === 'branch' && r.name !== state.head && state.branches.some((b) => b.name === r.name)).map((r) => r.name),
+    remotes: refs.filter((r) => r.kind === 'remote' && state.remotes.some((b) => b.name === r.name)).map((r) => r.name),
+  };
+}
+
+function pickedMenu(e) {
+  const { locals, remotes } = pickedRefs();
+  const n = locals.length + remotes.length;
+  if (n) ctxMenu(e.clientX, e.clientY, [{ label: `Delete ${n} branches`, action: deletePickedBranches }]);
+}
+
+// Deletes the picked branches after a confirmation. Picked remote branches are deleted on the server; the
+// checkbox also deletes the remote branch that each picked local branch tracks.
+async function deletePickedBranches() {
+  const { locals, remotes } = pickedRefs();
+  if (!locals.length && !remotes.length) return;
+  const upstreams = [...new Set(locals.map((n) => state.branches.find((b) => b.name === n).upstream)
+    .filter((u) => u && !remotes.includes(u) && state.remotes.some((r) => r.name === u)))];
+  const list = [...locals, ...remotes].map((n) => `<li>${esc(n)}</li>`).join('');
+  let alsoRemote = false;
+  const answer = modal({
+    title: 'Delete branches',
+    body: `<p>Delete ${locals.length} local and ${remotes.length} remote branch(es)?</p><ul class="del-list" data-no-i18n>${list}</ul>` +
+      (upstreams.length ? `<label class="cl-opt"><input type="checkbox" id="del-remote"> Also delete on the remote (${upstreams.length})</label>` : ''),
+    buttons: [{ label: 'Cancel', value: false }, { label: 'Delete', value: true, danger: true }],
+  });
+  const cb = $('#del-remote');
+  if (cb) cb.onchange = () => { alsoRemote = cb.checked; };
+  if (!(await answer)) return;
+  const onServer = alsoRemote ? [...remotes, ...upstreams] : remotes;
+  sbPicked.clear();
+  run('Delete branches', async () => {
+    if (locals.length) await git(['branch', '-D', ...locals]);
+    const byRemote = {};
+    onServer.forEach((x) => { const [r, ...b] = x.split('/'); (byRemote[r] = byRemote[r] || []).push(b.join('/')); });
+    for (const r of Object.keys(byRemote)) await git(['push', r, '--delete', ...byRemote[r]]);
+  });
+}
+
+// The Delete key acts on the picked branches only while the sidebar was the last place clicked.
+let sbFocused = false;
+document.addEventListener('mousedown', (e) => { sbFocused = !!e.target.closest('#sidebar'); }, true);
+const deleteKeyBranches = () => { if (sbFocused && sbPicked.size) deletePickedBranches(); };
+
+// Dragging a branch, remote branch or tag onto a local branch offers merge / rebase; dragging a local branch onto
+// a remote offers to push it there.
+let sbDrag = null;
+function sbDropTarget(e) {
+  if (!sbDrag) return null;
+  const it = e.target.closest('.sb-item');
+  if (!it) return null;
+  if (it.dataset.kind === 'branch' && !(sbDrag.kind === 'branch' && it.dataset.name === sbDrag.name)) return it;
+  const k = it.dataset.key || '';
+  if (sbDrag.kind === 'branch' && k.startsWith('remote:') && !k.slice(7).includes('/')) return it;
+  return null;
+}
+function clearSbDrop(keep) {
+  document.querySelectorAll('#sidebar .sb-item.drop').forEach((x) => x !== keep && x.classList.remove('drop'));
+}
+function sbDropMenu(e, src, t) {
+  const x = src.name;
+  if (t.dataset.key) {
+    const r = t.dataset.key.slice(7);
+    return ctxMenu(e.clientX, e.clientY, [{ label: `Push ${x} to ${r}`, action: () => run('Push', () => git(['push', '-u', r, x])) }]);
+  }
+  const y = t.dataset.name;
+  if (y === state.head) {
+    return ctxMenu(e.clientX, e.clientY, [
+      { label: `Merge ${x} into ${y}`, action: () => run('Merge', () => gitAllowConflict(['merge', x])) },
+      { label: `Rebase ${y} onto ${x}`, action: () => rebaseOnto(x) },
+    ]);
+  }
+  ctxMenu(e.clientX, e.clientY, [
+    { label: `Merge ${x} into ${y}`, action: () => run('Merge', async () => { await git(['checkout', y]); await afterCheckout(); return gitAllowConflict(['merge', x]); }) },
+    { label: `Rebase ${y} onto ${x}`, action: async () => {
+      if (await confirm2('Rebase', `Rebase ${y} onto ${x}? The commits of ${y} are rewritten.`)) run('Rebase onto ' + x, () => gitAllowConflict(['rebase', x, y]));
+    } },
+  ]);
+}
+
+// Small counters on the Pull and Push buttons: commits of the current branch's upstream not yet pulled, and local
+// commits not yet pushed (as of the last fetch).
+function updateSyncBadges() {
+  const cur = state.branches.find((b) => b.current);
+  const track = (cur && cur.track) || '';
+  const n = (re) => { const m = re.exec(track); return m ? +m[1] : 0; };
+  const set = (id, count, tip) => {
+    const btn = $(id);
+    if (!btn) return;
+    let el = btn.querySelector('.tb-badge');
+    if (!count) { if (el) el.remove(); return; }
+    if (!el) { el = document.createElement('span'); el.className = 'tb-badge'; el.dataset.noI18n = ''; btn.appendChild(el); }
+    el.textContent = count > 99 ? '99+' : String(count);
+    el.title = window.t(tip).replace('{0}', count);
+  };
+  set('#tb-pull', n(/behind (\d+)/), '{0} commit(s) to pull');
+  set('#tb-push', n(/ahead (\d+)/), '{0} commit(s) to push');
 }
 
 function trackText(t) {
   if (!t) return '';
-  return t.replace(/ahead (\d+)/, '↑$1').replace(/behind (\d+)/, '↓$1').replace(/[\[\],]/g, '').replace('gone', '✕');
+  // A branch whose remote is gone shows the alert badge on its icon instead of a mark here.
+  return t.replace(/ahead (\d+)/, '↑$1').replace(/behind (\d+)/, '↓$1').replace(/[\[\],]/g, '').replace('gone', '').trim();
 }
 
 function fmtDate(ms) {
@@ -333,9 +545,28 @@ function fmtDate(ms) {
   return d.toLocaleDateString(kgLocale(), { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
+// The remote branch a local branch is published as: its upstream if that still exists, otherwise a remote
+// branch with the same name. Null when the branch exists only locally.
+function remoteOfBranch(name) {
+  const b = state.branches.find((x) => x.name === name);
+  if (!b) return null;
+  if (b.upstream && state.remotes.some((r) => r.name === b.upstream)) return b.upstream;
+  const same = state.remotes.find((r) => r.name.slice(r.name.indexOf('/') + 1) === name);
+  return same ? same.name : null;
+}
+
 function badges(c) {
   if (!kgGetAppearance().showRefs) return '';
-  return c.refs.map((r) => `<span class="badge ${r.type}">${esc(r.name)}</span>`).join('');
+  // Compact labels: a remote branch on the same commit as the local branch it publishes is shown only through the
+  // cloud icon on the local badge.
+  const hidden = new Set();
+  if (gitOpts().compactLabels) c.refs.forEach((r) => { if (r.type === 'local' || r.type === 'head') { const rem = remoteOfBranch(r.name); if (rem) hidden.add(rem); } });
+  return c.refs.filter((r) => !(r.type === 'remote' && hidden.has(r.name))).map((r) => {
+    if (r.type !== 'local' && r.type !== 'head') return `<span class="badge ${r.type}">${esc(r.name)}</span>`;
+    const rem = remoteOfBranch(r.name);
+    const tip = rem ? window.t('On the remote as {0}').replace('{0}', rem) : window.t('Local only — not on any remote');
+    return `<span class="badge ${r.type}" title="${esc(tip)}"><span class="badge-ico">${rem ? REMOTE_SVG : BRANCH_SVG}</span>${esc(r.name)}</span>`;
+  }).join('');
 }
 
 // Relative dates ("3 days ago") for the log; the exact date and time stay available as a tooltip.
@@ -550,10 +781,41 @@ async function doCommit() {
   const ok = await run(amend ? 'Amend commit' : 'Commit', () => git(['commit', ...(amend ? ['--amend'] : []), ...(msg ? ['-F', '-'] : ['--no-edit'])], msg || undefined));
   state.draft = '';
   if (state.sel.type === 'wc' && $('#msg')) { fillMessage(''); $('#amend').checked = false; amendFilled = null; }
+  // An amended commit would need a force push, so only new commits are pushed automatically.
+  if (ok !== false && ok !== undefined && !amend && gitOpts().pushOnCommit) await push();
   return ok;
 }
 
-const fetchAll = () => run('Fetch', () => git(['fetch', '--all', '--prune']));
+const fetchAll = () => { if (state.repo) lastFetch.set(state.repo, Date.now()); return run('Fetch', () => git(fetchArgs())); };
+
+const FETCH_SVG = '<svg viewBox="0 0 48 48" width="56" height="56"><circle cx="24" cy="24" r="22" fill="var(--accent)"/><path d="M24 12v20m-8-8 8 8 8-8M14 36h20" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+// Fetch dialog: one remote or all of them. The choice of "all remotes" and the remote are remembered.
+async function fetchDialog() {
+  if (!state.repo || state.busy) return;
+  const repo = state.repo;
+  const names = (await git(['remote'])).split('\n').map((s) => s.trim()).filter(Boolean);
+  if (state.repo !== repo) return;
+  if (!names.length) return notice('Fetch', 'This repository has no remotes.');
+  let all = true, remote = names[0];
+  try { all = localStorage.getItem('fetchAll') !== '0'; const r = localStorage.getItem('fetchRemote'); if (names.includes(r)) remote = r; } catch { /* ignore */ }
+  const answer = modal({
+    title: 'Fetch',
+    body: `<div class="fd"><div class="fd-ico">${FETCH_SVG}</div><div class="fd-main"><h3>Fetch</h3>
+      <p class="hint">Fetch latest changes from remote repository</p>
+      <div class="fd-row"><label for="fd-remote">Remote:</label><select id="fd-remote" ${all ? 'disabled' : ''}>${names.map((n) => `<option value="${esc(n)}" ${n === remote ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></div>
+      <label class="cl-opt fd-all"><input type="checkbox" id="fd-all" ${all ? 'checked' : ''}> Fetch all remotes</label></div></div>`,
+    buttons: [{ label: 'Fetch', value: true, primary: true }, { label: 'Cancel', value: false }],
+  });
+  const sel = $('#fd-remote'), cb = $('#fd-all');
+  sel.onchange = () => { remote = sel.value; };
+  cb.onchange = () => { all = cb.checked; sel.disabled = all; };
+  if (!(await answer) || state.repo !== repo) return;
+  try { localStorage.setItem('fetchAll', all ? '1' : '0'); localStorage.setItem('fetchRemote', remote); } catch { /* ignore */ }
+  if (all) return fetchAll();
+  lastFetch.set(repo, Date.now());
+  return run('Fetch ' + remote, () => git(['fetch', remote, '--prune', ...(gitOpts().fetchTags ? ['--tags'] : [])]));
+}
 const pull = () => run('Pull', () => gitAllowConflict(['pull']));
 const NO_UPSTREAM = /no upstream|--set-upstream/;
 const PUSH_REJECTED = /rejected|non-fast-forward|fetch first|stale info/i;
@@ -589,15 +851,17 @@ async function forcePush(confirmed = false) {
 }
 
 async function newBranch(from) {
-  const name = await prompt2('New branch', 'Branch name' + (from ? ` (from ${from.slice(0, 7)})` : ''));
-  if (name) run('Create branch', () => git(['checkout', '-b', name, ...(from ? [from] : [])]));
+  const typed = await prompt2('New branch', 'Branch name' + (from ? ` (from ${from.slice(0, 7)})` : ''));
+  const name = typed && branchNameFrom(typed);
+  if (name) run('Create branch', async () => { await git(['checkout', '-b', name, ...(from ? [from] : [])]); if (from) await afterCheckout(); });
 }
 
-const checkout = (ref) => run('Checkout ' + ref, () => git(['checkout', ref]));
+const checkout = (ref) => run('Checkout ' + ref, async () => { await git(['checkout', ref]); await afterCheckout(); });
 const checkoutRemote = (name) => run('Checkout ' + name, async () => {
   const local = name.split('/').slice(1).join('/');
   if (state.branches.some((b) => b.name === local)) await git(['checkout', local]);
   else await git(['checkout', '--track', name]);
+  await afterCheckout();
 });
 
 function branchMenu(e, el) {
@@ -613,7 +877,7 @@ function branchMenu(e, el) {
       !cur && { label: 'Checkout', action: () => checkout(name) },
       !cur && { label: `Merge into ${state.head}`, action: () => run('Merge', () => gitAllowConflict(['merge', name])) },
       { label: `Rebase ${state.head} onto ${name}`, action: () => rebaseOnto(name) },
-      { label: 'Rename…', action: async () => { const n = await prompt2('Rename branch', 'New name', name); if (n) run('Rename', () => git(['branch', '-m', name, n])); } },
+      { label: 'Rename…', action: async () => { const t = await prompt2('Rename branch', 'New name', name); const n = t && branchNameFrom(t); if (n && n !== name) run('Rename', () => git(['branch', '-m', name, n])); } },
       cur && { label: 'Force push (with lease)', action: () => forcePush() },
       { label: 'Create worktree…', action: () => addWorktreeDialog(name) },
       !cur && '-',
@@ -741,7 +1005,7 @@ $('#tb-open').onclick = pickAndOpen;
 $('#btn-clone').onclick = cloneRepo;
 $('#tb-clone').onclick = cloneRepo;
 $('#recent').onclick = (e) => { const it = e.target.closest('.item'); if (it) openRepo(it.dataset.path); };
-$('#tb-fetch').onclick = fetchAll;
+$('#tb-fetch').onclick = () => fetchDialog();
 $('#tb-pull').onclick = pull;
 $('#tb-push').onclick = push;
 $('#tb-push').oncontextmenu = (e) => {
@@ -764,10 +1028,13 @@ $('#sidebar').onclick = (e) => {
   if (e.target.closest('[data-act=lfs-pull]')) return lfsPull();
   if (e.target.closest('[data-act=prune-worktrees]')) return pruneWorktrees();
   if (e.target.closest('[data-act=update-submodules]')) return updateAllSubmodules();
+  { const f = e.target.closest('[data-act=sb-folder]'); if (f) return toggleSbFolder(f.dataset.key); }
   if (e.target.closest('[data-act=wc]')) { selectWc(); return; }
   if (e.target.closest('[data-act=log]')) { selectLog(); return; }
   const it = e.target.closest('.sb-item[data-kind]');
   if (!it) return;
+  if (sbPickable(it) && (e.ctrlKey || e.metaKey || e.shiftKey)) return pickSb(it, e);
+  if (sbPickable(it)) pickSb(it, {}); else { sbPicked.clear(); applySbPicked(); }
   if (it.dataset.kind === 'stash') return selectStash(it.dataset.name);
   const target = { branch: state.branches, flow: state.branches, remote: state.remotes, tag: state.tags }[it.dataset.kind];
   const hit = target && target.find((x) => x.name === it.dataset.name);
@@ -788,7 +1055,38 @@ $('#sidebar').ondblclick = (e) => {
   if (it.dataset.kind === 'remote') checkoutRemote(it.dataset.name);
   if (it.dataset.kind === 'tag') checkout(it.dataset.name);
 };
-$('#sidebar').oncontextmenu = (e) => { const it = e.target.closest('.sb-item[data-kind]'); if (it) branchMenu(e, it); };
+$('#sidebar').oncontextmenu = (e) => {
+  const it = e.target.closest('.sb-item[data-kind]');
+  if (!it) return;
+  if (sbPickable(it) && sbPicked.has(sbKey(it)) && sbPicked.size > 1) { e.preventDefault(); return pickedMenu(e); }
+  if (sbPickable(it)) pickSb(it, {});
+  branchMenu(e, it);
+};
+$('#sidebar').ondragstart = (e) => {
+  const it = e.target.closest('.sb-item[data-kind]');
+  if (!it || !DRAGGABLE.includes(it.dataset.kind)) return e.preventDefault();
+  sbDrag = { kind: it.dataset.kind, name: it.dataset.name };
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', it.dataset.name);
+};
+$('#sidebar').ondragover = (e) => {
+  const t = sbDropTarget(e);
+  clearSbDrop(t);
+  if (!t) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  t.classList.add('drop');
+};
+$('#sidebar').ondragleave = (e) => { if (!e.relatedTarget || !$('#sidebar').contains(e.relatedTarget)) clearSbDrop(); };
+$('#sidebar').ondragend = () => { sbDrag = null; clearSbDrop(); };
+$('#sidebar').ondrop = (e) => {
+  const t = sbDropTarget(e), src = sbDrag;
+  sbDrag = null;
+  clearSbDrop();
+  if (!t) return;
+  e.preventDefault();
+  sbDropMenu(e, src, t);
+};
 
 function selectWc() {
   state.sel = { type: 'wc' };
@@ -901,7 +1199,7 @@ function partialHunk(h, picked, forward) {
 }
 
 $('#tabs').onclick = (e) => {
-  if (e.target.closest('#tab-add')) return pickAndOpen();
+  if (e.target.closest('#tab-add')) return openMgrTab();
   const x = e.target.closest('[data-close]');
   if (x) return closeTab(+x.dataset.close);
   const t = e.target.closest('.tab');
@@ -918,7 +1216,7 @@ renderRecent();
 (async () => {
   let saved = { repos: [], active: -1 };
   try { saved = JSON.parse(localStorage.getItem('tabs')) || saved; } catch { /* ignore */ }
-  saved.repos.forEach((repo) => tabs.push({ repo, snap: null }));
+  saved.repos.forEach((repo) => tabs.push(repo === '@mgr' ? { mgr: true, repo: null, snap: null } : { repo, snap: null }));
   const initial = await window.api.initialRepo();
   // Later scripts (submodules, worktrees, …) define functions used while loading a repository.
   if (document.readyState !== 'complete') await new Promise((r) => window.addEventListener('load', r, { once: true }));

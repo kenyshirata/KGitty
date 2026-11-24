@@ -1,11 +1,11 @@
 'use strict';
-// Author avatars: coloured initials by default, optionally replaced by the author's Gravatar photo.
-// Gravatar is opt-in because it sends a hash of each author's e-mail address to gravatar.com.
+// Author avatars: the author's Gravatar photo when there is one, coloured initials otherwise. Gravatar is on by
+// default and can be turned off (it sends a SHA-256 hash of each author's e-mail address to gravatar.com).
 
 const lsGet = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch { /* ignore */ } };
 
-const avOpts = { show: lsGet('avatars') !== '0', gravatar: lsGet('gravatar') === '1' };
+const avOpts = { show: lsGet('avatars') !== '0', gravatar: lsGet('gravatar') !== '0' };
 const gravCache = new Map(); // e-mail -> sha256 hex
 
 async function sha256Hex(s) {
@@ -14,7 +14,7 @@ async function sha256Hex(s) {
 }
 
 async function prepareGravatars(commits) {
-  if (!avOpts.gravatar) return;
+  if (!avOpts.gravatar || !crypto.subtle) return;
   const emails = [...new Set(commits.map((c) => c.email).filter(Boolean))].filter((e) => !gravCache.has(e));
   await Promise.all(emails.map(async (e) => gravCache.set(e, await sha256Hex(e.trim().toLowerCase()))));
 }
@@ -46,16 +46,19 @@ function toggleAvatars() {
   rerenderAvatars();
 }
 
+async function setGravatar(on) {
+  avOpts.gravatar = on;
+  lsSet('gravatar', on ? '1' : '0');
+  if (on) await prepareGravatars(state.commits);
+  rerenderAvatars();
+  if (typeof mgrRefreshDetail === 'function') mgrRefreshDetail();
+}
+
 async function toggleGravatar() {
   if (!avOpts.gravatar) {
     const ok = await confirm2('Load photos from Gravatar',
       'To show author photos, KGitty sends a SHA-256 hash of each author\'s e-mail address to gravatar.com. Nothing else leaves your machine. Enable it?');
     if (!ok) return;
-    avOpts.gravatar = true;
-    await prepareGravatars(state.commits);
-  } else {
-    avOpts.gravatar = false;
   }
-  lsSet('gravatar', avOpts.gravatar ? '1' : '0');
-  rerenderAvatars();
+  return setGravatar(!avOpts.gravatar);
 }

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- KGitty: a kitty whose face is a commit graph. Eyes are commits, the nose is a commit the mouth branches
+       out of, and the whiskers are branch lines ending in commits. Source of build/icon.png and build/icon.ico
+       (regenerate with: npm run icon). -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34365a"/>
+      <stop offset="1" stop-color="#1a1b2e"/>
+    </linearGradient>
+    <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffc35c"/>
+      <stop offset="1" stop-color="#f2753a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.55">
+      <stop offset="0" stop-color="#7c6cff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#7c6cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#bg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#glow)"/>
+  <rect x="17.5" y="17.5" width="477" height="477" rx="110.5" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="3"/>
+
+  <!-- head and ears -->
+  <g fill="url(#fur)" stroke="url(#fur)" stroke-width="26" stroke-linejoin="round">
+    <path d="M104 262 L122 96 L232 172 Z"/>
+    <path d="M408 262 L390 96 L280 172 Z"/>
+  </g>
+  <ellipse cx="256" cy="300" rx="168" ry="146" fill="url(#fur)"/>
+  <g fill="#c9512c" opacity="0.75">
+    <path d="M146 200 L152 140 L198 172 Z" stroke="#c9512c" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M366 200 L360 140 L314 172 Z" stroke="#c9512c" stroke-width="10" stroke-linejoin="round"/>
+  </g>
+
+  <!-- whiskers: branch lines with a commit at each tip -->
+  <g stroke="#ffe2bd" stroke-width="9" stroke-linecap="round" fill="none">
+    <path d="M158 330 C120 320 92 306 62 300"/>
+    <path d="M160 352 C124 356 98 364 68 374"/>
+    <path d="M354 330 C392 320 420 306 450 300"/>
+    <path d="M352 352 C388 356 414 364 444 374"/>
+  </g>
+  <g fill="#ffe2bd">
+    <circle cx="58" cy="299" r="13"/>
+    <circle cx="64" cy="375" r="13"/>
+    <circle cx="454" cy="299" r="13"/>
+    <circle cx="448" cy="375" r="13"/>
+  </g>
+
+  <!-- eyes: commits -->
+  <g>
+    <circle cx="192" cy="280" r="34" fill="#1f2036"/>
+    <circle cx="192" cy="280" r="17" fill="#5aa2ff"/>
+    <circle cx="186" cy="273" r="6" fill="#ffffff"/>
+    <circle cx="320" cy="280" r="34" fill="#1f2036"/>
+    <circle cx="320" cy="280" r="17" fill="#4fd18b"/>
+    <circle cx="314" cy="273" r="6" fill="#ffffff"/>
+  </g>
+
+  <!-- nose commit, mouth branching out of it -->
+  <path d="M256 342 C256 372 238 388 214 388 M256 342 C256 372 274 388 298 388" fill="none" stroke="#1f2036" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="256" cy="336" r="17" fill="#1f2036"/>
+  <circle cx="214" cy="388" r="10" fill="#1f2036"/>
+  <circle cx="298" cy="388" r="10" fill="#1f2036"/>
+</svg>
