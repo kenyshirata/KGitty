@@ -50,6 +50,9 @@ async function prefsDialog() {
   let scope = '--global';
   const helperOrig = await cfgGet('--global', 'credential.helper');
   let helper = helperOrig;
+  const appVersion = await window.api.appVersion();
+  const updInfo = await window.api.updateState();
+  let hasToken = updInfo.hasToken;
   const effHelpers = (await window.api.git(cfgCwd(), ['config', '--get-all', 'credential.helper'])).stdout.split('\n').filter(Boolean);
   const mt = await cfgGet('--global', 'merge.tool');
   const mtPath = mt ? await cfgGet('--global', `mergetool.${mt}.path`) : '';
@@ -66,6 +69,9 @@ async function prefsDialog() {
     const known = HELPERS.some(([v]) => v === helper);
     const eff = p.effective;
     ov.innerHTML = `<div class="modal wide pf"><h3>Preferences</h3>
+      <div class="pf-sec"><div class="sb-head">Language</div>
+        <div class="field"><select id="pf-lang">${[['', 'Automatic (system language)'], ...kgLanguages()].map(([v, l]) => `<option value="${v}" ${kgLanguagePref() === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
+        <p class="hint">Choose the language of the interface. It changes immediately.</p></div>
       <div class="pf-sec"><div class="sb-head">Identity</div>
         <p class="hint">Name and e-mail recorded in the commits you make.</p>
         <div class="field"><label>Apply to</label><select id="pf-scope"><option value="--global" ${scope === '--global' ? 'selected' : ''}>All repositories (global)</option>${canLocal ? `<option value="--local" ${scope === '--local' ? 'selected' : ''}>Only this repository</option>` : ''}</select></div>
@@ -88,6 +94,12 @@ async function prefsDialog() {
         <div class="field"><label>Executable (optional)</label><input type="text" id="pf-mtpath" value="${esc(mtPath)}" placeholder="full path if the tool is not on PATH"></div></div>
         <div class="field"><label>Custom command</label><input type="text" id="pf-mtcmd" value="${esc(mtCmd)}" placeholder='"C:/tools/merge.exe" "$LOCAL" "$BASE" "$REMOTE" -o "$MERGED"'></div>
         <p class="hint">Used by the Merge tool button on a conflicted file. The custom command may use $LOCAL, $BASE, $REMOTE and $MERGED.</p>
+      </div>
+      <div class="pf-sec"><div class="sb-head">Updates</div>
+        <p class="hint">KGitty ${esc(appVersion)} · <span id="upd-line">${esc(updateLine(updState))}</span></p>
+        <label class="cl-opt"><input type="checkbox" id="pf-upd-auto" ${updateOpts().auto ? 'checked' : ''}> Check for updates automatically</label>
+        <div class="field"><label>Access token (only needed while the GitHub repository is private)</label><input type="password" id="pf-upd-token" autocomplete="off" placeholder="${hasToken ? 'A token is saved — type to replace it' : 'Optional'}"></div>
+        <button id="pf-upd-check">Check now</button> <button id="pf-upd-clear" ${hasToken ? '' : 'class="hidden"'}>Remove saved token</button>
       </div>
       <div class="btns"><button id="pf-cancel">Cancel</button><button class="primary" id="pf-save">Save</button></div></div>`;
   };
@@ -114,6 +126,11 @@ async function prefsDialog() {
       }
       const h = $('#pf-helper').value;
       if (h !== helperOrig) { await cfgSet('--global', 'credential.helper', h); }
+      const upd = { auto: $('#pf-upd-auto').checked };
+      try { localStorage.setItem('updateOpts', JSON.stringify(upd)); } catch { /* ignore */ }
+      await window.api.setUpdateOpts(upd);
+      const tok = $('#pf-upd-token').value.trim();
+      if (tok) { const res = await window.api.setUpdateToken(tok); if (!res.ok) throw new Error(res.error); }
       gcmWindow = $('#pf-gcm').checked;
       try { localStorage.setItem('gcmWindow', gcmWindow ? '1' : '0'); } catch { /* ignore */ }
       await window.api.setAuthOpts({ gcmWindow });
@@ -124,6 +141,7 @@ async function prefsDialog() {
     setStatus('Preferences saved');
   };
   ov.onchange = async (e) => {
+    if (e.target.id === 'pf-lang') return kgSetLanguage(e.target.value);
     if (e.target.id !== 'pf-scope') return;
     const keep = $('#pf-helper').value, gcm = $('#pf-gcm').checked;
     scope = e.target.value;
@@ -133,7 +151,9 @@ async function prefsDialog() {
     $('#pf-gcm').checked = gcm;
   };
   ov.onclick = (e) => {
-    if (e.target.closest('#pf-cancel')) close();
+    if (e.target.closest('#pf-upd-check')) checkForUpdates();
+    else if (e.target.closest('#pf-upd-clear')) { window.api.setUpdateToken('').then(() => { hasToken = false; $('#pf-upd-clear').classList.add('hidden'); $('#pf-upd-token').placeholder = 'Optional'; }); }
+    else if (e.target.closest('#pf-cancel')) close();
     else if (e.target.closest('#pf-save')) save();
   };
   ov.onkeydown = (e) => {

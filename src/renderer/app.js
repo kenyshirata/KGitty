@@ -330,7 +330,7 @@ function trackText(t) {
 
 function fmtDate(ms) {
   const d = new Date(ms);
-  return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
+  return d.toLocaleDateString(kgLocale(), { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 function badges(c) {
@@ -339,9 +339,10 @@ function badges(c) {
 }
 
 // Relative dates ("3 days ago") for the log; the exact date and time stay available as a tooltip.
-const relFmt = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+let relFmt = null, relLocale = '';
 function fmtCommitDate(ms) {
   if (kgGetAppearance().dateFmt !== 'relative') return fmtDate(ms);
+  if (relLocale !== kgLocale()) { relLocale = kgLocale(); relFmt = new Intl.RelativeTimeFormat(relLocale, { numeric: 'auto' }); }
   const s = Math.round((ms - Date.now()) / 1000);
   for (const [unit, secs] of [['year', 31536000], ['month', 2592000], ['week', 604800], ['day', 86400], ['hour', 3600], ['minute', 60]]) {
     if (Math.abs(s) >= secs) return relFmt.format(Math.round(s / secs), unit);
@@ -351,7 +352,7 @@ function fmtCommitDate(ms) {
 
 const LOG_COLUMNS = {
   author: (c) => `<span class="auth">${avatarHtml(c.author, c.email)}<span class="an">${esc(c.author)}</span></span>`,
-  date: (c) => `<span class="date" title="${esc(new Date(c.time).toLocaleString())}">${fmtCommitDate(c.time)}</span>`,
+  date: (c) => `<span class="date" title="${esc(new Date(c.time).toLocaleString(kgLocale()))}">${fmtCommitDate(c.time)}</span>`,
   sha: (c) => `<span class="sha">${c.hash.slice(0, 7)}</span>`,
 };
 

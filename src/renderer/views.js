@@ -150,7 +150,7 @@ async function renderCommitDetail() {
 
   if (state.dtab === 'commit') {
     left.innerHTML = `<div class="ci-wrap"><div class="ci-author">${avatarHtml(author, email, 40, true)}
-        <div><div class="ci-name"><b>${esc(author)}</b> <span class="dim">${esc(email)}</span></div><div class="dim">${new Date(date).toLocaleString()}</div>
+        <div><div class="ci-name"><b>${esc(author)}</b> <span class="dim">${esc(email)}</span></div><div class="dim">${new Date(date).toLocaleString(kgLocale())}</div>
         ${committer.split(' <')[0] !== author ? `<div class="dim">Committed by ${esc(committer)}</div>` : ''}</div></div>
       <div class="ci-grid"><span class="dim">REFS</span><span>${badges(c) || '<span class="dim">—</span>'}</span>
         <span class="dim">SHA</span><span class="ci-sha">${c.hash}</span>

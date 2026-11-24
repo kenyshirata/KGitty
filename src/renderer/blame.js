@@ -49,7 +49,7 @@ async function showBlame(path, rev = null, stack = []) {
     const info = infos[l.sha];
     const first = idx === 0 || lines[idx - 1].sha !== l.sha;
     const gutter = first
-      ? `<span class="bh">${l.sha === NOT_COMMITTED ? 'local' : l.sha.slice(0, 7)}</span><span class="ba">${esc(l.sha === NOT_COMMITTED ? 'Not committed' : info.author || '')}</span><span class="bd">${info.time ? fmtDate(info.time) : ''}</span>`
+      ? `<span class="bh"${l.sha === NOT_COMMITTED ? ' data-i18n' : ''}>${l.sha === NOT_COMMITTED ? 'local' : l.sha.slice(0, 7)}</span><span class="ba"${l.sha === NOT_COMMITTED ? ' data-i18n' : ''}>${esc(l.sha === NOT_COMMITTED ? 'Not committed' : info.author || '')}</span><span class="bd">${info.time ? fmtDate(info.time) : ''}</span>`
       : '';
     return `<tr data-sha="${l.sha}" class="${first ? 'first' : ''}"><td class="bg" style="border-left-color:${blameColor(l.sha)}">${gutter}</td><td class="bn">${idx + 1}</td><td class="bc">${code[idx] || ' '}</td></tr>`;
   }).join('');
@@ -68,7 +68,7 @@ async function showBlame(path, rev = null, stack = []) {
     const info = infos[sha];
     const uncommitted = sha === NOT_COMMITTED;
     $('#bl-info').innerHTML = `<span><b>${esc(uncommitted ? 'Not committed yet' : info.summary || '')}</b>
-      <span class="dim"> ${uncommitted ? '' : `${sha.slice(0, 7)} · ${esc(info.author || '')} · ${info.time ? new Date(info.time).toLocaleString() : ''}`}</span></span>
+      <span class="dim"> ${uncommitted ? '' : `${sha.slice(0, 7)} · ${esc(info.author || '')} · ${info.time ? new Date(info.time).toLocaleString(kgLocale()) : ''}`}</span></span>
       <span class="fh-btns">${uncommitted ? '' : '<button data-bl="log">Show in log</button>'}${info.previous ? '<button data-bl="prev">Blame previous version</button>' : ''}</span>`;
   };
 

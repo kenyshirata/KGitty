@@ -418,3 +418,9 @@ body.resizing, body.resizing * { user-select: none !important; }
 .ap-col label { min-width: 120px; }
 .ap-col button { padding: 0 6px; font-size: 10px; }
 .ap-prev { margin: 10px 0 4px; padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; font: var(--code-size)/1.45 var(--code-font); user-select: text; }
+
+/* update bar */
+.update-bar { display: flex; align-items: center; gap: 10px; padding: 5px 12px; background: var(--accent-bg); border-top: 1px solid var(--border); }
+.update-bar button { padding: 1px 10px; font-size: 12px; }
+.upd-prog { flex: 0 0 160px; height: 6px; border-radius: 3px; background: var(--bg3); overflow: hidden; }
+.upd-prog i { display: block; height: 100%; background: var(--accent); }

@@ -32,7 +32,7 @@ async function showReflog() {
       <div class="fh-head"><h3>Reflog <small>${entries.length} entr${entries.length === 1 ? 'y' : 'ies'}</small></h3>
         <span class="fh-btns"><select id="rl-ref">${refs.map((r) => `<option ${r === ref ? 'selected' : ''}>${esc(r)}</option>`).join('')}</select><button id="fh-close">Close</button></span></div>
       <div class="fh-body"><div class="fh-list">${entries.map((c, i) => `<div class="fh-row ${i === sel ? 'sel' : ''}" data-i="${i}"><div class="fh-sub">${esc(c.action)}</div>
-        <div class="fh-meta">${esc(c.selector)} · ${c.hash.slice(0, 7)} · ${esc(c.subject)} · ${new Date(c.time).toLocaleString()}</div></div>`).join('') || '<div class="empty">Empty reflog</div>'}</div>
+        <div class="fh-meta">${esc(c.selector)} · ${c.hash.slice(0, 7)} · ${esc(c.subject)} · ${new Date(c.time).toLocaleString(kgLocale())}</div></div>`).join('') || '<div class="empty">Empty reflog</div>'}</div>
         <div class="fh-diff" id="rl-detail"></div></div></div>`;
     ov.classList.remove('hidden');
     $('#fh-close').focus();

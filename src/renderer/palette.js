@@ -37,6 +37,7 @@ function paletteItems(q) {
   extra('Git LFS: pull', () => lfsPull(), hasRepo && state.lfs.available);
   extra('Open repository in the file manager', () => window.api.reveal(state.repo), hasRepo);
   extra('Copy repository path', () => navigator.clipboard.writeText(state.repo), hasRepo);
+  extra('Check for updates', () => checkForUpdates());
   extra('Theme: follow the system', () => setThemePref('system'));
   extra('Theme: light', () => setThemePref('light'));
   extra('Theme: dark', () => setThemePref('dark'));
@@ -49,7 +50,7 @@ function paletteItems(q) {
     }
     for (const r of state.remotes) add('Remote', 'Checkout ' + r.name, () => checkoutRemote(r.name));
     for (const t of state.tags) add('Tag', 'Checkout ' + t.name, () => checkout(t.name));
-    for (const s of state.stashes) add('Stash', s.msg, () => selectStash(s.ref), { hint: s.ref });
+    for (const s of state.stashes) add('Stash', s.msg, () => selectStash(s.ref), { hint: s.ref, data: true });
   }
 
   const open = new Set(tabs.map((t) => t.repo));
@@ -65,7 +66,7 @@ function paletteItems(q) {
     for (const c of state.commits) {
       if (n >= 400) break;
       if (c.hash.startsWith(ql) || c.subject.toLowerCase().includes(ql) || c.author.toLowerCase().includes(ql)) {
-        add('Commit', c.subject, () => { selectLog(); selectCommit(c.hash, true); }, { hint: c.hash.slice(0, 7) + ' · ' + c.author, direct: true });
+        add('Commit', c.subject, () => { selectLog(); selectCommit(c.hash, true); }, { hint: c.hash.slice(0, 7) + ' · ' + c.author, direct: true, data: true });
         n++;
       }
     }
@@ -120,7 +121,7 @@ function commandPalette() {
   const draw = () => {
     shown = compute();
     sel = Math.min(sel, Math.max(0, shown.length - 1));
-    $('#pal-list').innerHTML = shown.map((it, i) => `<div class="pal-row ${i === sel ? 'sel' : ''}" data-i="${i}"><span class="pal-cat">${esc(it.cat)}</span><span class="pal-label">${esc(it.label)}</span>${it.keys ? `<span class="pal-keys">${it.keys.split('+').map((k) => `<kbd>${esc(k)}</kbd>`).join('')}</span>` : it.hint ? `<span class="pal-hint dim">${esc(it.hint)}</span>` : ''}</div>`).join('') || '<div class="empty">Nothing matches</div>';
+    $('#pal-list').innerHTML = shown.map((it, i) => `<div class="pal-row ${i === sel ? 'sel' : ''}" data-i="${i}"${it.data ? ' data-no-i18n' : ''}><span class="pal-cat">${esc(it.cat)}</span><span class="pal-label">${esc(it.label)}</span>${it.keys ? `<span class="pal-keys">${it.keys.split('+').map((k) => `<kbd>${esc(k)}</kbd>`).join('')}</span>` : it.hint ? `<span class="pal-hint dim">${esc(it.hint)}</span>` : ''}</div>`).join('') || '<div class="empty">Nothing matches</div>';
     const row = $('#pal-list .pal-row.sel');
     if (row) row.scrollIntoView({ block: 'nearest' });
   };

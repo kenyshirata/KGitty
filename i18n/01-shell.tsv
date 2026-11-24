@@ -1,0 +1,139 @@
+# English	pt-BR	es	fr	de	ru	zh-CN	ja	ko
+# Rows are: the English text, then its translation in the order of the header above. {0}, {1} are placeholders.
+A simple Git client	Um cliente Git simples	Un cliente Git sencillo	Un client Git simple	Ein einfacher Git-Client	Простой клиент Git	简洁的 Git 客户端	シンプルな Git クライアント	간단한 Git 클라이언트
+Open repository…	Abrir repositório…	Abrir repositorio…	Ouvrir un dépôt…	Repository öffnen…	Открыть репозиторий…	打开仓库…	リポジトリを開く…	저장소 열기…
+Clone repository…	Clonar repositório…	Clonar repositorio…	Cloner un dépôt…	Repository klonen…	Клонировать репозиторий…	克隆仓库…	リポジトリをクローン…	저장소 복제…
+Repository manager…	Gerenciador de repositórios…	Administrador de repositorios…	Gestionnaire de dépôts…	Repository-Verwaltung…	Менеджер репозиториев…	仓库管理器…	リポジトリ管理…	저장소 관리자…
+◐ Theme	◐ Tema	◐ Tema	◐ Thème	◐ Design	◐ Тема	◐ 主题	◐ テーマ	◐ 테마
+Theme	Tema	Tema	Thème	Design	Тема	主题	テーマ	테마
+🗂 Repos	🗂 Repos	🗂 Repos	🗂 Dépôts	🗂 Repos	🗂 Репо	🗂 仓库	🗂 リポジトリ	🗂 저장소
+📂 Open	📂 Abrir	📂 Abrir	📂 Ouvrir	📂 Öffnen	📂 Открыть	📂 打开	📂 開く	📂 열기
+⎘ Clone	⎘ Clonar	⎘ Clonar	⎘ Cloner	⎘ Klonen	⎘ Клонировать	⎘ 克隆	⎘ クローン	⎘ 복제
+⟳ Fetch	⟳ Fetch	⟳ Fetch	⟳ Fetch	⟳ Fetch	⟳ Fetch	⟳ 获取	⟳ フェッチ	⟳ 페치
+⇣ Pull	⇣ Pull	⇣ Pull	⇣ Pull	⇣ Pull	⇣ Pull	⇣ 拉取	⇣ プル	⇣ 풀
+⇡ Push	⇡ Push	⇡ Push	⇡ Push	⇡ Push	⇡ Push	⇡ 推送	⇡ プッシュ	⇡ 푸시
+⑂ Branch	⑂ Branch	⑂ Rama	⑂ Branche	⑂ Branch	⑂ Ветка	⑂ 分支	⑂ ブランチ	⑂ 브랜치
+▤ Stash	▤ Stash	▤ Stash	▤ Stash	▤ Stash	▤ Stash	▤ 贮藏	▤ スタッシュ	▤ 스태시
+↶ Undo	↶ Desfazer	↶ Deshacer	↶ Annuler	↶ Rückgängig	↶ Отменить	↶ 撤销	↶ 元に戻す	↶ 실행 취소
+⟲ Reflog	⟲ Reflog	⟲ Reflog	⟲ Reflog	⟲ Reflog	⟲ Reflog	⟲ Reflog	⟲ Reflog	⟲ Reflog
+Repository manager (Ctrl+Shift+M)	Gerenciador de repositórios (Ctrl+Shift+M)	Administrador de repositorios (Ctrl+Shift+M)	Gestionnaire de dépôts (Ctrl+Shift+M)	Repository-Verwaltung (Ctrl+Shift+M)	Менеджер репозиториев (Ctrl+Shift+M)	仓库管理器 (Ctrl+Shift+M)	リポジトリ管理 (Ctrl+Shift+M)	저장소 관리자 (Ctrl+Shift+M)
+Open repository	Abrir repositório	Abrir repositorio	Ouvrir un dépôt	Repository öffnen	Открыть репозиторий	打开仓库	リポジトリを開く	저장소 열기
+Clone repository	Clonar repositório	Clonar repositorio	Cloner un dépôt	Repository klonen	Клонировать репозиторий	克隆仓库	リポジトリをクローン	저장소 복제
+Undo	Desfazer	Deshacer	Annuler	Rückgängig	Отменить	撤销	元に戻す	실행 취소
+Redo	Refazer	Rehacer	Rétablir	Wiederholen	Повторить	重做	やり直す	다시 실행
+Reflog	Reflog	Reflog	Reflog	Reflog	Reflog	Reflog	Reflog	Reflog
+Preferences (Ctrl+,)	Preferências (Ctrl+,)	Preferencias (Ctrl+,)	Préférences (Ctrl+,)	Einstellungen (Ctrl+,)	Настройки (Ctrl+,)	首选项 (Ctrl+,)	設定 (Ctrl+,)	환경설정 (Ctrl+,)
+Keyboard shortcuts (F1)	Atalhos de teclado (F1)	Atajos de teclado (F1)	Raccourcis clavier (F1)	Tastenkürzel (F1)	Горячие клавиши (F1)	键盘快捷键 (F1)	キーボードショートカット (F1)	키보드 단축키 (F1)
+Filter commits…	Filtrar commits…	Filtrar commits…	Filtrer les commits…	Commits filtern…	Фильтр коммитов…	筛选提交…	コミットを絞り込む…	커밋 필터…
+Drag to resize · double-click to reset	Arraste para redimensionar · clique duplo para restaurar	Arrastra para cambiar el tamaño · doble clic para restablecer	Glisser pour redimensionner · double-clic pour réinitialiser	Zum Ändern ziehen · Doppelklick zum Zurücksetzen	Перетащите, чтобы изменить размер · двойной щелчок — сброс	拖动调整大小 · 双击还原	ドラッグでサイズ変更 · ダブルクリックでリセット	드래그하여 크기 조절 · 더블 클릭하면 초기화
+Select a commit or file	Selecione um commit ou arquivo	Selecciona un commit o archivo	Sélectionnez un commit ou un fichier	Commit oder Datei auswählen	Выберите коммит или файл	选择一个提交或文件	コミットまたはファイルを選択	커밋 또는 파일을 선택하세요
+Open repository in a new tab	Abrir repositório em uma nova aba	Abrir repositorio en una pestaña nueva	Ouvrir un dépôt dans un nouvel onglet	Repository in neuem Tab öffnen	Открыть репозиторий в новой вкладке	在新标签页中打开仓库	新しいタブでリポジトリを開く	새 탭에서 저장소 열기
+Wait for the running operation to finish	Aguarde a operação em andamento terminar	Espera a que termine la operación en curso	Attendez la fin de l'opération en cours	Warten Sie, bis der laufende Vorgang beendet ist	Дождитесь завершения текущей операции	请等待当前操作完成	実行中の操作が終わるまでお待ちください	진행 중인 작업이 끝날 때까지 기다리세요
+{0:t} — done	{0} — concluído	{0} — hecho	{0} — terminé	{0} — fertig	{0} — готово	{0} — 完成	{0} — 完了	{0} — 완료
+{0:t}…	{0}…	{0}…	{0}…	{0}…	{0}…	{0}…	{0}…	{0}…
+{0:t} failed	{0}: falhou	{0}: error	{0} : échec	{0} fehlgeschlagen	Не удалось: {0}	{0}失败	{0}に失敗しました	{0} 실패
+Close	Fechar	Cerrar	Fermer	Schließen	Закрыть	关闭	閉じる	닫기
+OK	OK	Aceptar	OK	OK	ОК	确定	OK	확인
+Cancel	Cancelar	Cancelar	Annuler	Abbrechen	Отмена	取消	キャンセル	취소
+Confirm	Confirmar	Confirmar	Confirmer	Bestätigen	Подтвердить	确认	確認	확인
+Not a repository	Não é um repositório	No es un repositorio	Ce n'est pas un dépôt	Kein Repository	Не репозиторий	不是仓库	リポジトリではありません	저장소가 아닙니다
+{0} is not a Git repository.	{0} não é um repositório Git.	{0} no es un repositorio Git.	{0} n'est pas un dépôt Git.	{0} ist kein Git-Repository.	{0} не является репозиторием Git.	{0} 不是 Git 仓库。	{0} は Git リポジトリではありません。	{0}은(는) Git 저장소가 아닙니다.
+Delete multiple branches	Excluir várias branches	Eliminar varias ramas	Supprimer plusieurs branches	Mehrere Branches löschen	Удалить несколько веток	批量删除分支	複数のブランチを削除	여러 브랜치 삭제
+Local Changes	Alterações locais	Cambios locales	Modifications locales	Lokale Änderungen	Локальные изменения	本地更改	ローカルの変更	로컬 변경 사항
+All Commits	Todos os commits	Todos los commits	Tous les commits	Alle Commits	Все коммиты	所有提交	すべてのコミット	모든 커밋
+Branches	Branches	Ramas	Branches	Branches	Ветки	分支	ブランチ	브랜치
+Remotes	Remotos	Remotos	Distants	Remotes	Удалённые	远程	リモート	리모트
+Tags	Tags	Etiquetas	Tags	Tags	Теги	标签	タグ	태그
+Stashes	Stashes	Stashes	Stashes	Stashes	Stashes	贮藏列表	スタッシュ	스태시
+No commits	Nenhum commit	Sin commits	Aucun commit	Keine Commits	Нет коммитов	没有提交	コミットなし	커밋 없음
+Stored with Git LFS	Armazenado com Git LFS	Almacenado con Git LFS	Stocké avec Git LFS	Mit Git LFS gespeichert	Хранится в Git LFS	由 Git LFS 存储	Git LFS で保存	Git LFS로 저장됨
+Select a commit to see its details	Selecione um commit para ver os detalhes	Selecciona un commit para ver sus detalles	Sélectionnez un commit pour voir ses détails	Commit auswählen, um Details zu sehen	Выберите коммит, чтобы увидеть подробности	选择一个提交以查看详情	コミットを選択すると詳細が表示されます	커밋을 선택하면 세부 정보가 표시됩니다
+Unified	Unificado	Unificado	Unifié	Vereint	Унифицированный	统一	統合	통합
+Side by side	Lado a lado	Lado a lado	Côte à côte	Nebeneinander	Рядом	并排	横並び	나란히
+Unstage lines	Remover linhas do stage	Quitar líneas del stage	Retirer les lignes de l'index	Zeilen aus Stage entfernen	Убрать строки из индекса	取消暂存所选行	選択行をアンステージ	선택한 줄 스테이지 취소
+Unstage hunk	Remover hunk do stage	Quitar hunk del stage	Retirer le hunk de l'index	Hunk aus Stage entfernen	Убрать блок из индекса	取消暂存此块	ハンクをアンステージ	헝크 스테이지 취소
+Stage lines	Adicionar linhas ao stage	Añadir líneas al stage	Indexer les lignes	Zeilen stagen	Добавить строки в индекс	暂存所选行	選択行をステージ	선택한 줄 스테이지
+Discard lines	Descartar linhas	Descartar líneas	Annuler les lignes	Zeilen verwerfen	Отбросить строки	放弃所选行	選択行を破棄	선택한 줄 버리기
+Stage hunk	Adicionar hunk ao stage	Añadir hunk al stage	Indexer le hunk	Hunk stagen	Добавить блок в индекс	暂存此块	ハンクをステージ	헝크 스테이지
+Discard hunk	Descartar hunk	Descartar hunk	Annuler le hunk	Hunk verwerfen	Отбросить блок	放弃此块	ハンクを破棄	헝크 버리기
+No textual changes (empty or binary file)	Sem alterações de texto (arquivo vazio ou binário)	Sin cambios de texto (archivo vacío o binario)	Aucun changement textuel (fichier vide ou binaire)	Keine Textänderungen (leere oder binäre Datei)	Нет текстовых изменений (пустой или двоичный файл)	没有文本更改（空文件或二进制文件）	テキストの変更はありません（空ファイルまたはバイナリ）	텍스트 변경 사항 없음 (빈 파일 또는 바이너리 파일)
+… diff truncated …	… diff truncado …	… diff truncado …	… diff tronqué …	… Diff gekürzt …	… diff усечён …	… 差异已截断 …	… 差分を省略しました …	… diff 일부 생략 …
+Stage	Stage	Stage	Indexer	Stagen	В индекс	暂存	ステージ	스테이지
+Unstage	Remover do stage	Quitar del stage	Désindexer	Aus Stage entfernen	Убрать из индекса	取消暂存	アンステージ	스테이지 취소
+Discard	Descartar	Descartar	Annuler	Verwerfen	Отбросить	放弃	破棄	버리기
+Discard changes	Descartar alterações	Descartar cambios	Annuler les modifications	Änderungen verwerfen	Отбросить изменения	放弃更改	変更を破棄	변경 사항 버리기
+Discard changes to {0}? This cannot be undone.	Descartar as alterações em {0}? Isso não pode ser desfeito.	¿Descartar los cambios en {0}? No se puede deshacer.	Annuler les modifications de {0} ? Cette action est irréversible.	Änderungen an {0} verwerfen? Das kann nicht rückgängig gemacht werden.	Отбросить изменения в {0}? Это нельзя отменить.	放弃对 {0} 的更改？此操作无法撤销。	{0} への変更を破棄しますか？この操作は元に戻せません。	{0}의 변경 사항을 버릴까요? 되돌릴 수 없습니다.
+Enter a commit subject	Digite o assunto do commit	Escribe el asunto del commit	Saisissez le sujet du commit	Betreff des Commits eingeben	Введите заголовок коммита	请输入提交标题	コミットの件名を入力してください	커밋 제목을 입력하세요
+Resolve all conflicts before committing	Resolva todos os conflitos antes de fazer o commit	Resuelve todos los conflictos antes de hacer commit	Résolvez tous les conflits avant de valider	Lösen Sie vor dem Commit alle Konflikte	Разрешите все конфликты перед коммитом	提交前请先解决所有冲突	コミットする前にすべての競合を解決してください	커밋하기 전에 모든 충돌을 해결하세요
+Nothing staged	Nada no stage	Nada en el stage	Rien d'indexé	Nichts gestaged	Ничего не добавлено в индекс	没有已暂存的内容	ステージされたものがありません	스테이지된 항목 없음
+Amend commit	Corrigir commit	Enmendar commit	Modifier le commit	Commit ändern	Изменить коммит	修改提交	コミットを修正	커밋 수정
+Commit	Commit	Commit	Commit	Commit	Коммит	提交	コミット	커밋
+Commit to {0}	Commit em {0}	Commit en {0}	Commit sur {0}	Commit auf {0}	Коммит в {0}	提交到 {0}	{0} にコミット	{0}에 커밋
+Fetch	Fetch	Fetch	Fetch	Fetch	Fetch	获取	フェッチ	페치
+Pull	Pull	Pull	Pull	Pull	Pull	拉取	プル	풀
+Push	Push	Push	Push	Push	Push	推送	プッシュ	푸시
+Push rejected by the remote	Push rejeitado pelo remoto	Push rechazado por el remoto	Push rejeté par le dépôt distant	Push vom Remote abgelehnt	Push отклонён удалённым репозиторием	推送被远程拒绝	リモートにプッシュを拒否されました	원격에서 푸시를 거부했습니다
+Push rejected	Push rejeitado	Push rechazado	Push rejeté	Push abgelehnt	Push отклонён	推送被拒绝	プッシュが拒否されました	푸시 거부됨
+The remote branch has commits you do not have, or its history differs (for example after a rebase). Force push with --force-with-lease? It overwrites the remote branch only if nobody pushed to it since your last fetch.	A branch remota tem commits que você não tem, ou o histórico dela é diferente (por exemplo, depois de um rebase). Fazer force push com --force-with-lease? Ele só sobrescreve a branch remota se ninguém tiver enviado nada para ela desde o seu último fetch.	La rama remota tiene commits que no tienes, o su historial es distinto (por ejemplo, tras un rebase). ¿Hacer force push con --force-with-lease? Solo sobrescribe la rama remota si nadie ha enviado nada desde tu último fetch.	La branche distante contient des commits que vous n'avez pas, ou son historique diffère (par exemple après un rebase). Forcer le push avec --force-with-lease ? Cela n'écrase la branche distante que si personne n'y a poussé depuis votre dernier fetch.	Der Remote-Branch enthält Commits, die Sie nicht haben, oder sein Verlauf weicht ab (z. B. nach einem Rebase). Force-Push mit --force-with-lease? Der Remote-Branch wird nur überschrieben, wenn seit Ihrem letzten Fetch niemand dorthin gepusht hat.	В удалённой ветке есть коммиты, которых у вас нет, или её история отличается (например, после rebase). Выполнить force push с --force-with-lease? Удалённая ветка будет перезаписана, только если с вашего последнего fetch в неё никто не отправлял изменения.	远程分支包含你没有的提交，或其历史已不同（例如在变基之后）。要使用 --force-with-lease 强制推送吗？只有自上次获取以来没有其他人推送过，才会覆盖远程分支。	リモートブランチに手元にないコミットがあるか、履歴が異なっています（リベース後など）。--force-with-lease で強制プッシュしますか？前回のフェッチ以降に誰もプッシュしていない場合にのみ、リモートブランチを上書きします。	원격 브랜치에 가지고 있지 않은 커밋이 있거나 히스토리가 다릅니다(예: 리베이스 후). --force-with-lease로 강제 푸시할까요? 마지막 페치 이후 아무도 푸시하지 않은 경우에만 원격 브랜치를 덮어씁니다.
+Force push	Force push	Force push	Push forcé	Force-Push	Force push	强制推送	強制プッシュ	강제 푸시
+Check out a branch first (HEAD is detached).	Faça checkout de uma branch primeiro (HEAD está desanexado).	Cambia primero a una rama (HEAD está desacoplado).	Basculez d'abord sur une branche (HEAD est détaché).	Wechseln Sie zuerst zu einem Branch (HEAD ist losgelöst).	Сначала переключитесь на ветку (HEAD отсоединён).	请先检出一个分支（HEAD 处于分离状态）。	先にブランチをチェックアウトしてください（HEAD が切り離されています）。	먼저 브랜치를 체크아웃하세요 (HEAD가 분리되어 있습니다).
+Force push {0} with --force-with-lease? The remote branch is overwritten if nobody pushed to it since your last fetch.	Fazer force push de {0} com --force-with-lease? A branch remota é sobrescrita se ninguém tiver enviado nada para ela desde o seu último fetch.	¿Hacer force push de {0} con --force-with-lease? La rama remota se sobrescribe si nadie ha enviado nada desde tu último fetch.	Forcer le push de {0} avec --force-with-lease ? La branche distante est écrasée si personne n'y a poussé depuis votre dernier fetch.	{0} mit --force-with-lease force-pushen? Der Remote-Branch wird überschrieben, wenn seit Ihrem letzten Fetch niemand dorthin gepusht hat.	Выполнить force push ветки {0} с --force-with-lease? Удалённая ветка будет перезаписана, если с вашего последнего fetch в неё никто не отправлял изменения.	要使用 --force-with-lease 强制推送 {0} 吗？如果自上次获取以来没有其他人推送过，远程分支将被覆盖。	{0} を --force-with-lease で強制プッシュしますか？前回のフェッチ以降に誰もプッシュしていなければ、リモートブランチが上書きされます。	{0}을(를) --force-with-lease로 강제 푸시할까요? 마지막 페치 이후 아무도 푸시하지 않았다면 원격 브랜치를 덮어씁니다.
+New branch	Nova branch	Nueva rama	Nouvelle branche	Neuer Branch	Новая ветка	新建分支	新しいブランチ	새 브랜치
+Branch name	Nome da branch	Nombre de la rama	Nom de la branche	Branch-Name	Название ветки	分支名称	ブランチ名	브랜치 이름
+Branch name (from {0})	Nome da branch (a partir de {0})	Nombre de la rama (desde {0})	Nom de la branche (depuis {0})	Branch-Name (von {0})	Название ветки (от {0})	分支名称（基于 {0}）	ブランチ名（{0} から）	브랜치 이름 ({0}에서)
+Create branch	Criar branch	Crear rama	Créer la branche	Branch erstellen	Создать ветку	创建分支	ブランチを作成	브랜치 만들기
+Checkout	Checkout	Cambiar a	Basculer	Auschecken	Переключиться	检出	チェックアウト	체크아웃
+Checkout {0}	Checkout de {0}	Cambiar a {0}	Basculer sur {0}	{0} auschecken	Переключиться на {0}	检出 {0}	{0} をチェックアウト	{0} 체크아웃
+Merge into {0}	Fazer merge em {0}	Fusionar en {0}	Fusionner dans {0}	In {0} mergen	Влить в {0}	合并到 {0}	{0} にマージ	{0}에 병합
+Merge	Merge	Fusionar	Fusionner	Mergen	Слияние	合并	マージ	병합
+Rebase {0} onto {1}	Rebase de {0} sobre {1}	Rebase de {0} sobre {1}	Rebaser {0} sur {1}	{0} auf {1} rebasen	Rebase {0} на {1}	将 {0} 变基到 {1}	{0} を {1} にリベース	{0}을(를) {1} 위로 리베이스
+Rename…	Renomear…	Renombrar…	Renommer…	Umbenennen…	Переименовать…	重命名…	名前を変更…	이름 바꾸기…
+Rename branch	Renomear branch	Renombrar rama	Renommer la branche	Branch umbenennen	Переименовать ветку	重命名分支	ブランチ名を変更	브랜치 이름 바꾸기
+New name	Novo nome	Nuevo nombre	Nouveau nom	Neuer Name	Новое имя	新名称	新しい名前	새 이름
+Rename	Renomear	Renombrar	Renommer	Umbenennen	Переименовать	重命名	名前を変更	이름 바꾸기
+Force push (with lease)	Force push (com lease)	Force push (con lease)	Push forcé (avec lease)	Force-Push (mit Lease)	Force push (с lease)	强制推送（带 lease）	強制プッシュ（lease 付き）	강제 푸시 (lease 사용)
+Create worktree…	Criar worktree…	Crear worktree…	Créer un worktree…	Worktree erstellen…	Создать worktree…	创建工作树…	ワークツリーを作成…	워크트리 만들기…
+Delete	Excluir	Eliminar	Supprimer	Löschen	Удалить	删除	削除	삭제
+Delete branch	Excluir branch	Eliminar rama	Supprimer la branche	Branch löschen	Удалить ветку	删除分支	ブランチを削除	브랜치 삭제
+Delete branch {0}?	Excluir a branch {0}?	¿Eliminar la rama {0}?	Supprimer la branche {0} ?	Branch {0} löschen?	Удалить ветку {0}?	删除分支 {0}？	ブランチ {0} を削除しますか？	브랜치 {0}을(를) 삭제할까요?
+Delete on remote	Excluir no remoto	Eliminar en el remoto	Supprimer sur le distant	Auf Remote löschen	Удалить на удалённом	从远程删除	リモートで削除	원격에서 삭제
+Delete remote branch	Excluir branch remota	Eliminar rama remota	Supprimer la branche distante	Remote-Branch löschen	Удалить удалённую ветку	删除远程分支	リモートブランチを削除	원격 브랜치 삭제
+Delete {0} on the server?	Excluir {0} no servidor?	¿Eliminar {0} en el servidor?	Supprimer {0} sur le serveur ?	{0} auf dem Server löschen?	Удалить {0} на сервере?	要在服务器上删除 {0} 吗？	サーバー上の {0} を削除しますか？	서버에서 {0}을(를) 삭제할까요?
+Push to origin	Enviar para o origin	Enviar a origin	Pousser vers origin	Zu origin pushen	Отправить в origin	推送到 origin	origin にプッシュ	origin으로 푸시
+Push tag	Enviar tag	Enviar etiqueta	Pousser le tag	Tag pushen	Отправить тег	推送标签	タグをプッシュ	태그 푸시
+Delete tag	Excluir tag	Eliminar etiqueta	Supprimer le tag	Tag löschen	Удалить тег	删除标签	タグを削除	태그 삭제
+Delete tag {0}?	Excluir a tag {0}?	¿Eliminar la etiqueta {0}?	Supprimer le tag {0} ?	Tag {0} löschen?	Удалить тег {0}?	删除标签 {0}？	タグ {0} を削除しますか？	태그 {0}을(를) 삭제할까요?
+Apply	Aplicar	Aplicar	Appliquer	Anwenden	Применить	应用	適用	적용
+Apply stash	Aplicar stash	Aplicar stash	Appliquer le stash	Stash anwenden	Применить stash	应用贮藏	スタッシュを適用	스태시 적용
+Pop	Pop	Pop	Pop	Pop	Pop	弹出	Pop	Pop
+Pop stash	Pop do stash	Pop del stash	Pop du stash	Stash poppen	Pop stash	弹出贮藏	スタッシュを Pop	스태시 Pop
+Drop	Descartar	Descartar	Supprimer	Verwerfen	Удалить	丢弃	ドロップ	드롭
+Drop stash	Descartar stash	Descartar stash	Supprimer le stash	Stash verwerfen	Удалить stash	丢弃贮藏	スタッシュをドロップ	스태시 드롭
+Drop this stash?	Descartar este stash?	¿Descartar este stash?	Supprimer ce stash ?	Diesen Stash verwerfen?	Удалить этот stash?	要丢弃这个贮藏吗？	このスタッシュをドロップしますか？	이 스태시를 드롭할까요?
+Checkout (detached)	Checkout (desanexado)	Cambiar a (desacoplado)	Basculer (détaché)	Auschecken (losgelöst)	Переключиться (detached)	检出（分离 HEAD）	チェックアウト（デタッチ）	체크아웃 (분리됨)
+Create branch here…	Criar branch aqui…	Crear rama aquí…	Créer une branche ici…	Branch hier erstellen…	Создать ветку здесь…	在此创建分支…	ここにブランチを作成…	여기에 브랜치 만들기…
+Create tag here…	Criar tag aqui…	Crear etiqueta aquí…	Créer un tag ici…	Tag hier erstellen…	Создать тег здесь…	在此创建标签…	ここにタグを作成…	여기에 태그 만들기…
+New tag	Nova tag	Nueva etiqueta	Nouveau tag	Neuer Tag	Новый тег	新建标签	新しいタグ	새 태그
+Tag name	Nome da tag	Nombre de la etiqueta	Nom du tag	Tag-Name	Название тега	标签名称	タグ名	태그 이름
+Tag	Tag	Etiqueta	Tag	Tag	Тег	标签	タグ	태그
+Cherry-pick	Cherry-pick	Cherry-pick	Cherry-pick	Cherry-Pick	Cherry-pick	摘取 (Cherry-pick)	チェリーピック	체리픽
+Revert	Reverter	Revertir	Annuler (revert)	Revert	Откатить (revert)	还原 (Revert)	リバート	되돌리기 (Revert)
+Reset {0} here ({1})	Reset de {0} para cá ({1})	Reset de {0} aquí ({1})	Reset de {0} ici ({1})	{0} hierher zurücksetzen ({1})	Reset {0} сюда ({1})	将 {0} 重置到此处 ({1})	{0} をここにリセット ({1})	{0}을(를) 여기로 리셋 ({1})
+Hard reset	Hard reset	Hard reset	Hard reset	Hard Reset	Hard reset	硬重置	ハードリセット	하드 리셋
+Hard reset to {0}? Uncommitted changes will be lost.	Hard reset para {0}? As alterações não commitadas serão perdidas.	¿Hard reset a {0}? Se perderán los cambios sin commit.	Hard reset vers {0} ? Les modifications non validées seront perdues.	Hard Reset auf {0}? Nicht committete Änderungen gehen verloren.	Выполнить hard reset на {0}? Незакоммиченные изменения будут потеряны.	硬重置到 {0}？未提交的更改将丢失。	{0} にハードリセットしますか？未コミットの変更は失われます。	{0}(으)로 하드 리셋할까요? 커밋되지 않은 변경 사항은 사라집니다.
+Reset	Reset	Reset	Reset	Reset	Reset	重置	リセット	리셋
+Rebase {0} onto this commit	Rebase de {0} sobre este commit	Rebase de {0} sobre este commit	Rebaser {0} sur ce commit	{0} auf diesen Commit rebasen	Rebase {0} на этот коммит	将 {0} 变基到此提交	{0} をこのコミットにリベース	{0}을(를) 이 커밋 위로 리베이스
+Interactive rebase onto here…	Rebase interativo sobre este…	Rebase interactivo sobre este…	Rebase interactif sur celui-ci…	Interaktiver Rebase auf diesen…	Интерактивный rebase на этот…	交互式变基到此处…	ここへ対話的リベース…	여기로 대화형 리베이스…
+Interactive rebase from here…	Rebase interativo a partir daqui…	Rebase interactivo desde aquí…	Rebase interactif depuis ici…	Interaktiver Rebase ab hier…	Интерактивный rebase отсюда…	从此处开始交互式变基…	ここから対話的リベース…	여기서부터 대화형 리베이스…
+Copy SHA	Copiar SHA	Copiar SHA	Copier le SHA	SHA kopieren	Копировать SHA	复制 SHA	SHA をコピー	SHA 복사
+Clone repository	Clonar repositório	Clonar repositorio	Cloner un dépôt	Repository klonen	Клонировать репозиторий	克隆仓库	リポジトリをクローン	저장소 복제
+Repository URL	URL do repositório	URL del repositorio	URL du dépôt	Repository-URL	URL репозитория	仓库地址	リポジトリの URL	저장소 URL
+Parent folder	Pasta pai	Carpeta superior	Dossier parent	Übergeordneter Ordner	Родительская папка	上级文件夹	親フォルダー	상위 폴더
+Browse…	Procurar…	Examinar…	Parcourir…	Durchsuchen…	Обзор…	浏览…	参照…	찾아보기…
+Folder name	Nome da pasta	Nombre de la carpeta	Nom du dossier	Ordnername	Имя папки	文件夹名称	フォルダー名	폴더 이름
+Also clone submodules	Clonar também os submódulos	Clonar también los submódulos	Cloner aussi les sous-modules	Submodule ebenfalls klonen	Клонировать также подмодули	同时克隆子模块	サブモジュールもクローン	서브모듈도 복제
+Clone	Clonar	Clonar	Cloner	Klonen	Клонировать	克隆	クローン	복제
+Clone {0}	Clonar {0}	Clonar {0}	Cloner {0}	{0} klonen	Клонирование {0}	克隆 {0}	{0} をクローン	{0} 복제
+Cloning…	Clonando…	Clonando…	Clonage…	Klone…	Клонирование…	正在克隆…	クローン中…	복제 중…
+Tick the lines to {0} first	Marque primeiro as linhas para {0}	Marca primero las líneas para {0}	Cochez d'abord les lignes à {0}	Wählen Sie zuerst die Zeilen aus: {0}	Сначала отметьте строки: {0}	请先勾选要{0}的行	先に{0}する行にチェックを入れてください	먼저 {0}할 줄을 선택하세요
+Discard the selected {0} from the working copy? This cannot be undone.	Descartar {0} selecionado(s) da cópia de trabalho? Isso não pode ser desfeito.	¿Descartar la selección ({0}) de la copia de trabajo? No se puede deshacer.	Annuler la sélection ({0}) dans la copie de travail ? Cette action est irréversible.	Die ausgewählten {0} aus dem Arbeitsverzeichnis verwerfen? Das kann nicht rückgängig gemacht werden.	Отбросить выбранное ({0}) из рабочей копии? Это нельзя отменить.	要从工作副本中放弃所选的{0}吗？此操作无法撤销。	作業コピーから選択した{0}を破棄しますか？この操作は元に戻せません。	작업 사본에서 선택한 {0}을(를) 버릴까요? 되돌릴 수 없습니다.

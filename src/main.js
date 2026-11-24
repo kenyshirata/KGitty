@@ -240,6 +240,7 @@ ipcMain.handle('reveal', (_e, p) => shell.showItemInFolder(path.normalize(p)));
 
 app.whenReady().then(() => {
   startAskpass();
+  require('./updater').init(() => mainWin);
   createWindow();
   app.on('activate', () => BrowserWindow.getAllWindows().length || createWindow());
 });

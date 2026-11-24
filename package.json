@@ -8,7 +8,9 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --win nsis"
+    "dist": "electron-builder --win nsis --publish never",
+    "release": "electron-builder --win nsis --publish always",
+    "i18n": "node tools/build-i18n.js"
   },
   "license": "MIT",
   "devDependencies": {
@@ -48,6 +50,17 @@
       "shortcutName": "KGitty",
       "artifactName": "KGitty-Setup-${version}.${ext}"
     },
-    "afterPack": "build/afterPack.js"
+    "afterPack": "build/afterPack.js",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "kenyshirata",
+        "repo": "KGitty",
+        "releaseType": "release"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }

@@ -1,0 +1,137 @@
+Author	Autor	Autor	Auteur	Autor	Автор	作者	作成者	작성자
+Date	Data	Fecha	Date	Datum	Дата	日期	日付	날짜
+Hash	Hash	Hash	Hash	Hash	Хеш	哈希	ハッシュ	해시
+Zoom {0}%	Zoom {0}%	Zoom {0}%	Zoom {0} %	Zoom {0} %	Масштаб {0}%	缩放 {0}%	ズーム {0}%	확대/축소 {0}%
+Theme default	Padrão do tema	Predeterminado del tema	Défaut du thème	Theme-Standard	Как в теме	主题默认	テーマの既定	테마 기본값
+Pick any colour	Escolha qualquer cor	Elige cualquier color	Choisissez une couleur	Beliebige Farbe wählen	Выберите любой цвет	选择任意颜色	好きな色を選択	원하는 색 선택
+Custom	Personalizada	Personalizado	Personnalisée	Benutzerdefiniert	Своя	自定义	カスタム	사용자 지정
+Move left	Mover para a esquerda	Mover a la izquierda	Déplacer vers la gauche	Nach links	Сдвинуть влево	左移	左へ移動	왼쪽으로 이동
+Move right	Mover para a direita	Mover a la derecha	Déplacer vers la droite	Nach rechts	Сдвинуть вправо	右移	右へ移動	오른쪽으로 이동
+Default (Consolas)	Padrão (Consolas)	Predeterminada (Consolas)	Par défaut (Consolas)	Standard (Consolas)	По умолчанию (Consolas)	默认 (Consolas)	既定 (Consolas)	기본값 (Consolas)
+Appearance	Aparência	Apariencia	Apparence	Darstellung	Внешний вид	外观	外観	모양
+Appearance…	Aparência…	Apariencia…	Apparence…	Darstellung…	Внешний вид…	外观…	外観…	모양…
+changes apply immediately	as alterações são aplicadas na hora	los cambios se aplican al instante	les modifications s'appliquent immédiatement	Änderungen werden sofort übernommen	изменения применяются сразу	更改会立即生效	変更はすぐに反映されます	변경 사항은 즉시 적용됩니다
+Accent colour	Cor de destaque	Color de énfasis	Couleur d'accentuation	Akzentfarbe	Акцентный цвет	强调色	アクセントカラー	강조 색상
+Text and density	Texto e densidade	Texto y densidad	Texte et densité	Text und Dichte	Текст и плотность	文字与密度	テキストと密度	텍스트 및 밀도
+Interface zoom	Zoom da interface	Zoom de la interfaz	Zoom de l'interface	Oberflächenzoom	Масштаб интерфейса	界面缩放	インターフェイスのズーム	인터페이스 확대/축소
+Code font	Fonte do código	Fuente del código	Police du code	Code-Schriftart	Шрифт кода	代码字体	コードのフォント	코드 글꼴
+Code size	Tamanho do código	Tamaño del código	Taille du code	Code-Größe	Размер кода	代码大小	コードのサイズ	코드 크기
+Font ligatures	Ligaduras da fonte	Ligaduras de la fuente	Ligatures de police	Schriftligaturen	Лигатуры шрифта	字体连字	フォントの合字	글꼴 합자
+Row density	Densidade das linhas	Densidad de filas	Densité des lignes	Zeilendichte	Плотность строк	行密度	行の密度	행 밀도
+The font has to be installed on this computer; if it is not, the default is used.	A fonte precisa estar instalada neste computador; se não estiver, a padrão será usada.	La fuente debe estar instalada en este equipo; si no lo está, se usa la predeterminada.	La police doit être installée sur cet ordinateur ; sinon, la police par défaut est utilisée.	Die Schriftart muss auf diesem Computer installiert sein; andernfalls wird die Standardschrift verwendet.	Шрифт должен быть установлен на этом компьютере; иначе будет использован шрифт по умолчанию.	该字体必须已安装在此计算机上；否则将使用默认字体。	フォントはこのコンピューターにインストールされている必要があります。ない場合は既定のフォントが使われます。	글꼴이 이 컴퓨터에 설치되어 있어야 합니다. 없으면 기본 글꼴을 사용합니다.
+Commit list	Lista de commits	Lista de commits	Liste des commits	Commit-Liste	Список коммитов	提交列表	コミット一覧	커밋 목록
+Columns	Colunas	Columnas	Colonnes	Spalten	Столбцы	列	列	열
+Date format	Formato da data	Formato de fecha	Format de date	Datumsformat	Формат даты	日期格式	日付の形式	날짜 형식
+Absolute (06 Oct 2026)	Absoluta (06 out 2026)	Absoluta (06 oct 2026)	Absolue (06 oct. 2026)	Absolut (06. Okt. 2026)	Абсолютный (06 окт. 2026)	绝对日期（2026年10月6日）	絶対 (2026年10月6日)	절대 (2026년 10월 6일)
+Relative (3 days ago)	Relativa (há 3 dias)	Relativa (hace 3 días)	Relative (il y a 3 jours)	Relativ (vor 3 Tagen)	Относительный (3 дня назад)	相对时间（3 天前）	相対 (3 日前)	상대 (3일 전)
+Show	Mostrar	Mostrar	Afficher	Anzeigen	Показывать	显示	表示	표시
+Branch and tag badges	Selos de branch e tag	Etiquetas de rama y tag	Badges de branche et de tag	Branch- und Tag-Marken	Метки веток и тегов	分支和标签徽章	ブランチとタグのバッジ	브랜치 및 태그 배지
+Author avatars	Avatares dos autores	Avatares de los autores	Avatars des auteurs	Autoren-Avatare	Аватары авторов	作者头像	作成者のアバター	작성자 아바타
+Panels	Painéis	Paneles	Panneaux	Bereiche	Панели	面板	パネル	패널
+Drag the borders between the sidebar, the commit list and the file list to resize them; double-click a border to reset it.	Arraste as bordas entre a barra lateral, a lista de commits e a lista de arquivos para redimensioná-las; clique duas vezes em uma borda para restaurá-la.	Arrastra los bordes entre la barra lateral, la lista de commits y la lista de archivos para cambiar su tamaño; haz doble clic en un borde para restablecerlo.	Faites glisser les bordures entre la barre latérale, la liste des commits et la liste des fichiers pour les redimensionner ; double-cliquez sur une bordure pour la réinitialiser.	Ziehen Sie die Ränder zwischen Seitenleiste, Commit-Liste und Dateiliste, um die Größe zu ändern; ein Doppelklick auf einen Rand setzt ihn zurück.	Перетаскивайте границы между боковой панелью, списком коммитов и списком файлов, чтобы изменить размеры; двойной щелчок по границе сбрасывает её.	拖动侧边栏、提交列表和文件列表之间的边界来调整大小；双击边界可还原。	サイドバー、コミット一覧、ファイル一覧の境界をドラッグするとサイズを変更できます。境界をダブルクリックすると元に戻ります。	사이드바, 커밋 목록, 파일 목록 사이의 경계를 드래그해 크기를 조절하세요. 경계를 더블 클릭하면 초기화됩니다.
+Reset panel sizes	Restaurar tamanhos dos painéis	Restablecer tamaños de paneles	Réinitialiser les tailles des panneaux	Bereichsgrößen zurücksetzen	Сбросить размеры панелей	还原面板大小	パネルのサイズをリセット	패널 크기 초기화
+Reset appearance	Restaurar aparência	Restablecer apariencia	Réinitialiser l'apparence	Darstellung zurücksetzen	Сбросить внешний вид	还原外观	外観をリセット	모양 초기화
+Compact	Compacta	Compacta	Compacte	Kompakt	Компактная	紧凑	コンパクト	좁게
+Normal	Normal	Normal	Normale	Normal	Обычная	标准	標準	보통
+Comfortable	Confortável	Cómoda	Confortable	Komfortabel	Свободная	宽松	ゆったり	넓게
+System	Sistema	Sistema	Système	System	Системная	跟随系统	システム	시스템
+Light	Claro	Claro	Clair	Hell	Светлая	浅色	ライト	라이트
+Dark	Escuro	Oscuro	Sombre	Dunkel	Тёмная	深色	ダーク	다크
+High contrast	Alto contraste	Alto contraste	Contraste élevé	Hoher Kontrast	Высокий контраст	高对比度	ハイコントラスト	고대비
+Show author avatars	Mostrar avatares dos autores	Mostrar avatares de los autores	Afficher les avatars des auteurs	Autoren-Avatare anzeigen	Показывать аватары авторов	显示作者头像	作成者のアバターを表示	작성자 아바타 표시
+Load photos from Gravatar	Carregar fotos do Gravatar	Cargar fotos de Gravatar	Charger les photos depuis Gravatar	Fotos von Gravatar laden	Загружать фото из Gravatar	从 Gravatar 加载照片	Gravatar から写真を読み込む	Gravatar에서 사진 불러오기
+Theme: {0:t}	Tema: {0}	Tema: {0}	Thème : {0}	Design: {0}	Тема: {0}	主题：{0}	テーマ: {0}	테마: {0}
+Sign in	Entrar	Iniciar sesión	Se connecter	Anmelden	Вход	登录	サインイン	로그인
+Username	Usuário	Usuario	Nom d'utilisateur	Benutzername	Имя пользователя	用户名	ユーザー名	사용자 이름
+Password or access token	Senha ou token de acesso	Contraseña o token de acceso	Mot de passe ou jeton d'accès	Passwort oder Zugriffstoken	Пароль или токен доступа	密码或访问令牌	パスワードまたはアクセストークン	비밀번호 또는 액세스 토큰
+GitHub no longer accepts account passwords — paste a personal access token.	O GitHub não aceita mais senhas de conta — cole um token de acesso pessoal.	GitHub ya no acepta contraseñas de cuenta: pega un token de acceso personal.	GitHub n'accepte plus les mots de passe de compte — collez un jeton d'accès personnel.	GitHub akzeptiert keine Kontopasswörter mehr — fügen Sie ein persönliches Zugriffstoken ein.	GitHub больше не принимает пароли от аккаунта — вставьте персональный токен доступа.	GitHub 不再接受账户密码——请粘贴个人访问令牌。	GitHub はアカウントのパスワードを受け付けなくなりました。個人用アクセストークンを貼り付けてください。	GitHub는 더 이상 계정 비밀번호를 허용하지 않습니다. 개인 액세스 토큰을 붙여넣으세요.
+Use an access token if your account has two-factor authentication.	Use um token de acesso se a sua conta tiver autenticação em dois fatores.	Usa un token de acceso si tu cuenta tiene autenticación en dos pasos.	Utilisez un jeton d'accès si votre compte a l'authentification à deux facteurs.	Verwenden Sie ein Zugriffstoken, wenn Ihr Konto die Zwei-Faktor-Authentifizierung nutzt.	Используйте токен доступа, если в вашем аккаунте включена двухфакторная аутентификация.	如果账户启用了双重验证，请使用访问令牌。	アカウントで二要素認証を使っている場合は、アクセストークンを使用してください。	계정에 2단계 인증이 설정되어 있으면 액세스 토큰을 사용하세요.
+SSH key passphrase	Senha da chave SSH	Frase de contraseña de la clave SSH	Phrase secrète de la clé SSH	Passphrase des SSH-Schlüssels	Парольная фраза SSH-ключа	SSH 密钥口令	SSH キーのパスフレーズ	SSH 키 암호
+SSH password	Senha SSH	Contraseña SSH	Mot de passe SSH	SSH-Passwort	Пароль SSH	SSH 密码	SSH パスワード	SSH 비밀번호
+Passphrase	Frase secreta	Frase de contraseña	Phrase secrète	Passphrase	Парольная фраза	口令	パスフレーズ	암호
+Password	Senha	Contraseña	Mot de passe	Passwort	Пароль	密码	パスワード	비밀번호
+Unknown host	Host desconhecido	Host desconocido	Hôte inconnu	Unbekannter Host	Неизвестный хост	未知主机	不明なホスト	알 수 없는 호스트
+Type “yes” to trust this host, or “no”	Digite “yes” para confiar neste host, ou “no”	Escribe “yes” para confiar en este host, o “no”	Tapez « yes » pour faire confiance à cet hôte, ou « no »	Geben Sie „yes“ ein, um diesem Host zu vertrauen, oder „no“	Введите «yes», чтобы доверять этому хосту, или «no»	输入 “yes” 以信任此主机，或输入 “no”	このホストを信頼するには「yes」、しない場合は「no」と入力	이 호스트를 신뢰하려면 “yes”, 아니면 “no”를 입력하세요
+Git needs input	O Git precisa de uma resposta	Git necesita una respuesta	Git a besoin d'une réponse	Git benötigt eine Eingabe	Git требуется ввод	Git 需要输入	Git が入力を求めています	Git에 입력이 필요합니다
+Answer	Resposta	Respuesta	Réponse	Antwort	Ответ	回答	回答	응답
+Git hands this to your credential helper, which stores it if one is configured (Preferences → Credentials).	O Git entrega isto ao seu credential helper, que o guarda se houver um configurado (Preferências → Credenciais).	Git se lo entrega a tu credential helper, que lo guarda si hay uno configurado (Preferencias → Credenciales).	Git le transmet à votre assistant d'identifiants, qui le mémorise s'il y en a un de configuré (Préférences → Identifiants).	Git übergibt dies an Ihren Credential-Helper, der es speichert, falls einer eingerichtet ist (Einstellungen → Anmeldedaten).	Git передаёт это вашему credential helper, который сохранит данные, если он настроен (Настройки → Учётные данные).	Git 会把它交给凭据助手，如果已配置，则由其保存（首选项 → 凭据）。	Git はこれを認証情報ヘルパーに渡し、設定されていれば保存されます（設定 → 認証情報）。	Git은 이 정보를 자격 증명 도우미에 전달하며, 설정되어 있으면 저장됩니다 (환경설정 → 자격 증명).
+To show author photos, KGitty sends a SHA-256 hash of each author's e-mail address to gravatar.com. Nothing else leaves your machine. Enable it?	Para mostrar as fotos dos autores, o KGitty envia ao gravatar.com um hash SHA-256 do e-mail de cada autor. Nada mais sai da sua máquina. Ativar?	Para mostrar las fotos de los autores, KGitty envía a gravatar.com un hash SHA-256 del correo de cada autor. Nada más sale de tu equipo. ¿Activarlo?	Pour afficher les photos des auteurs, KGitty envoie à gravatar.com un hachage SHA-256 de l'adresse e-mail de chaque auteur. Rien d'autre ne quitte votre machine. L'activer ?	Um Autorenfotos anzuzeigen, sendet KGitty einen SHA-256-Hash der E-Mail-Adresse jedes Autors an gravatar.com. Sonst verlässt nichts Ihren Rechner. Aktivieren?	Чтобы показывать фото авторов, KGitty отправляет на gravatar.com SHA-256-хеш адреса электронной почты каждого автора. Больше ничего с вашего компьютера не уходит. Включить?	为了显示作者照片，KGitty 会把每位作者邮箱的 SHA-256 哈希发送到 gravatar.com，除此之外不会有任何数据离开你的电脑。要启用吗？	作成者の写真を表示するため、KGitty は各作成者のメールアドレスの SHA-256 ハッシュを gravatar.com に送信します。それ以外のデータが外部に送られることはありません。有効にしますか？	작성자 사진을 표시하려고 KGitty는 각 작성자 이메일 주소의 SHA-256 해시를 gravatar.com으로 보냅니다. 그 외에는 아무것도 컴퓨터 밖으로 나가지 않습니다. 사용할까요?
+Blame	Blame	Blame	Blame	Blame	Blame	追溯 (Blame)	Blame	Blame
+Blame · {0}	Blame · {0}	Blame · {0}	Blame · {0}	Blame · {0}	Blame · {0}	追溯 · {0}	Blame · {0}	Blame · {0}
+Not committed	Não commitado	Sin commit	Non validé	Nicht committet	Не закоммичено	未提交	未コミット	커밋되지 않음
+Not committed yet	Ainda não commitado	Aún sin commit	Pas encore validé	Noch nicht committet	Ещё не закоммичено	尚未提交	まだコミットされていません	아직 커밋되지 않음
+local	local	local	local	lokal	локально	本地	ローカル	로컬
+Click a line to see the commit that last changed it.	Clique em uma linha para ver o commit que a alterou por último.	Haz clic en una línea para ver el commit que la modificó por última vez.	Cliquez sur une ligne pour voir le commit qui l'a modifiée en dernier.	Klicken Sie auf eine Zeile, um den Commit zu sehen, der sie zuletzt geändert hat.	Щёлкните по строке, чтобы увидеть коммит, который изменил её последним.	点击某一行即可查看最后修改它的提交。	行をクリックすると、その行を最後に変更したコミットが表示されます。	줄을 클릭하면 그 줄을 마지막으로 바꾼 커밋이 표시됩니다.
+← Back	← Voltar	← Atrás	← Retour	← Zurück	← Назад	← 返回	← 戻る	← 뒤로
+Show in log	Mostrar no log	Mostrar en el log	Afficher dans le journal	Im Log anzeigen	Показать в журнале	在日志中显示	ログで表示	로그에서 보기
+Blame previous version	Blame da versão anterior	Blame de la versión anterior	Blame de la version précédente	Blame der Vorgängerversion	Blame предыдущей версии	追溯上一个版本	前のバージョンを Blame	이전 버전 Blame
+Delete branches	Excluir branches	Eliminar ramas	Supprimer des branches	Branches löschen	Удалить ветки	删除分支	ブランチを削除	브랜치 삭제
+Delete branches…	Excluir branches…	Eliminar ramas…	Supprimer des branches…	Branches löschen…	Удалить ветки…	删除分支…	ブランチを削除…	브랜치 삭제…
+There are no other branches to delete.	Não há outras branches para excluir.	No hay otras ramas que eliminar.	Il n'y a aucune autre branche à supprimer.	Es gibt keine weiteren Branches zum Löschen.	Других веток для удаления нет.	没有其他可删除的分支。	削除できる他のブランチはありません。	삭제할 다른 브랜치가 없습니다.
+Default branch or upstream of the current branch	Branch padrão ou upstream da branch atual	Rama predeterminada o upstream de la rama actual	Branche par défaut ou upstream de la branche courante	Standard-Branch oder Upstream des aktuellen Branches	Ветка по умолчанию или upstream текущей ветки	默认分支或当前分支的上游	デフォルトブランチ、または現在のブランチの upstream	기본 브랜치 또는 현재 브랜치의 upstream
+Filter…	Filtrar…	Filtrar…	Filtrer…	Filtern…	Фильтр…	筛选…	絞り込み…	필터…
+Select merged	Selecionar já mescladas	Seleccionar fusionadas	Sélectionner les fusionnées	Gemergte auswählen	Выбрать слитые	选择已合并的	マージ済みを選択	병합된 항목 선택
+Select gone	Selecionar removidas	Seleccionar eliminadas	Sélectionner les supprimées	Gelöschte auswählen	Выбрать удалённые	选择已消失的	削除済みを選択	사라진 항목 선택
+Clear	Limpar	Limpiar	Effacer	Leeren	Очистить	清除	クリア	지우기
+Local ({0})	Locais ({0})	Locales ({0})	Locales ({0})	Lokal ({0})	Локальные ({0})	本地 ({0})	ローカル ({0})	로컬 ({0})
+Remote ({0})	Remotas ({0})	Remotas ({0})	Distantes ({0})	Remote ({0})	Удалённые ({0})	远程 ({0})	リモート ({0})	원격 ({0})
+Local	Local	Local	Local	Lokal	Локальные	本地	ローカル	로컬
+Remote	Remoto	Remoto	Distant	Remote	Удалённые	远程	リモート	원격
+No matches	Nenhuma correspondência	Sin coincidencias	Aucune correspondance	Keine Treffer	Совпадений нет	没有匹配项	一致するものはありません	일치하는 항목 없음
+{0} remote branch(es) will be deleted on the server.	{0} branch(es) remota(s) será(ão) excluída(s) no servidor.	Se eliminará(n) {0} rama(s) remota(s) en el servidor.	{0} branche(s) distante(s) sera/seront supprimée(s) sur le serveur.	{0} Remote-Branch(es) werden auf dem Server gelöscht.	На сервере будет удалено веток: {0}.	将在服务器上删除 {0} 个远程分支。	サーバー上の {0} 個のリモートブランチが削除されます。	서버에서 원격 브랜치 {0}개가 삭제됩니다.
+Delete {0} branches	Excluir {0} branches	Eliminar {0} ramas	Supprimer {0} branches	{0} Branches löschen	Удалить веток: {0}	删除 {0} 个分支	{0} 個のブランチを削除	브랜치 {0}개 삭제
+Delete 1 branch	Excluir 1 branch	Eliminar 1 rama	Supprimer 1 branche	1 Branch löschen	Удалить 1 ветку	删除 1 个分支	1 個のブランチを削除	브랜치 1개 삭제
+Delete {0} local and {1} remote branch(es)?	Excluir {0} branch(es) local(is) e {1} remota(s)?	¿Eliminar {0} rama(s) local(es) y {1} remota(s)?	Supprimer {0} branche(s) locale(s) et {1} distante(s) ?	{0} lokale und {1} Remote-Branch(es) löschen?	Удалить локальных веток: {0}, удалённых: {1}?	要删除 {0} 个本地分支和 {1} 个远程分支吗？	ローカル {0} 個とリモート {1} 個のブランチを削除しますか？	로컬 브랜치 {0}개와 원격 브랜치 {1}개를 삭제할까요?
+{0} local branch(es) are not merged into HEAD and will be force-deleted: {1}.	{0} branch(es) local(is) não foi(ram) mesclada(s) em HEAD e será(ão) excluída(s) à força: {1}.	{0} rama(s) local(es) no está(n) fusionada(s) en HEAD y se eliminará(n) a la fuerza: {1}.	{0} branche(s) locale(s) ne sont pas fusionnées dans HEAD et seront supprimées de force : {1}.	{0} lokale Branch(es) sind nicht in HEAD gemergt und werden erzwungen gelöscht: {1}.	Локальных веток, не слитых в HEAD, будет удалено принудительно: {0} ({1}).	有 {0} 个本地分支尚未合并到 HEAD，将被强制删除：{1}。	ローカルの {0} 個のブランチが HEAD にマージされておらず、強制削除されます: {1}。	로컬 브랜치 {0}개가 HEAD에 병합되지 않았으며 강제로 삭제됩니다: {1}.
+Remote branches are deleted on the server and cannot be restored from here.	Branches remotas são excluídas no servidor e não podem ser restauradas daqui.	Las ramas remotas se eliminan en el servidor y no se pueden restaurar desde aquí.	Les branches distantes sont supprimées sur le serveur et ne peuvent pas être restaurées d'ici.	Remote-Branches werden auf dem Server gelöscht und können von hier aus nicht wiederhergestellt werden.	Удалённые ветки удаляются на сервере и не могут быть восстановлены отсюда.	远程分支会在服务器上被删除，无法从这里恢复。	リモートブランチはサーバー上で削除され、ここからは復元できません。	원격 브랜치는 서버에서 삭제되며 여기서 복원할 수 없습니다.
+Some branches could not be deleted:	Algumas branches não puderam ser excluídas:	No se pudieron eliminar algunas ramas:	Certaines branches n'ont pas pu être supprimées :	Einige Branches konnten nicht gelöscht werden:	Не удалось удалить некоторые ветки:	有些分支无法删除：	削除できなかったブランチがあります:	일부 브랜치를 삭제하지 못했습니다:
+Rebase	Rebase	Rebase	Rebase	Rebase	Rebase	变基	リベース	리베이스
+merge	merge	merge	merge	Merge	слияние	合并	マージ	병합
+rebase	rebase	rebase	rebase	Rebase	rebase	变基	リベース	리베이스
+cherry-pick	cherry-pick	cherry-pick	cherry-pick	Cherry-Pick	cherry-pick	摘取	チェリーピック	체리픽
+revert	revert	revert	revert	Revert	revert	还原	リバート	되돌리기
+{0:t} in progress	{0} em andamento	{0} en curso	{0} en cours	{0} läuft	{0}: выполняется	{0}进行中	{0}を実行中	{0} 진행 중
+{0} file(s) with conflicts	{0} arquivo(s) com conflitos	{0} archivo(s) con conflictos	{0} fichier(s) en conflit	{0} Datei(en) mit Konflikten	Файлов с конфликтами: {0}	{0} 个文件存在冲突	競合のあるファイル: {0} 個	충돌이 있는 파일 {0}개
+All conflicts resolved	Todos os conflitos resolvidos	Todos los conflictos resueltos	Tous les conflits sont résolus	Alle Konflikte gelöst	Все конфликты разрешены	所有冲突已解决	すべての競合を解決しました	모든 충돌 해결됨
+Continue	Continuar	Continuar	Continuer	Fortsetzen	Продолжить	继续	続行	계속
+Skip	Pular	Omitir	Ignorer	Überspringen	Пропустить	跳过	スキップ	건너뛰기
+Abort	Abortar	Abortar	Abandonner	Abbrechen	Прервать	中止	中止	중단
+Merge tool	Ferramenta de merge	Herramienta de fusión	Outil de fusion	Merge-Tool	Инструмент слияния	合并工具	マージツール	병합 도구
+Open the conflicted files in your external merge tool	Abrir os arquivos em conflito na sua ferramenta de merge externa	Abrir los archivos en conflicto en tu herramienta de fusión externa	Ouvrir les fichiers en conflit dans votre outil de fusion externe	Dateien mit Konflikten im externen Merge-Tool öffnen	Открыть файлы с конфликтами во внешнем инструменте слияния	在外部合并工具中打开有冲突的文件	競合しているファイルを外部マージツールで開く	충돌 파일을 외부 병합 도구로 열기
+Abort and discard the changes made by this operation?	Abortar e descartar as alterações feitas por esta operação?	¿Abortar y descartar los cambios hechos por esta operación?	Abandonner et annuler les modifications faites par cette opération ?	Abbrechen und die durch diesen Vorgang vorgenommenen Änderungen verwerfen?	Прервать и отбросить изменения, сделанные этой операцией?	中止并放弃此操作所做的更改吗？	中止して、この操作による変更を破棄しますか？	중단하고 이 작업으로 변경된 내용을 버릴까요?
+Abort {0:t}	Abortar {0}	Abortar {0}	Abandonner {0}	{0} abbrechen	Прервать: {0}	中止{0}	{0}を中止	{0} 중단
+Continue {0:t}	Continuar {0}	Continuar {0}	Continuer {0}	{0} fortsetzen	Продолжить: {0}	继续{0}	{0}を続行	{0} 계속
+Skip commit	Pular commit	Omitir commit	Ignorer le commit	Commit überspringen	Пропустить коммит	跳过提交	コミットをスキップ	커밋 건너뛰기
+… {0} unchanged lines …	… {0} linhas inalteradas …	… {0} líneas sin cambios …	… {0} lignes inchangées …	… {0} unveränderte Zeilen …	… неизменённых строк: {0} …	… {0} 行未更改 …	… 変更なしの {0} 行 …	… 변경 없는 {0}줄 …
+Conflict {0} of {1}	Conflito {0} de {1}	Conflicto {0} de {1}	Conflit {0} sur {1}	Konflikt {0} von {1}	Конфликт {0} из {1}	冲突 {0}/{1}	競合 {0} / {1}	충돌 {0}/{1}
+Use ours	Usar a nossa	Usar la nuestra	Garder la nôtre	Unsere verwenden	Взять нашу	使用我们的	自分側を使用	내 쪽 사용
+Use theirs	Usar a deles	Usar la suya	Garder la leur	Ihre verwenden	Взять их	使用对方的	相手側を使用	상대 쪽 사용
+Use both	Usar ambas	Usar ambas	Garder les deux	Beide verwenden	Взять обе	两者都用	両方を使用	둘 다 사용
+Edit…	Editar…	Editar…	Modifier…	Bearbeiten…	Изменить…	编辑…	編集…	편집…
+Ours · {0}	Nossa · {0}	Nuestra · {0}	Nôtre · {0}	Unsere · {0}	Наша · {0}	我们的 · {0}	自分側 · {0}	내 쪽 · {0}
+Theirs · {0}	Deles · {0}	Suya · {0}	Leur · {0}	Ihre · {0}	Их · {0}	对方的 · {0}	相手側 · {0}	상대 쪽 · {0}
+Base	Base	Base	Base	Basis	Базовая версия	基础版本	ベース	베이스
+Open in your external merge tool	Abrir na sua ferramenta de merge externa	Abrir en tu herramienta de fusión externa	Ouvrir dans votre outil de fusion externe	Im externen Merge-Tool öffnen	Открыть во внешнем инструменте слияния	在外部合并工具中打开	外部マージツールで開く	외부 병합 도구로 열기
+Take ours	Ficar com a nossa	Quedarse con la nuestra	Prendre la nôtre	Unsere übernehmen	Принять нашу	采用我们的	自分側を採用	내 쪽 채택
+Take theirs	Ficar com a deles	Quedarse con la suya	Prendre la leur	Ihre übernehmen	Принять их	采用对方的	相手側を採用	상대 쪽 채택
+Delete file	Excluir arquivo	Eliminar archivo	Supprimer le fichier	Datei löschen	Удалить файл	删除文件	ファイルを削除	파일 삭제
+{0} — {1}/{2} resolved	{0} — {1}/{2} resolvidos	{0} — {1}/{2} resueltos	{0} — {1}/{2} résolus	{0} — {1}/{2} gelöst	{0} — разрешено {1}/{2}	{0} — 已解决 {1}/{2}	{0} — {1}/{2} 件解決済み	{0} — {1}/{2} 해결됨
+{0} — no conflict markers	{0} — sem marcadores de conflito	{0} — sin marcadores de conflicto	{0} — aucun marqueur de conflit	{0} — keine Konfliktmarker	{0} — маркеров конфликта нет	{0} — 没有冲突标记	{0} — 競合マーカーなし	{0} — 충돌 표시 없음
+Mark resolved	Marcar como resolvido	Marcar como resuelto	Marquer comme résolu	Als gelöst markieren	Отметить как разрешённый	标记为已解决	解決済みにする	해결됨으로 표시
+Save & mark resolved	Salvar e marcar como resolvido	Guardar y marcar como resuelto	Enregistrer et marquer comme résolu	Speichern und als gelöst markieren	Сохранить и отметить как разрешённый	保存并标记为已解决	保存して解決済みにする	저장하고 해결됨으로 표시
+{0} conflict(s) still need a choice	{0} conflito(s) ainda precisa(m) de uma escolha	{0} conflicto(s) aún necesita(n) una elección	{0} conflit(s) nécessitent encore un choix	Bei {0} Konflikt(en) fehlt noch eine Auswahl	Конфликтов, требующих выбора: {0}	还有 {0} 处冲突需要选择	あと {0} 件の競合で選択が必要です	{0}개의 충돌에서 아직 선택이 필요합니다
+Ready to save	Pronto para salvar	Listo para guardar	Prêt à enregistrer	Bereit zum Speichern	Готово к сохранению	可以保存了	保存できます	저장할 준비 완료
+This file cannot be shown as text (deleted, binary or one-sided change). Use the buttons above.	Este arquivo não pode ser exibido como texto (excluído, binário ou alterado em só um lado). Use os botões acima.	Este archivo no se puede mostrar como texto (eliminado, binario o con cambio en un solo lado). Usa los botones de arriba.	Ce fichier ne peut pas être affiché en texte (supprimé, binaire ou modifié d'un seul côté). Utilisez les boutons ci-dessus.	Diese Datei kann nicht als Text angezeigt werden (gelöscht, binär oder einseitig geändert). Verwenden Sie die Schaltflächen oben.	Этот файл нельзя показать как текст (удалён, двоичный или изменён только с одной стороны). Используйте кнопки выше.	无法以文本形式显示此文件（已删除、二进制或仅一侧有更改）。请使用上方的按钮。	このファイルはテキストとして表示できません（削除、バイナリ、または片側のみの変更）。上のボタンを使ってください。	이 파일은 텍스트로 표시할 수 없습니다(삭제됨, 바이너리 또는 한쪽만 변경됨). 위의 버튼을 사용하세요.
+Resolve {0}	Resolver {0}	Resolver {0}	Résoudre {0}	{0} lösen	Разрешить {0}	解决 {0}	{0} を解決	{0} 해결
+No merge tool configured	Nenhuma ferramenta de merge configurada	No hay herramienta de fusión configurada	Aucun outil de fusion configuré	Kein Merge-Tool eingerichtet	Инструмент слияния не настроен	未配置合并工具	マージツールが設定されていません	병합 도구가 설정되지 않았습니다
+Choose a merge tool (VS Code, Beyond Compare, KDiff3, Meld, …) in Preferences first.	Escolha primeiro uma ferramenta de merge (VS Code, Beyond Compare, KDiff3, Meld, …) nas Preferências.	Elige primero una herramienta de fusión (VS Code, Beyond Compare, KDiff3, Meld, …) en Preferencias.	Choisissez d'abord un outil de fusion (VS Code, Beyond Compare, KDiff3, Meld, …) dans les Préférences.	Wählen Sie zuerst in den Einstellungen ein Merge-Tool (VS Code, Beyond Compare, KDiff3, Meld, …).	Сначала выберите инструмент слияния (VS Code, Beyond Compare, KDiff3, Meld, …) в настройках.	请先在首选项中选择合并工具（VS Code、Beyond Compare、KDiff3、Meld 等）。	まず設定でマージツール（VS Code、Beyond Compare、KDiff3、Meld など）を選んでください。	먼저 환경설정에서 병합 도구(VS Code, Beyond Compare, KDiff3, Meld 등)를 선택하세요.
+Open Preferences	Abrir Preferências	Abrir Preferencias	Ouvrir les Préférences	Einstellungen öffnen	Открыть настройки	打开首选项	設定を開く	환경설정 열기
+Merge tool: {0}…	Ferramenta de merge: {0}…	Herramienta de fusión: {0}…	Outil de fusion : {0}…	Merge-Tool: {0}…	Инструмент слияния: {0}…	合并工具：{0}…	マージツール: {0}…	병합 도구: {0}…
+File history	Histórico do arquivo	Historial del archivo	Historique du fichier	Dateiverlauf	История файла	文件历史	ファイルの履歴	파일 기록
+History	Histórico	Historial	Historique	Verlauf	История	历史	履歴	기록
+No committed history for {0}.	Nenhum histórico commitado para {0}.	Sin historial de commits para {0}.	Aucun historique validé pour {0}.	Kein committeter Verlauf für {0}.	Нет истории коммитов для {0}.	{0} 没有已提交的历史。	{0} にはコミット履歴がありません。	{0}에 대한 커밋 기록이 없습니다.
+History · {0}	Histórico · {0}	Historial · {0}	Historique · {0}	Verlauf · {0}	История · {0}	历史 · {0}	履歴 · {0}	기록 · {0}
+{0} commit(s)	{0} commit(s)	{0} commit(s)	{0} commit(s)	{0} Commit(s)	Коммитов: {0}	{0} 个提交	{0} 件のコミット	커밋 {0}개
+Blame here	Blame aqui	Blame aquí	Blame ici	Hier Blame	Blame здесь	在此追溯	ここで Blame	여기서 Blame
+Reveal in Explorer	Mostrar no Explorer	Mostrar en el Explorador	Afficher dans l'Explorateur	Im Explorer anzeigen	Показать в проводнике	在资源管理器中显示	エクスプローラーで表示	탐색기에서 보기
+Copy path	Copiar caminho	Copiar ruta	Copier le chemin	Pfad kopieren	Копировать путь	复制路径	パスをコピー	경로 복사

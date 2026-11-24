@@ -99,7 +99,7 @@ async function renderStashDetail() {
   const [hash = '', author = '', date = '', subject = entry.msg] = info.stdout.split('\n');
   left.innerHTML = `<div class="cinfo"><div class="subject">${esc(subject)}</div>
       <div class="meta">${esc(ref)} · ${hash.slice(0, 7)}</div>
-      <div class="meta"><b>${esc(author)}</b> · ${date ? new Date(date).toLocaleString() : ''}</div></div>
+      <div class="meta"><b>${esc(author)}</b> · ${date ? new Date(date).toLocaleString(kgLocale()) : ''}</div></div>
     <div class="st-actions"><button data-st="apply" class="primary">Apply</button><button data-st="pop">Pop</button><button data-st="branch">Branch…</button><button data-st="drop" class="danger">Drop</button></div>
     <div class="fhead"><span>Stashed files (${files.length})</span><span class="fh-act">${viewToggle()}</span></div>` +
     renderFileList(files, 'stash', true, (f, d) => fileRow(f.path, f.code, { area: 'stash', depth: d }));

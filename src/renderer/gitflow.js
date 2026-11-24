@@ -86,7 +86,7 @@ function flowFinishDialog(type, name) {
   return new Promise((resolve) => {
     const ov = $('#overlay');
     const tagged = type !== 'feature';
-    const target = tagged ? `${f.main} and ${f.develop}` : f.develop;
+    const target = tagged ? `${f.main} / ${f.develop}` : f.develop;
     ov.innerHTML = `<div class="modal"><h3>Finish ${type} ${esc(name)}</h3>
       <p class="hint">Merges into ${esc(target)}${tagged ? ', tags the release' : ''}.</p>
       ${tagged ? `<div class="field"><label>Tag</label><input type="text" id="ff-tag" value="${esc(f.tagPrefix + name)}"></div>

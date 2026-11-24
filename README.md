@@ -27,6 +27,22 @@ npm run pack   # unpacked app only, in dist/win-unpacked
 
 The installer is not code-signed, so Windows SmartScreen may warn on first run.
 
+## Releases and automatic updates
+
+The installed app checks the repository's latest GitHub release shortly after start and every few hours (Preferences → Updates, or *Check for updates* in the command palette). Nothing is downloaded until you say so.
+
+To publish a new version:
+
+```bash
+# 1. set the new version in package.json (for example 0.2.0), commit it
+git tag v0.2.0
+git push origin main --tags
+```
+
+Pushing the tag runs `.github/workflows/release.yml`, which builds the installer and publishes it, together with `latest.yml`, as a GitHub release. Installed copies pick it up from there. While the repository is private, the app needs a GitHub access token that can read releases (`repo` scope); paste it in Preferences → Updates — it is stored encrypted by the operating system. Making the repository public removes that need.
+
+Set `KGITTY_UPDATE_URL` to a folder that serves `latest.yml` to test updates against a local server instead of GitHub.
+
 ## Features
 
 **History**
@@ -60,6 +76,8 @@ The installer is not code-signed, so Windows SmartScreen may warn on first run.
 - Preferences: identity (global or per repository), commit signing, credential helper, merge tool
 - Appearance settings: ten themes (system, light, dark, Dracula, Nord, One Dark, Monokai, Solarized Dark/Light, high contrast), accent colour, interface zoom, code font and size with ligatures, row density, and configurable commit-list columns and date format
 - Resizable panels that remember their size
+- Interface in 9 languages: English, Português (Brasil), Español, Français, Deutsch, Русский, 简体中文, 日本語 and 한국어 — automatic by default, changeable in Preferences
+- Automatic updates from GitHub Releases: a bar offers the new version, downloads it on request and installs it on restart
 - Command palette (`Ctrl+P`) and keyboard shortcuts for nearly everything (`F1` lists them)
 
 ## Keyboard shortcuts
@@ -80,12 +98,24 @@ The installer is not code-signed, so Windows SmartScreen may warn on first run.
 | `Ctrl+Alt+A` | Appearance settings |
 | `Ctrl+=` / `Ctrl+-` / `Ctrl+Alt+0` | Zoom in / out / reset |
 
+## Translations
+
+The app is written in English and translates what it shows on screen, so features never deal with languages. The text of every language lives in `i18n/*.tsv` (one row per phrase: the English text followed by its translation in each language, in the column order of `tools/build-i18n.js`). After editing, run:
+
+```bash
+npm run i18n   # regenerates src/renderer/lang/*.js and checks the tables
+```
+
+A phrase can contain placeholders such as `{0}` that must appear in every translation; `{0:t}` marks a placeholder whose value is itself interface text. Text from the repository (commit messages, branch and file names, diffs, git's own output) is never translated. To add a language, add a column to the tables, an entry to `LANGS` in `tools/build-i18n.js` and a `<script>` line in `src/renderer/index.html`.
+
 ## Project layout
 
 ```
 src/main.js         Electron main process: runs git, askpass server, file access
 src/preload.js      Bridge between the main process and the window
 src/renderer/       The interface: plain scripts, no build step or framework
+i18n/               Translation tables (edited by hand)
+tools/              build-i18n.js generates src/renderer/lang/ from the tables
 build/              Icons and the packaging hook
 ```
 
