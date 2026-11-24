@@ -19,6 +19,7 @@
   <script src="lang/ko.js"></script>
 </head>
 <body>
+  <nav id="menubar" class="menubar"></nav>
   <div id="welcome" class="welcome">
     <h1>KGitty</h1>
     <p>A simple Git client</p>
@@ -27,19 +28,18 @@
   </div>
 
   <div id="app" class="app hidden">
-    <div id="tabs" class="tabs"></div>
     <header class="toolbar">
       <div class="tb-group">
         <button id="tb-repos" title="Repository manager (Ctrl+Shift+M)">🗂 Repos</button>
         <button id="tb-open" title="Open repository">📂 Open</button>
         <button id="tb-clone" title="Clone repository">⎘ Clone</button>
       </div>
-      <div class="tb-group">
+      <div class="tb-group tb-repo">
         <button id="tb-fetch">⟳ Fetch</button>
         <button id="tb-pull">⇣ Pull</button>
         <button id="tb-push">⇡ Push</button>
       </div>
-      <div class="tb-group">
+      <div class="tb-group tb-repo">
         <button id="tb-branch">⑂ Branch</button>
         <button id="tb-stash">▤ Stash</button>
         <button id="tb-undo" title="Undo" disabled>↶ Undo</button>
@@ -49,11 +49,17 @@
       <div class="tb-spacer"></div>
       <div id="repo-title" class="repo-title"></div>
       <div class="tb-spacer"></div>
+      <div class="tb-group tb-repo">
+        <button id="tb-openin" title="Open the repository in another program">↗ Open in ▾</button>
+        <button id="tb-console" title="Open Git Bash in the repository folder">&gt;_ Console</button>
+      </div>
       <button id="tb-prefs" title="Preferences (Ctrl+,)">⚙</button>
       <button id="tb-theme" title="Theme">◐</button>
       <button id="tb-keys" title="Keyboard shortcuts (F1)">⌨</button>
-      <input id="search" type="search" placeholder="Filter commits…">
+      <input id="search" class="tb-repo" type="search" placeholder="Filter commits…">
+      <button id="tb-ws" class="tb-ws" title="Workspaces"><span class="tb-ws-ico">▣</span><span class="tb-ws-name" data-no-i18n></span> ▾</button>
     </header>
+    <div id="tabs" class="tabs"></div>
 
     <div class="body">
       <aside id="sidebar" class="sidebar"></aside>
@@ -69,6 +75,7 @@
         </section>
       </main>
     </div>
+    <div id="mgr" class="mgr hidden"><aside id="mgr-left" class="mgr-left"></aside><section id="mgr-right" class="mgr-right"></section></div>
     <div id="update-bar" class="update-bar hidden"></div>
     <footer id="statusbar" class="statusbar"></footer>
   </div>
@@ -99,9 +106,13 @@
   <script src="palette.js"></script>
   <script src="auth.js"></script>
   <script src="repomgr.js"></script>
+  <script src="mgrtab.js"></script>
   <script src="updates.js"></script>
   <script src="prefs.js"></script>
+  <script src="gitopts.js"></script>
   <script src="shortcuts.js"></script>
+  <script src="menubar.js"></script>
+  <script src="workspaces.js"></script>
   <script src="themeui.js"></script>
 </body>
 </html>

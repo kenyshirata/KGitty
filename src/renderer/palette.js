@@ -57,7 +57,7 @@ function paletteItems(q) {
   const repos = new Map();
   for (const r of rmLoad().repos) repos.set(rmNorm(r.path), r.name);
   for (const p of recents()) if (!repos.has(rmNorm(p))) repos.set(rmNorm(p), rmBase(p));
-  for (const t of tabs) if (!repos.has(rmNorm(t.repo))) repos.set(rmNorm(t.repo), rmBase(t.repo));
+  for (const t of tabs) if (t.repo && !repos.has(rmNorm(t.repo))) repos.set(rmNorm(t.repo), rmBase(t.repo));
   for (const [p, name] of repos) if (rmNorm(p) !== rmNorm(state.repo || '')) add('Repository', 'Open ' + name, () => openRepo(p), { hint: open.has(p) ? 'open tab' : p });
 
   if (hasRepo && q.length >= 2) {

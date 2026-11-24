@@ -70,7 +70,8 @@ function flowStartMenu(e) {
 async function flowStart(type) {
   const f = state.flow;
   const base = type === 'hotfix' ? f.main : f.develop;
-  const name = await prompt2(`Start ${type}`, type === 'feature' ? 'Feature name' : 'Version (for example 1.2.0)');
+  const typed = await prompt2(`Start ${type}`, type === 'feature' ? 'Feature name' : 'Version (for example 1.2.0)');
+  const name = typed && branchNameFrom(typed);
   if (!name) return;
   if (/[\s~^:?*\[\\]|\.\.|\/\/|\.lock$/.test(name)) return notice('Git Flow', 'That is not a valid branch name.');
   const branch = f.prefix[type] + name;

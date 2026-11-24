@@ -10,7 +10,8 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder --win nsis --publish never",
     "release": "electron-builder --win nsis --publish always",
-    "i18n": "node tools/build-i18n.js"
+    "i18n": "node tools/build-i18n.js",
+    "icon": "electron tools/build-icon.js"
   },
   "license": "MIT",
   "devDependencies": {

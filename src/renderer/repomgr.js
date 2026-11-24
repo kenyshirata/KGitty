@@ -45,7 +45,7 @@ async function repoManager() {
   let data = rmLoad();
   let query = '';
 
-  const close = () => { ov.classList.add('hidden'); ov.innerHTML = ''; ov.onclick = ov.oninput = ov.onkeydown = ov.oncontextmenu = null; };
+  const close = () => { ov.classList.add('hidden'); ov.innerHTML = ''; ov.onclick = ov.oninput = ov.onkeydown = ov.oncontextmenu = null; mgrRefresh(); };
   const save = () => rmSave(data);
   const open = (path) => { close(); openRepo(path); };
 
@@ -218,5 +218,6 @@ async function repoManager() {
   };
 }
 
-$('#tb-repos').onclick = repoManager;
-$('#btn-repos').onclick = repoManager;
+// mgrtab.js loads after this file.
+$('#tb-repos').onclick = () => openMgrTab();
+$('#btn-repos').onclick = () => openMgrTab();
