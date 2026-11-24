@@ -58,7 +58,8 @@ The installer is not code-signed, so Windows SmartScreen may warn on first run.
 - Clone, submodules and worktrees
 - Sign-in dialog for HTTPS and SSH passwords, tokens and passphrases (stored by your Git credential helper)
 - Preferences: identity (global or per repository), commit signing, credential helper, merge tool
-- Light, dark and system themes
+- Appearance settings: ten themes (system, light, dark, Dracula, Nord, One Dark, Monokai, Solarized Dark/Light, high contrast), accent colour, interface zoom, code font and size with ligatures, row density, and configurable commit-list columns and date format
+- Resizable panels that remember their size
 - Command palette (`Ctrl+P`) and keyboard shortcuts for nearly everything (`F1` lists them)
 
 ## Keyboard shortcuts
@@ -76,6 +77,8 @@ The installer is not code-signed, so Windows SmartScreen may warn on first run.
 | `Ctrl+Shift+S` | Stash |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / redo the last destructive operation |
 | `Ctrl+,` | Preferences |
+| `Ctrl+Alt+A` | Appearance settings |
+| `Ctrl+=` / `Ctrl+-` / `Ctrl+Alt+0` | Zoom in / out / reset |
 
 ## Project layout
 

@@ -3,7 +3,8 @@
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-const ROW = 26, LANE_W = 14, LOG_LIMIT = 2000;
+let ROW = window.kgRow || 26;
+const LANE_W = 14, LOG_LIMIT = 2000;
 const COLORS = ['#4a8cf0', '#e2b340', '#4fc26b', '#d96fd0', '#f0605a', '#3ec9c9', '#f08a3c', '#9b8cf0'];
 
 const freshRepoState = () => ({
@@ -333,19 +334,38 @@ function fmtDate(ms) {
 }
 
 function badges(c) {
+  if (!kgGetAppearance().showRefs) return '';
   return c.refs.map((r) => `<span class="badge ${r.type}">${esc(r.name)}</span>`).join('');
 }
+
+// Relative dates ("3 days ago") for the log; the exact date and time stay available as a tooltip.
+const relFmt = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+function fmtCommitDate(ms) {
+  if (kgGetAppearance().dateFmt !== 'relative') return fmtDate(ms);
+  const s = Math.round((ms - Date.now()) / 1000);
+  for (const [unit, secs] of [['year', 31536000], ['month', 2592000], ['week', 604800], ['day', 86400], ['hour', 3600], ['minute', 60]]) {
+    if (Math.abs(s) >= secs) return relFmt.format(Math.round(s / secs), unit);
+  }
+  return relFmt.format(0, 'second');
+}
+
+const LOG_COLUMNS = {
+  author: (c) => `<span class="auth">${avatarHtml(c.author, c.email)}<span class="an">${esc(c.author)}</span></span>`,
+  date: (c) => `<span class="date" title="${esc(new Date(c.time).toLocaleString())}">${fmtCommitDate(c.time)}</span>`,
+  sha: (c) => `<span class="sha">${c.hash.slice(0, 7)}</span>`,
+};
 
 function renderList() {
   const list = $('#commit-list');
   const f = state.filter.toLowerCase();
   const scroll = list.scrollTop;
+  const cols = kgGetAppearance().columns.filter((k) => LOG_COLUMNS[k]);
   let html = '';
   state.commits.forEach((c, i) => {
     if (f && !(`${c.subject} ${c.author} ${c.hash}`.toLowerCase().includes(f))) return;
     html += `<div class="crow ${state.sel.type === 'commit' && state.sel.hash === c.hash ? 'sel' : ''}" data-hash="${c.hash}">` +
       (f ? '' : graphSvg(state.graph[i])) +
-      `<span class="msg">${badges(c)}${esc(c.subject)}</span><span class="auth">${avatarHtml(c.author, c.email)}<span class="an">${esc(c.author)}</span></span><span class="date">${fmtDate(c.time)}</span><span class="sha">${c.hash.slice(0, 7)}</span></div>`;
+      `<span class="msg">${badges(c)}${esc(c.subject)}</span>` + cols.map((k) => LOG_COLUMNS[k](c)).join('') + '</div>';
   });
   list.innerHTML = html || '<div class="empty">No commits</div>';
   list.scrollTop = scroll;

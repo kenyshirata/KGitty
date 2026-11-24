@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('api', {
   writeFile: (repo, rel, text) => ipcRenderer.invoke('write-file', repo, rel, text),
   gitPathExists: (repo, name) => ipcRenderer.invoke('git-path-exists', repo, name),
   rebaseInteractive: (repo, base, items) => ipcRenderer.invoke('rebase-interactive', repo, base, items),
+  setZoom: (f) => ipcRenderer.invoke('set-zoom', f),
   setThemeSource: (pref) => ipcRenderer.invoke('set-theme-source', pref),
   reveal: (p) => ipcRenderer.invoke('reveal', p),
   onAskpass: (cb) => ipcRenderer.on('askpass', (_e, req) => cb(req)),

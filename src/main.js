@@ -223,6 +223,8 @@ ipcMain.handle('write-file', (_e, repo, rel, text) => {
   return true;
 });
 
+ipcMain.handle('set-zoom', (e, f) => { e.sender.setZoomFactor(Math.min(2, Math.max(0.6, +f || 1))); });
+
 ipcMain.handle('set-theme-source', (_e, pref) => {
   if (['system', 'light', 'dark'].includes(pref)) nativeTheme.themeSource = pref;
 });

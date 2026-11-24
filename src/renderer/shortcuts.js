@@ -61,6 +61,11 @@ const SHORTCUTS = [
 
   { group: 'Help', keys: 'Ctrl+P', label: 'Command palette', run: () => commandPalette() },
   { group: 'Help', keys: 'Ctrl+,', label: 'Preferences', run: () => prefsDialog() },
+  { group: 'Help', keys: 'Ctrl+Alt+A', label: 'Appearance settings', run: () => appearanceDialog() },
+  { group: 'Help', keys: 'Ctrl+=', label: 'Zoom in', run: () => zoomBy(0.1) },
+  { group: 'Help', keys: 'Ctrl++', label: 'Zoom in', hidden: true, run: () => zoomBy(0.1) },
+  { group: 'Help', keys: 'Ctrl+-', label: 'Zoom out', run: () => zoomBy(-0.1) },
+  { group: 'Help', keys: 'Ctrl+Alt+0', label: 'Reset zoom', run: () => { setAppearance({ zoom: 1 }); if (state.repo) setStatus('Zoom 100%'); } },
   { group: 'Help', keys: 'Ctrl+Alt+T', label: 'Switch theme (system / light / dark)', run: () => cycleTheme() },
   { group: 'Help', keys: 'F1', alt: '?', label: 'Keyboard shortcuts', free: true, run: () => showShortcuts() },
   { group: 'Help', keys: 'Esc', label: 'Close dialog or menu', hidden: true, run: () => {} },

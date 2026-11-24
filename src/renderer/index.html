@@ -48,11 +48,14 @@
 
     <div class="body">
       <aside id="sidebar" class="sidebar"></aside>
+      <div class="splitter" id="sp-side" title="Drag to resize · double-click to reset"></div>
       <main class="main" id="main">
         <section id="commit-list" class="commit-list"></section>
+        <div class="splitter h" id="sp-main" title="Drag to resize · double-click to reset"></div>
         <div id="dtabs" class="dtabs hidden"></div>
         <section class="detail">
           <div id="detail-left" class="detail-left"></div>
+          <div class="splitter" id="sp-detail" title="Drag to resize · double-click to reset"></div>
           <div id="detail-right" class="detail-right"><div class="empty">Select a commit or file</div></div>
         </section>
       </main>
@@ -67,6 +70,8 @@
   <script src="syntax.js"></script>
   <script src="avatars.js"></script>
   <script src="app.js"></script>
+  <script src="layout.js"></script>
+  <script src="appearance.js"></script>
   <script src="conflicts.js"></script>
   <script src="rebase.js"></script>
   <script src="filehistory.js"></script>
