@@ -125,7 +125,7 @@ function renderWorkingCopy() {
   const left = $('#detail-left');
   const scroll = [...left.querySelectorAll('.wc-files')].map((el) => el.scrollTop);
   const fileActs = { unstaged: '<span class="acts"><button data-act="stage">Stage</button><button data-act="discard">Discard</button></span>', staged: '<span class="acts"><button data-act="unstage">Unstage</button></span>' };
-  const section = (title, list, area, allAct, allLabel) => `<div class="wc-sec wc-${area}"><div class="fhead"><span>${title} (${list.length})</span><span class="fh-act">${viewToggle(area, list)}<button data-act="${allAct}" ${list.length ? '' : 'disabled'}>${allLabel}</button></span></div>
+  const section = (title, list, area, allAct, allLabel) => `<div class="wc-sec wc-${area}"><div class="fhead"><span>${title} (${list.length})</span><span class="fh-act">${viewToggle(area, list)}<button data-act="${area === 'staged' ? 'unstage-sel' : 'stage-sel'}" disabled title="${area === 'staged' ? 'Unstage the selected files' : 'Stage the selected files'}">${area === 'staged' ? 'Unstage' : 'Stage'}<span class="pick-n" data-no-i18n></span></button><button class="vtoggle" data-act="${allAct}" ${list.length ? '' : 'disabled'} title="${allLabel}">${area === 'staged' ? UNSTAGE_ALL_SVG : STAGE_ALL_SVG}</button></span></div>
     <div class="wc-files">${renderFileList(list, area, true,
     (f, d) => fileRow(f.path, area === 'staged' ? f.x : f.untracked ? '?' : f.y, { area, depth: d, acts: fileActs[area], lfs: f.lfs }),
     `<span class="acts"><button data-act="${area === 'staged' ? 'unstage-dir' : 'stage-dir'}">${area === 'staged' ? 'Unstage' : 'Stage'}</button></span>`)}</div></div>`;
@@ -135,6 +135,7 @@ function renderWorkingCopy() {
     '<div class="splitter h" id="sp-wc" title="Drag to resize · double-click to reset"></div>' +
     section('Staged', staged, 'staged', 'unstage-all', 'Unstage all');
   makeWcSplitter($('#sp-wc'));
+  restoreWcPick();
   renderCommitBox();
   left.querySelectorAll('.wc-files').forEach((el, i) => { el.scrollTop = scroll[i] || 0; });
   if (state.file && !state.status.some((f) => f.path === state.file.path && (state.file.area !== 'conflict' || f.conflict))) state.file = null;
@@ -173,6 +174,88 @@ function updateCommitButton() {
   btn.disabled = !!why;
   btn.title = why ? window.t(why) : '';
 }
+
+/* ---------- selecting files in Local Changes ---------- */
+
+// Files picked in Unstaged or Staged (one list at a time) with click, Ctrl+click, Shift+click or Ctrl+A, for the
+// Stage / Unstage buttons in the list headers.
+let wcPick = { area: null, paths: new Set(), anchor: null };
+let wcFocused = false; // the last click was in the file lists, so Ctrl+A selects files instead of text
+
+const STAGE_ALL_SVG = '<svg viewBox="0 0 18 16" width="15" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 2.5v10M1.25 10.25 3.5 12.5l2.25-2.25M9 2.5v10M6.75 10.25 9 12.5l2.25-2.25M14.5 2.5v10M12.25 10.25l2.25 2.25 2.25-2.25"/></svg>';
+const UNSTAGE_ALL_SVG = '<svg viewBox="0 0 18 16" width="15" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5v-10M1.25 5.75 3.5 3.5l2.25 2.25M9 13.5v-10M6.75 5.75 9 3.5l2.25 2.25M14.5 13.5v-10M12.25 5.75l2.25-2.25 2.25 2.25"/></svg>';
+
+const wcRowsIn = (area) => [...document.querySelectorAll(`#detail-left .frow[data-area="${area}"]`)];
+
+function applyWcPick() {
+  document.querySelectorAll('#detail-left .frow[data-area="unstaged"], #detail-left .frow[data-area="staged"]').forEach((r) =>
+    r.classList.toggle('sel', r.dataset.area === wcPick.area && wcPick.paths.has(r.dataset.path)));
+  for (const [area, act] of [['unstaged', 'stage-sel'], ['staged', 'unstage-sel']]) {
+    const b = document.querySelector(`#detail-left [data-act="${act}"]`);
+    if (!b) continue;
+    const n = wcPick.area === area ? wcPick.paths.size : 0;
+    b.disabled = !n;
+    b.querySelector('.pick-n').textContent = n > 1 ? ` (${n})` : '';
+  }
+}
+
+// After the lists are drawn again: keep the picked files that are still in their list; with none, the file whose
+// diff is shown counts as picked.
+function restoreWcPick() {
+  if (wcPick.area) {
+    const there = new Set(wcRowsIn(wcPick.area).map((r) => r.dataset.path));
+    wcPick.paths = new Set([...wcPick.paths].filter((p) => there.has(p)));
+  }
+  if (!wcPick.paths.size && state.file && (state.file.area === 'unstaged' || state.file.area === 'staged')) {
+    wcPick = { area: state.file.area, paths: new Set([state.file.path]), anchor: state.file.path };
+  }
+  applyWcPick();
+}
+
+// Handles a click on a file row of Unstaged / Staged. Returns true when the click only changed the selection
+// (Shift, or Ctrl removing a file); otherwise the caller shows the clicked file's diff.
+function wcPickClick(e, row) {
+  const area = row.dataset.area, path = row.dataset.path;
+  if (area !== wcPick.area) wcPick = { area, paths: new Set(), anchor: null };
+  if (e.shiftKey && wcPick.anchor) {
+    const rows = wcRowsIn(area).map((r) => r.dataset.path);
+    const a = rows.indexOf(wcPick.anchor), b = rows.indexOf(path);
+    if (a >= 0 && b >= 0) {
+      if (!(e.ctrlKey || e.metaKey)) wcPick.paths.clear();
+      rows.slice(Math.min(a, b), Math.max(a, b) + 1).forEach((p) => wcPick.paths.add(p));
+      applyWcPick();
+      return true;
+    }
+  }
+  if (e.ctrlKey || e.metaKey) {
+    const removed = wcPick.paths.delete(path);
+    if (!removed) wcPick.paths.add(path);
+    wcPick.anchor = path;
+    applyWcPick();
+    return removed;
+  }
+  wcPick = { area, paths: new Set([path]), anchor: path };
+  applyWcPick();
+  return false;
+}
+
+function wcSelectAll() {
+  const area = wcPick.area || 'unstaged';
+  const rows = wcRowsIn(area);
+  if (!rows.length) return;
+  wcPick = { area, paths: new Set(rows.map((r) => r.dataset.path)), anchor: rows[0].dataset.path };
+  applyWcPick();
+}
+
+const pickedPaths = (area) => (wcPick.area === area ? [...wcPick.paths] : []);
+
+document.addEventListener('mousedown', (e) => { wcFocused = !!e.target.closest('#detail-left .wc-sec'); }, true);
+document.addEventListener('keydown', (e) => {
+  if (!(e.ctrlKey || e.metaKey) || e.shiftKey || e.altKey || e.key.toLowerCase() !== 'a') return;
+  if (!wcFocused || state.sel.type !== 'wc' || overlayOpen() || typingTarget(e.target)) return;
+  e.preventDefault();
+  wcSelectAll();
+}, true);
 
 /* ---------- All Commits: Commit / Changes / File Tree ---------- */
 

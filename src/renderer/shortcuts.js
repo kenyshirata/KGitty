@@ -5,15 +5,7 @@
 const overlayOpen = () => !$('#overlay').classList.contains('hidden') || !$('#overlay2').classList.contains('hidden');
 const typingTarget = (el) => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
 
-function moveSelection(delta) {
-  const rows = [...document.querySelectorAll('#commit-list .crow')];
-  if (!rows.length) return;
-  const cur = rows.findIndex((r) => r.classList.contains('sel'));
-  const next = rows[Math.min(rows.length - 1, Math.max(0, (cur < 0 ? 0 : cur + delta)))];
-  if (next.dataset.wc) selectWc(); else selectCommit(next.dataset.hash);
-  const sel = document.querySelector('#commit-list .crow.sel');
-  if (sel) sel.scrollIntoView({ block: 'nearest' });
-}
+const moveSelection = (delta) => moveCommitSelection(delta);
 
 function toggleDiffView() {
   diffView = diffView === 'split' ? 'unified' : 'split';

@@ -4,7 +4,7 @@ const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 let ROW = window.kgRow || 26;
-const LANE_W = 14, LOG_LIMIT = 2000;
+const LANE_W = 14;
 const COLORS = ['#4a8cf0', '#e2b340', '#4fc26b', '#d96fd0', '#f0605a', '#3ec9c9', '#f08a3c', '#9b8cf0'];
 
 const freshRepoState = () => ({
@@ -33,7 +33,7 @@ function persistTabs() {
 
 function renderTabs() {
   $('#tabs').innerHTML =
-    tabs.map((t, i) => `<div class="tab ${i === active ? 'active' : ''}${t.mgr ? ' mgr-tab' : ''}" data-i="${i}" title="${esc(t.mgr ? window.t('Repository Manager') : t.repo)}">${t.dirty && gitOpts().tabDirty ? `<span class="tab-dot" title="${esc(window.t('Uncommitted changes'))}">●</span>` : ''}<span class="tname">${esc(t.mgr ? window.t('Repository Manager') : t.repo.split(/[\\/]/).pop())}</span><span class="x" data-close="${i}">✕</span></div>`).join('') +
+    tabs.map((t, i) => `<div class="tab ${i === active ? 'active' : ''}${t.mgr ? ' mgr-tab' : ''}" data-i="${i}" draggable="true" title="${esc(t.mgr ? window.t('Repository Manager') : t.repo)}">${t.dirty && gitOpts().tabDirty ? `<span class="tab-dot" title="${esc(window.t('Uncommitted changes'))}">●</span>` : ''}<span class="tname">${esc(t.mgr ? window.t('Repository Manager') : t.repo.split(/[\\/]/).pop())}</span><span class="x" data-close="${i}">✕</span></div>`).join('') +
     '<button class="tab-add" id="tab-add" title="New tab — repository manager">+</button>';
   if (typeof renderTabList === 'function') renderTabList();
 }
@@ -239,10 +239,12 @@ async function loadRefs() {
 }
 
 async function loadLog() {
-  const r = await window.api.git(state.repo, ['log', '--exclude=refs/stash', '--all', '--date-order', `-n${LOG_LIMIT}`, '--pretty=format:%H%x1f%P%x1f%an%x1f%ae%x1f%at%x1f%D%x1f%s%x1e']);
+  const r = await window.api.git(state.repo, ['log', '--exclude=refs/stash', '--all', '--date-order', '--pretty=format:%H%x1f%P%x1f%an%x1f%ae%x1f%at%x1f%D%x1f%s%x1f%b%x1e']);
   state.commits = r.code ? [] : r.stdout.split('\x1e').map((s) => s.trim()).filter(Boolean).map((rec) => {
-    const [hash, parents, author, email, at, refs, subject] = rec.split('\x1f');
-    return { hash, parents: parents ? parents.split(' ') : [], author, email, time: +at * 1000, refs: parseRefs(refs), subject };
+    const [hash, parents, author, email, at, refs, subject, ...body] = rec.split('\x1f');
+    // Only whether the message has a description is kept (for the ↩ after the subject), not the text itself.
+    const hasBody = body.join('\x1f').trim().length > 0;
+    return { hash, parents: parents ? parents.split(' ') : [], author, email, time: +at * 1000, refs: parseRefs(refs), subject, hasBody };
   });
   await prepareGravatars(state.commits);
   buildGraph();
@@ -312,8 +314,13 @@ function buildGraph() {
   state.graphW = Math.min(maxLanes, 14) * LANE_W + 10;
 }
 
+// Each row's graph is only as wide as the lanes that appear in that row (lines passing through, the commit and its
+// parents), so the message starts right after the rightmost branch line of the row, as in Fork.
 function graphSvg(g, wc) {
-  const W = state.graphW, H = ROW, mid = H / 2;
+  let last = g.col;
+  g.top.forEach((h, i) => { if (h && i > last) last = i; });
+  (g.parentCols || []).forEach((pc) => { if (pc > last) last = pc; });
+  const W = Math.min(last + 1, 14) * LANE_W + 8, H = ROW, mid = H / 2;
   const x = (i) => Math.min(i, 13) * LANE_W + LANE_W / 2 + 2;
   let s = `<svg class="graph" width="${W}" height="${H}">`;
   if (wc) return s + `<circle cx="${x(g.col)}" cy="${mid}" r="4.5" fill="none" stroke="#8b8f96" stroke-width="2" stroke-dasharray="2 2"/>` + (g.down ? `<line x1="${x(g.col)}" y1="${mid}" x2="${x(g.col)}" y2="${H}" stroke="#8b8f96" stroke-width="2" stroke-dasharray="3 3"/>` : '') + '</svg>';
@@ -570,6 +577,8 @@ function badges(c) {
   const hidden = new Set();
   if (gitOpts().compactLabels) c.refs.forEach((r) => { if (r.type === 'local' || r.type === 'head') { const rem = remoteOfBranch(r.name); if (rem) hidden.add(rem); } });
   return c.refs.filter((r) => !(r.type === 'remote' && hidden.has(r.name))).map((r) => {
+    if (r.type === 'remote') return `<span class="badge remote" title="${esc(window.t('Remote branch'))}"><span class="badge-ico">${REMOTE_SVG}</span>${esc(r.name)}</span>`;
+    if (r.type === 'tag') return `<span class="badge tag" title="${esc(window.t('Tag'))}"><span class="badge-ico">${TAG_SVG}</span>${esc(r.name)}</span>`;
     if (r.type !== 'local' && r.type !== 'head') return `<span class="badge ${r.type}">${esc(r.name)}</span>`;
     const rem = remoteOfBranch(r.name);
     const tip = rem ? window.t('On the remote as {0}').replace('{0}', rem) : window.t('Local only — not on any remote');
@@ -595,20 +604,74 @@ const LOG_COLUMNS = {
   sha: (c) => `<span class="sha">${c.hash.slice(0, 7)}</span>`,
 };
 
+// The commit list holds every commit of the repository, so it is virtual: a spacer as tall as all rows keeps the
+// scroll bar right, and only the rows in view (plus a margin) exist in the page. Rows have a fixed height (ROW).
+let listRows = [];  // indices into state.commits shown by the list (after the filter)
+let listDrawn = ''; // "first:last" of the rows currently in the page
+const LIST_MARGIN = 30;
+
 function renderList() {
   const list = $('#commit-list');
   const f = state.filter.toLowerCase();
-  const scroll = list.scrollTop;
+  listRows = [];
+  state.commits.forEach((c, i) => { if (!f || `${c.subject} ${c.author} ${c.hash}`.toLowerCase().includes(f)) listRows.push(i); });
+  if (!listRows.length) { list.innerHTML = '<div class="empty">No commits</div>'; listDrawn = ''; return; }
+  if (!list.querySelector('.cl-spacer')) list.innerHTML = '<div class="cl-spacer"><div class="cl-win"></div></div>';
+  list.querySelector('.cl-spacer').style.height = listRows.length * ROW + 'px';
+  listDrawn = '';
+  drawListWindow();
+}
+
+function drawListWindow() {
+  const list = $('#commit-list');
+  const win = list.querySelector('.cl-win');
+  if (!win) return;
+  const first = Math.max(0, Math.floor(list.scrollTop / ROW) - LIST_MARGIN);
+  const last = Math.min(listRows.length, Math.ceil((list.scrollTop + list.clientHeight) / ROW) + LIST_MARGIN);
+  const key = `${first}:${last}`;
+  if (key === listDrawn) return;
+  listDrawn = key;
+  const f = state.filter;
   const cols = kgGetAppearance().columns.filter((k) => LOG_COLUMNS[k]);
   let html = '';
-  state.commits.forEach((c, i) => {
-    if (f && !(`${c.subject} ${c.author} ${c.hash}`.toLowerCase().includes(f))) return;
+  for (let r = first; r < last; r++) {
+    const i = listRows[r], c = state.commits[i];
     html += `<div class="crow ${state.sel.type === 'commit' && state.sel.hash === c.hash ? 'sel' : ''}" data-hash="${c.hash}">` +
       (f ? '' : graphSvg(state.graph[i])) +
-      `<span class="msg">${badges(c)}${esc(c.subject)}</span>` + cols.map((k) => LOG_COLUMNS[k](c)).join('') + '</div>';
-  });
-  list.innerHTML = html || '<div class="empty">No commits</div>';
-  list.scrollTop = scroll;
+      `<span class="msg">${badges(c)}${esc(c.subject)}${c.hasBody ? `<span class="has-body" title="${esc(window.t('The commit message has a description'))}">↩</span>` : ''}</span>` + cols.map((k) => LOG_COLUMNS[k](c)).join('') + '</div>';
+  }
+  win.style.transform = `translateY(${first * ROW}px)`;
+  win.innerHTML = html;
+}
+
+let listScrollQueued = false;
+$('#commit-list').addEventListener('scroll', () => {
+  if (listScrollQueued) return;
+  listScrollQueued = true;
+  requestAnimationFrame(() => { listScrollQueued = false; drawListWindow(); });
+});
+new ResizeObserver(() => { listDrawn = ''; drawListWindow(); }).observe($('#commit-list'));
+
+// Scrolls the list so the commit is in view: centred, or only as far as needed ('nearest').
+function scrollToCommit(hash, block = 'center') {
+  const list = $('#commit-list');
+  const r = listRows.findIndex((i) => state.commits[i].hash === hash);
+  if (r < 0) return;
+  const top = r * ROW, h = list.clientHeight;
+  if (block === 'center') list.scrollTop = Math.max(0, top - h / 2 + ROW / 2);
+  else if (top < list.scrollTop) list.scrollTop = top;
+  else if (top + ROW > list.scrollTop + h) list.scrollTop = top + ROW - h;
+  drawListWindow();
+}
+
+// Moves the selection in the commit list by `delta` rows (arrow keys).
+function moveCommitSelection(delta) {
+  if (!listRows.length) return;
+  const cur = state.sel.type === 'commit' ? listRows.findIndex((i) => state.commits[i].hash === state.sel.hash) : -1;
+  const r = Math.min(listRows.length - 1, Math.max(0, cur < 0 ? 0 : cur + delta));
+  const hash = state.commits[listRows[r]].hash;
+  selectCommit(hash);
+  scrollToCommit(hash, 'nearest');
 }
 
 const STATUS_LABEL = { M: 'M', A: 'A', D: 'D', R: 'R', C: 'C', '?': 'U', T: 'M', U: 'U' };
@@ -1107,10 +1170,7 @@ function selectCommit(hash, scroll) {
   state.lastCommit = hash;
   state.file = null;
   renderSidebar(); renderList(); renderDetail();
-  if (scroll) {
-    const row = $(`.crow[data-hash="${hash}"]`);
-    if (row) row.scrollIntoView({ block: 'center' });
-  }
+  if (scroll) scrollToCommit(hash);
 }
 
 $('#commit-list').onclick = (e) => {
@@ -1147,6 +1207,8 @@ $('#detail-left').onclick = async (e) => {
     if (act.dataset.act === 'op-tool') return openMergeTool();
     if (act.dataset.act === 'stage-all') return stage(state.status.filter((f) => f.unstaged).map((f) => f.path));
     if (act.dataset.act === 'unstage-all') return unstage(state.status.filter((f) => f.staged).map((f) => f.path));
+    if (act.dataset.act === 'stage-sel') { const p = pickedPaths('unstaged'); return p.length && stage(p); }
+    if (act.dataset.act === 'unstage-sel') { const p = pickedPaths('staged'); return p.length && unstage(p); }
   }
   if (!row) return;
   const path = row.dataset.path;
@@ -1160,8 +1222,11 @@ $('#detail-left').onclick = async (e) => {
     state.file = { path, area: row.dataset.area };
     return renderDetail();
   }
+  const wcList = state.sel.type === 'wc' && (row.dataset.area === 'unstaged' || row.dataset.area === 'staged');
+  if (wcList && wcPickClick(e, row)) return;
   state.file = { path, area: row.dataset.area };
-  document.querySelectorAll('#detail-left .frow').forEach((r) => r.classList.toggle('sel', r === row));
+  if (wcList) document.querySelectorAll('#detail-left .frow[data-area="conflict"]').forEach((r) => r.classList.remove('sel'));
+  else document.querySelectorAll('#detail-left .frow').forEach((r) => r.classList.toggle('sel', r === row));
   showFileDiff();
 };
 

@@ -1,9 +1,9 @@
 :root {
   --bg: #1e1f22; --bg2: #25272b; --bg3: #2d2f34; --border: #393b40;
   --fg: #d7d9dd; --dim: #8b8f96; --accent: #4a8cf0; --accent-bg: #2a4a7c;
-  --add: #2ea04366; --del: #f8514966;
+  --add: #3a5c3f; --del: #633f3e;
   --fg-strong: #fff; --on-accent: #fff; --btn-hover: #383b41; --row-hover: #ffffff0d;
-  --add-fg: #d9ffe0; --del-fg: #ffe0de; --word-add: #2ea043b3; --word-del: #f85149a6;
+  --add-fg: #d9ffe0; --del-fg: #ffe0de; --word-add: #388442; --word-del: #9f4247;
   --hunk-bg: #1f2a3f; --hunk-fg: #7aa7ff; --comment: #8b949e; --err: #ff8a84;
   --st-m: #e2b340; --st-a: #4fc26b; --st-d: #f0605a; --st-r: #5aa0f0;
   --conflict-bg: #4a2326; --conflict-fg: #ff9b95; --banner-bg: #3a3020;
@@ -74,11 +74,15 @@ input:focus, textarea:focus { outline: 1px solid var(--accent); }
 
 .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .commit-list { flex: 1.3; overflow: auto; min-height: 120px; position: relative; }
+.cl-spacer { position: relative; }
+.cl-win { position: absolute; top: 0; left: 0; right: 0; will-change: transform; }
 .crow { display: flex; align-items: center; height: var(--row, 26px); cursor: default; white-space: nowrap; }
 .crow:hover { background: var(--bg3); }
 .crow.sel { background: var(--accent-bg); }
 .crow .graph { flex-shrink: 0; height: var(--row, 26px); }
 .crow .msg { flex: 1; overflow: hidden; text-overflow: ellipsis; min-width: 0; padding-right: 10px; }
+.crow .msg .has-body { margin-left: 6px; color: var(--dim); font-size: 12px; }
+.crow.sel .msg .has-body { color: inherit; opacity: .8; }
 .crow .auth { width: 150px; color: var(--dim); overflow: hidden; text-overflow: ellipsis; padding-right: 8px; }
 .crow .date { width: 110px; color: var(--dim); }
 .crow .sha { width: 66px; color: var(--dim); font-family: var(--code-font); }
@@ -125,6 +129,8 @@ pre.diff .hunk { color: var(--hunk-fg); background: var(--hunk-bg); margin-top: 
 .overlay { position: fixed; inset: 0; background: var(--scrim); display: flex; align-items: center; justify-content: center; z-index: 50; }
 .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px; min-width: 380px; max-width: 560px; box-shadow: 0 10px 40px var(--shadow); }
 .modal h3 { margin: 0 0 12px; }
+/* Long words without spaces (file paths, branch names) wrap instead of running out of the dialog. */
+.modal p, .modal .hint, .modal label, .modal li { overflow-wrap: anywhere; }
 .modal .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
 .modal .field input { width: 100%; }
 .modal .btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
@@ -628,3 +634,24 @@ body { display: flex; flex-direction: column; }
 .tl-empty { padding: 8px 14px; color: var(--dim); }
 .tb-btn.on { background: var(--bg3); border-color: var(--border); }
 .tb-btn.on .tb-ico { color: var(--accent); }
+
+/* ---------- picking files in Local Changes ---------- */
+#detail-left .wc-sec .frow { user-select: none; }
+.fh-act [data-act="stage-sel"], .fh-act [data-act="unstage-sel"] { padding: 1px 8px; font-size: 12px; line-height: 1.2; }
+
+/* ---------- dragging tabs ---------- */
+.tab.dragging, .tl-row.dragging { opacity: .45; }
+.tab.drop-before { box-shadow: inset 3px 0 0 var(--accent); }
+.tab.drop-after { box-shadow: inset -3px 0 0 var(--accent); }
+.tl-row.drop-before { box-shadow: inset 0 2px 0 var(--accent); }
+.tl-row.drop-after { box-shadow: inset 0 -2px 0 var(--accent); }
+
+/* ---------- toolbar icon packs ---------- */
+.tb-glyph { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; font-size: 17px; line-height: 1; }
+.ap-tbpacks { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.ap-tbpack { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 8px 10px; text-align: left; }
+.ap-tbpack.sel { outline: 2px solid var(--accent); }
+.tbp-row { display: flex; gap: 6px; color: var(--fg); }
+.tbp-ico { display: flex; }
+.tbp-ico svg { display: block; width: 18px; height: 18px; }
+.tbp-ico .tb-glyph { width: 18px; height: 18px; font-size: 15px; }

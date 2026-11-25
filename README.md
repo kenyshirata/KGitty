@@ -129,3 +129,5 @@ The interface is plain JavaScript split by feature (`gitflow.js`, `imagediff.js`
 ## License
 
 KGitty is released under the [MIT License](LICENSE). It bundles [highlight.js](https://highlightjs.org/), which has its own BSD 3-Clause license (`src/renderer/vendor/LICENSE`).
+
+Some toolbar icon packs use icons from [Octicons](https://github.com/primer/octicons) (MIT), [Phosphor Icons](https://phosphoricons.com) (MIT), [Material Symbols](https://fonts.google.com/icons) (Apache-2.0) and [Tabler Icons](https://tabler.io/icons) (MIT); their licenses are in `src/renderer/vendor/icons/`.

@@ -10,6 +10,7 @@ function setAppearance(patch) {
   kgSetAppearance(patch);
   ROW = window.kgRow;
   if ('zoom' in patch) window.api.setZoom(patch.zoom);
+  if ('toolbarIcons' in patch && typeof applyToolbarIcons === 'function') applyToolbarIcons();
   if (state.repo) renderList();
 }
 
@@ -28,6 +29,7 @@ function appearanceHtml() {
   const ap0 = kgGetAppearance();
   return `<div class="ap-sec"><div class="sb-head">Theme</div><div class="ap-themes" data-ap="themes"></div></div>
     <div class="ap-sec"><div class="sb-head">Accent colour</div><div class="ap-accent" data-ap="accent"></div></div>
+    <div class="ap-sec"><div class="sb-head">Toolbar icons</div><div class="ap-tbpacks" data-ap="tbpacks"></div></div>
     <div class="ap-sec"><div class="sb-head">Text and density</div>
       <div class="ap-grid">
         <label>Interface zoom</label><span class="ap-range"><input type="range" id="ap-zoom" min="60" max="200" step="10" value="${Math.round(ap0.zoom * 100)}"><b id="ap-zoomv">${Math.round(ap0.zoom * 100)}%</b></span>
@@ -75,7 +77,14 @@ function wireAppearance(root, afterReset) {
       ...hidden.map((k) => `<div class="ap-col dim"><label><input type="checkbox" data-col="${k}"> ${LOG_COLUMN_NAMES[k]}</label></div>`)].join('');
   };
 
+  const packsHtml = () => {
+    const cur = toolbarPack();
+    return Object.entries(TB_PACKS).map(([id, [label]]) =>
+      `<button class="ap-tbpack ${id === cur ? 'sel' : ''}" data-tbpack="${id}"><span class="tbp-row">${toolbarPackPreview(id)}</span><span>${esc(label)}</span></button>`).join('');
+  };
+
   const redrawParts = () => {
+    part('tbpacks').innerHTML = packsHtml();
     part('themes').innerHTML = themesHtml();
     part('accent').innerHTML = accentHtml();
     part('cols').innerHTML = columnsHtml();
@@ -108,7 +117,9 @@ function wireAppearance(root, afterReset) {
     const th = e.target.closest('.ap-theme[data-theme]');
     if (th) { setThemePref(th.dataset.theme); return redrawParts(); }
     const ac = e.target.closest('button[data-accent]');
-    if (ac) { setAppearance({ accent: ac.dataset.accent }); part('accent').innerHTML = accentHtml(); return; }
+    if (ac) { setAppearance({ accent: ac.dataset.accent }); redrawParts(); return; }
+    const tp = e.target.closest('button[data-tbpack]');
+    if (tp) { setAppearance({ toolbarIcons: tp.dataset.tbpack }); part('tbpacks').innerHTML = packsHtml(); return; }
     const mv = e.target.closest('[data-move]');
     if (mv) {
       const cols = kgGetAppearance().columns.filter((k) => LOG_COLUMN_NAMES[k]);
@@ -122,6 +133,7 @@ function wireAppearance(root, afterReset) {
       setThemePref('system');
       ROW = window.kgRow;
       window.api.setZoom(1);
+      applyToolbarIcons();
       resetLayoutSizes();
       if (state.repo) renderList();
       afterReset();

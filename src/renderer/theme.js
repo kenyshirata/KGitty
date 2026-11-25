@@ -16,7 +16,7 @@
     highcontrast: { label: 'High contrast', base: 'dark', vars: { bg: '#000000', bg2: '#0b0b0b', bg3: '#1c1c1c', border: '#8b949e', fg: '#ffffff', 'fg-strong': '#ffffff', dim: '#d0d7de', accent: '#71b7ff', 'accent-bg': '#0b3a75', 'on-accent': '#000000', 'btn-hover': '#2b2b2b', 'hunk-bg': '#0b2a4a', 'hunk-fg': '#9ccfff', scroll: '#6e7681', 'x-hover': '#8b949e', comment: '#c9d1d9' } },
   };
 
-  var DEFAULTS = { accent: '', codeFont: '', codeSize: 12, ligatures: true, density: 'normal', dateFmt: 'absolute', columns: ['author', 'date', 'sha'], showRefs: true, zoom: 1 };
+  var DEFAULTS = { accent: '', codeFont: '', codeSize: 12, ligatures: true, density: 'normal', dateFmt: 'absolute', columns: ['author', 'date', 'sha'], showRefs: true, zoom: 1, toolbarIcons: 'lines' };
   var DENSITY = { compact: 22, normal: 26, comfortable: 32 };
   var DEFAULT_CODE_FONT = 'Consolas, "Cascadia Mono", monospace';
 

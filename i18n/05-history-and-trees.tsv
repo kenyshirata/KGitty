@@ -229,3 +229,14 @@ Appearance changes apply immediately, also without Save.	As alterações de apar
 Stage the new, changed or deleted files to commit	Coloque no stage os arquivos novos, alterados ou excluídos para commitar	Pasa al stage los archivos nuevos, modificados o eliminados para confirmar	Indexez les fichiers nouveaux, modifiés ou supprimés pour valider	Neue, geänderte oder gelöschte Dateien stagen, um zu committen	Добавьте в stage новые, изменённые или удалённые файлы, чтобы сделать коммит	请暂存新建、修改或删除的文件后再提交	コミットするには新規・変更・削除したファイルをステージしてください	커밋하려면 새 파일, 변경되거나 삭제된 파일을 스테이지하세요
 Collapse all folders	Recolher todas as pastas	Contraer todas las carpetas	Replier tous les dossiers	Alle Ordner einklappen	Свернуть все папки	折叠所有文件夹	すべてのフォルダーを折りたたむ	모든 폴더 접기
 Expand all folders	Expandir todas as pastas	Expandir todas las carpetas	Déplier tous les dossiers	Alle Ordner ausklappen	Развернуть все папки	展开所有文件夹	すべてのフォルダーを展開	모든 폴더 펼치기
+The commit message has a description	A mensagem do commit tem descrição	El mensaje del commit tiene descripción	Le message du commit a une description	Die Commit-Nachricht hat eine Beschreibung	У сообщения коммита есть описание	提交信息包含描述	コミットメッセージに説明があります	커밋 메시지에 설명이 있습니다
+Stage the selected files	Fazer stage dos arquivos selecionados	Pasar al stage los archivos seleccionados	Indexer les fichiers sélectionnés	Ausgewählte Dateien stagen	Добавить выбранные файлы в stage	暂存所选文件	選択したファイルをステージ	선택한 파일 스테이지
+Unstage the selected files	Tirar do stage os arquivos selecionados	Quitar del stage los archivos seleccionados	Désindexer les fichiers sélectionnés	Ausgewählte Dateien aus dem Stage nehmen	Убрать выбранные файлы из stage	取消暂存所选文件	選択したファイルのステージを解除	선택한 파일 스테이지 해제
+Toolbar icons	Ícones da barra	Iconos de la barra	Icônes de la barre	Symbolleisten-Symbole	Значки панели	工具栏图标	ツールバーのアイコン	도구 모음 아이콘
+Lines	Linhas	Líneas	Lignes	Linien	Линии	线条	線	선
+Bold	Negrito	Negrita	Gras	Fett	Жирные	粗体	太線	굵게
+Solid	Sólido	Sólido	Plein	Gefüllt	Заливка	实心	塗りつぶし	채움
+Duotone	Duotone	Bitono	Bicolore	Duoton	Двухцветные	双色	デュオトーン	듀오톤
+Colourful	Colorido	Colorido	Coloré	Bunt	Цветные	彩色	カラフル	컬러풀
+Classic	Clássico	Clásico	Classique	Klassisch	Классические	经典	クラシック	클래식
+Remote branch	Branch remota	Rama remota	Branche distante	Remote-Branch	Удалённая ветка	远程分支	リモートブランチ	원격 브랜치
