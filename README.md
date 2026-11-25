@@ -125,3 +125,7 @@ The interface is plain JavaScript split by feature (`gitflow.js`, `imagediff.js`
 
 - Network operations never prompt in a terminal. Git asks for credentials through a small helper that opens KGitty's own dialog; to remember them, pick a credential helper in Preferences.
 - Syntax highlighting uses [highlight.js](https://highlightjs.org) (BSD-3-Clause), bundled in `src/renderer/vendor/` with its licence.
+
+## License
+
+KGitty is released under the [MIT License](LICENSE). It bundles [highlight.js](https://highlightjs.org/), which has its own BSD 3-Clause license (`src/renderer/vendor/LICENSE`).
