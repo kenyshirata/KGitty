@@ -94,10 +94,14 @@ async function prefsDialog(tab) {
       <div ${panel('git')}>
       <div class="pf-sec"><div class="sb-head">Identity</div>
         <p class="hint">Name and e-mail recorded in the commits you make.</p>
+        <div class="pf-ident"><div class="pf-avatar" id="pf-avatar"></div>
+        <div class="pf-ident-fields">
         <div class="field"><label>Apply to</label><select id="pf-scope"><option value="--global" ${scope === '--global' ? 'selected' : ''}>All repositories (global)</option>${canLocal ? `<option value="--local" ${scope === '--local' ? 'selected' : ''}>Only this repository</option>` : ''}</select></div>
         <div class="pf-two"><div class="field"><label>Name</label><input type="text" id="pf-name" value="${esc(d.name)}" placeholder="${esc(eff ? eff.name : 'Your Name')}"></div>
         <div class="field"><label>E-mail</label><input type="text" id="pf-email" value="${esc(d.email)}" placeholder="${esc(eff ? eff.email : 'you@example.com')}"></div></div>
+        <p class="hint">Change the avatar at <a href="https://gravatar.com" target="_blank">gravatar.com</a></p>
         ${scope === '--local' ? '<p class="hint">Leave a field empty to use the global value.</p>' : ''}
+        </div></div>
       </div>
       <div class="pf-sec"><div class="sb-head">Credentials</div>
         <div class="field"><label>Where Git remembers passwords and tokens (global)</label><select id="pf-helper">${HELPERS.map(([v, l]) => `<option value="${esc(v)}" ${v === helper ? 'selected' : ''}>${esc(l)}</option>`).join('')}${known ? '' : `<option value="${esc(helper)}" selected>Custom: ${esc(helper)}</option>`}</select></div>
@@ -131,7 +135,25 @@ async function prefsDialog(tab) {
       <div class="btns"><button id="pf-cancel">Cancel</button><button class="primary" id="pf-save">Save</button></div></div>`;
   };
   ov.classList.remove('hidden');
+  // The Gravatar photo of the e-mail being edited (or the effective one when the field is empty), initials otherwise.
+  let avTimer = null, avSeq = 0;
+  const drawAvatar = async () => {
+    const box = $('#pf-avatar');
+    if (!box) return;
+    const name = $('#pf-name').value.trim() || $('#pf-name').placeholder;
+    const email = $('#pf-email').value.trim() || (p.effective ? p.effective.email : '');
+    const seq = ++avSeq;
+    if (email) await prepareGravatars([{ email }]);
+    if (seq !== avSeq || !$('#pf-avatar')) return;
+    box.innerHTML = avatarHtml(name || '?', email, 72, true);
+  };
+  ov.oninput = (e) => {
+    if (e.target.id !== 'pf-name' && e.target.id !== 'pf-email') return;
+    clearTimeout(avTimer);
+    avTimer = setTimeout(drawAvatar, 400);
+  };
   draw();
+  drawAvatar();
   const focusTab = () => { const f = ov.querySelector('.pf-panel:not(.hidden) input[type=text], .pf-panel:not(.hidden) select'); (f || ov.querySelector('.pf-tab.on')).focus(); };
   focusTab();
 
@@ -179,6 +201,7 @@ async function prefsDialog(tab) {
     p = await loadPrefs(scope);
     helper = keep;
     draw();
+    drawAvatar();
     $('#pf-gcm').checked = gcm;
   };
   ov.onclick = (e) => {
@@ -199,7 +222,6 @@ async function prefsDialog(tab) {
   };
 }
 
-$('#tb-prefs').onclick = prefsDialog;
 
 const IDENTITY_ERR = /Author identity unknown|Please tell me who you are|empty ident name|unable to auto-detect email/i;
 const AUTH_ERR = /Authentication failed|unable to read askpass response|terminal prompts disabled|could not read (Username|Password)|Permission denied \(publickey|HTTP Basic: Access denied|returned error: 403|Invalid username or token/i;

@@ -153,3 +153,5 @@ function commandPalette() {
     if (e.target === ov) close();
   };
 }
+
+$('#repo-title').onclick = () => commandPalette();

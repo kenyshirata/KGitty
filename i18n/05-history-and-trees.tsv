@@ -207,3 +207,19 @@ Fetch latest changes from remote repository	Buscar as alterações mais recentes
 Remote:	Remoto:	Remoto:	Dépôt distant :	Remote:	Удалённый:	远程：	リモート:	원격:
 Fetch all remotes	Fazer fetch de todos os remotos	Hacer fetch de todos los remotos	Récupérer tous les dépôts distants	Alle Remotes abrufen	Получить со всех удалённых	获取所有远程	すべてのリモートをフェッチ	모든 원격 가져오기
 This repository has no remotes.	Este repositório não tem remotos.	Este repositorio no tiene remotos.	Ce dépôt n’a aucun dépôt distant.	Dieses Repository hat keine Remotes.	У этого репозитория нет удалённых.	此仓库没有远程。	このリポジトリにはリモートがありません。	이 저장소에는 원격이 없습니다.
+Change the avatar at	Alterar o avatar em	Cambiar el avatar en	Changer l’avatar sur	Avatar ändern auf	Изменить аватар на	在此更改头像：	アバターの変更:	아바타 변경:
+Developed by	Desenvolvido por	Desarrollado por	Développé par	Entwickelt von	Разработчик	开发者	開発者	개발자
+GitHub	GitHub	GitHub	GitHub	GitHub	GitHub	GitHub	GitHub	GitHub
+Source code	Código-fonte	Código fuente	Code source	Quellcode	Исходный код	源代码	ソースコード	소스 코드
+Feedback	Feedback	Comentarios	Retours	Feedback	Обратная связь	反馈	フィードバック	피드백
+Report a problem or suggest an idea	Relatar um problema ou sugerir uma ideia	Informar un problema o sugerir una idea	Signaler un problème ou proposer une idée	Problem melden oder Idee vorschlagen	Сообщить о проблеме или предложить идею	报告问题或提出建议	問題を報告、またはアイデアを提案	문제 신고 또는 아이디어 제안
+License	Licença	Licencia	Licence	Lizenz	Лицензия	许可证	ライセンス	라이선스
+Repos	Repos	Repos	Dépôts	Repos	Репозитории	仓库	リポジトリ	저장소
+Open in	Abrir em	Abrir en	Ouvrir dans	Öffnen in	Открыть в	打开方式	開く	열기
+Console	Console	Consola	Console	Konsole	Консоль	控制台	コンソール	콘솔
+Command palette (Ctrl+P)	Paleta de comandos (Ctrl+P)	Paleta de comandos (Ctrl+P)	Palette de commandes (Ctrl+P)	Befehlspalette (Ctrl+P)	Палитра команд (Ctrl+P)	命令面板 (Ctrl+P)	コマンドパレット (Ctrl+P)	명령 팔레트 (Ctrl+P)
+Fetch (Ctrl+Shift+F)	Fetch (Ctrl+Shift+F)	Fetch (Ctrl+Shift+F)	Récupérer (Ctrl+Shift+F)	Abrufen (Ctrl+Shift+F)	Fetch (Ctrl+Shift+F)	获取 (Ctrl+Shift+F)	フェッチ (Ctrl+Shift+F)	가져오기 (Ctrl+Shift+F)
+Pull (Ctrl+Shift+L)	Pull (Ctrl+Shift+L)	Pull (Ctrl+Shift+L)	Tirer (Ctrl+Shift+L)	Pull (Ctrl+Shift+L)	Pull (Ctrl+Shift+L)	拉取 (Ctrl+Shift+L)	プル (Ctrl+Shift+L)	풀 (Ctrl+Shift+L)
+Push (Ctrl+Shift+P)	Push (Ctrl+Shift+P)	Push (Ctrl+Shift+P)	Pousser (Ctrl+Shift+P)	Push (Ctrl+Shift+P)	Push (Ctrl+Shift+P)	推送 (Ctrl+Shift+P)	プッシュ (Ctrl+Shift+P)	푸시 (Ctrl+Shift+P)
+Save stash (Ctrl+Shift+S)	Salvar stash (Ctrl+Shift+S)	Guardar stash (Ctrl+Shift+S)	Enregistrer un stash (Ctrl+Shift+S)	Stash speichern (Ctrl+Shift+S)	Сохранить stash (Ctrl+Shift+S)	保存储藏 (Ctrl+Shift+S)	スタッシュを保存 (Ctrl+Shift+S)	스태시 저장 (Ctrl+Shift+S)
+New branch (Ctrl+B)	Nova branch (Ctrl+B)	Nueva rama (Ctrl+B)	Nouvelle branche (Ctrl+B)	Neuer Branch (Ctrl+B)	Новая ветка (Ctrl+B)	新建分支 (Ctrl+B)	新しいブランチ (Ctrl+B)	새 브랜치 (Ctrl+B)

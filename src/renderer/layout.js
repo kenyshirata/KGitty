@@ -13,6 +13,7 @@ function applyLayoutSizes() {
   set('--sidebar-w', layoutSizes.side);
   set('--dl-w', layoutSizes.left);
   set('--dlwc-w', layoutSizes.leftWc);
+  set('--wc-top', layoutSizes.wcTop);
   const list = $('#commit-list');
   if (list) list.style.flex = layoutSizes.list ? `0 1 ${layoutSizes.list}px` : '';
 }
@@ -51,6 +52,16 @@ function makeSplitter(el, onMove, resetKeys) {
 }
 
 const clampPx = (v, lo, hi) => Math.round(Math.min(Math.max(v, lo), Math.max(lo, hi)));
+
+// Border between Unstaged and Staged in Local Changes; the element is rebuilt with the list, so it is wired each time.
+function makeWcSplitter(el) {
+  if (!el) return;
+  makeSplitter(el, (ev) => {
+    const top = $('#detail-left .wc-unstaged').getBoundingClientRect().top;
+    const bottom = $('#detail-left').getBoundingClientRect().bottom;
+    layoutSizes.wcTop = clampPx(ev.clientY - top, 70, bottom - top - 70);
+  }, ['wcTop']);
+}
 
 makeSplitter($('#sp-side'), (ev) => {
   const body = $('.body').getBoundingClientRect();

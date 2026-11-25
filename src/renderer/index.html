@@ -22,42 +22,44 @@
   <nav id="menubar" class="menubar"></nav>
   <div id="welcome" class="welcome">
     <h1>KGitty</h1>
-    <p>A simple Git client</p>
+    <p>A fast and easy-to-use Git client</p>
     <div class="welcome-btns"><button id="btn-open" class="primary">Open repository…</button><button id="btn-clone">Clone repository…</button><button id="btn-repos">Repository manager…</button><button id="btn-theme" title="Theme">◐ Theme</button></div>
     <div id="recent"></div>
   </div>
 
   <div id="app" class="app hidden">
     <header class="toolbar">
-      <div class="tb-group">
-        <button id="tb-repos" title="Repository manager (Ctrl+Shift+M)">🗂 Repos</button>
-        <button id="tb-open" title="Open repository">📂 Open</button>
-        <button id="tb-clone" title="Clone repository">⎘ Clone</button>
+      <div class="tb-side tb-left">
+        <div class="tb-group">
+          <button id="tb-repos" class="tb-btn" title="Repository manager (Ctrl+Shift+M)"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="11" y="3" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg></span><span class="tb-lbl">Repos</span></button>
+          <button id="tb-open" class="tb-btn" title="Open repository"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.75 6V4.75c0-.83.67-1.5 1.5-1.5h3.5l1.75 2h6.25c.83 0 1.5.67 1.5 1.5V8"/><path d="M2.75 15.5 4.6 8.9c.18-.6.73-1.03 1.36-1.03h11.1c.66 0 1.13.64.94 1.27l-1.7 5.6c-.18.6-.73 1.01-1.36 1.01H3.75z"/></svg></span><span class="tb-lbl">Open</span></button>
+          <button id="tb-clone" class="tb-btn" title="Clone repository"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="6.5" width="10" height="10" rx="1.5"/><path d="M13.5 6.5V4.75c0-.83-.67-1.5-1.5-1.5H4.75c-.83 0-1.5.67-1.5 1.5V12c0 .83.67 1.5 1.5 1.5H6.5"/></svg></span><span class="tb-lbl">Clone</span></button>
+        </div>
+        <div class="tb-group tb-repo">
+          <button id="tb-fetch" class="tb-btn" title="Fetch (Ctrl+Shift+F)"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 9.5a5.5 5.5 0 1 1-1.6-3.9"/><path d="M14.5 2.75v3.25h-3.25"/></svg></span><span class="tb-lbl">Fetch</span></button>
+          <button id="tb-pull" class="tb-btn" title="Pull (Ctrl+Shift+L)"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v10M5.75 8.75 10 13l4.25-4.25M4 16.75h12"/></svg></span><span class="tb-lbl">Pull</span></button>
+          <button id="tb-push" class="tb-btn" title="Push (Ctrl+Shift+P)"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14V4M5.75 8.25 10 4l4.25 4.25M4 16.75h12"/></svg></span><span class="tb-lbl">Push</span></button>
+          <button id="tb-stash" class="tb-btn" title="Save stash (Ctrl+Shift+S)"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="1.5"/><path d="M3 10h14M8 6.5h4M8 13.5h4"/></svg></span><span class="tb-lbl">Stash</span></button>
+        </div>
+        <div class="tb-group tb-repo">
+          <button id="tb-undo" class="tb-btn" title="Undo" disabled><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5 3.5 8.5 7 12"/><path d="M3.75 8.5H12a4.25 4.25 0 0 1 0 8.5H9"/></svg></span><span class="tb-lbl">Undo</span></button>
+          <button id="tb-redo" class="tb-btn" title="Redo" disabled><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m13 5 3.5 3.5L13 12"/><path d="M16.25 8.5H8a4.25 4.25 0 0 0 0 8.5h3"/></svg></span><span class="tb-lbl">Redo</span></button>
+          <button id="tb-reflog" class="tb-btn" title="Reflog"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.75 1.75"/></svg></span><span class="tb-lbl">Reflog</span></button>
+        </div>
       </div>
-      <div class="tb-group tb-repo">
-        <button id="tb-fetch">⟳ Fetch</button>
-        <button id="tb-pull">⇣ Pull</button>
-        <button id="tb-push">⇡ Push</button>
+      <div class="tb-center tb-repo">
+        <div id="repo-title" class="repo-title" title="Command palette (Ctrl+P)"><span class="rt-name"></span><span class="rt-branch"><svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="4.5" r="2"/><circle cx="6" cy="15.5" r="2"/><circle cx="14.5" cy="7" r="2"/><path d="M6 6.5v7M14.5 9c0 3-2.5 3.75-8.5 4.5"/><path d="M16.5 14.5h-4M14.5 12.5v4"/></svg><span class="rt-branch-name"></span></span></div>
+        <button id="tb-branch" class="tb-btn" title="New branch (Ctrl+B)"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="4.5" r="2"/><circle cx="6" cy="15.5" r="2"/><circle cx="14.5" cy="7" r="2"/><path d="M6 6.5v7M14.5 9c0 3-2.5 3.75-8.5 4.5"/><path d="M16.5 14.5h-4M14.5 12.5v4"/></svg></span><span class="tb-lbl">Branch</span></button>
       </div>
-      <div class="tb-group tb-repo">
-        <button id="tb-branch">⑂ Branch</button>
-        <button id="tb-stash">▤ Stash</button>
-        <button id="tb-undo" title="Undo" disabled>↶ Undo</button>
-        <button id="tb-redo" title="Redo" disabled>↷</button>
-        <button id="tb-reflog" title="Reflog">⟲ Reflog</button>
+      <div class="tb-side tb-right">
+        <input id="search" class="tb-repo" type="search" placeholder="Filter commits…">
+        <div class="tb-group">
+          <span class="tb-repo tb-inline"><button id="tb-openin" class="tb-btn" title="Open the repository in another program"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.5h5.5V9M16.25 3.75 9.5 10.5"/><path d="M14.5 12v3.25c0 .83-.67 1.5-1.5 1.5H4.75c-.83 0-1.5-.67-1.5-1.5V7c0-.83.67-1.5 1.5-1.5H8"/></svg></span><span class="tb-lbl">Open in<span class="tb-caret">▾</span></span></button></span>
+          <span class="tb-repo tb-inline"><button id="tb-console" class="tb-btn" title="Open Git Bash in the repository folder"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="15" height="13" rx="1.5"/><path d="m5.75 8 2.5 2-2.5 2M10.5 12.5h3.75"/></svg></span><span class="tb-lbl">Console</span></button></span>
+          <button id="tb-theme" class="tb-btn" title="Theme"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 3v14a7 7 0 0 0 0-14z" fill="currentColor"/></svg></span><span class="tb-lbl">Theme</span></button>
+          <button id="tb-ws" class="tb-btn tb-ws" title="Workspaces"><span class="tb-ico"><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="11" height="9" rx="1.25"/><path d="M6.5 5.5V4.25c0-.69.56-1.25 1.25-1.25h8c.69 0 1.25.56 1.25 1.25v7.5c0 .69-.56 1.25-1.25 1.25H13.5"/></svg></span><span class="tb-lbl"><span class="tb-ws-name" data-no-i18n></span><span class="tb-caret">▾</span></span></button>
+        </div>
       </div>
-      <div class="tb-spacer"></div>
-      <div id="repo-title" class="repo-title"></div>
-      <div class="tb-spacer"></div>
-      <div class="tb-group tb-repo">
-        <button id="tb-openin" title="Open the repository in another program">↗ Open in ▾</button>
-        <button id="tb-console" title="Open Git Bash in the repository folder">&gt;_ Console</button>
-      </div>
-      <button id="tb-prefs" title="Preferences (Ctrl+,)">⚙</button>
-      <button id="tb-theme" title="Theme">◐</button>
-      <button id="tb-keys" title="Keyboard shortcuts (F1)">⌨</button>
-      <input id="search" class="tb-repo" type="search" placeholder="Filter commits…">
-      <button id="tb-ws" class="tb-ws" title="Workspaces"><span class="tb-ws-ico">▣</span><span class="tb-ws-name" data-no-i18n></span> ▾</button>
     </header>
     <div id="tabs" class="tabs"></div>
 
@@ -71,7 +73,7 @@
         <section class="detail">
           <div id="detail-left" class="detail-left"></div>
           <div class="splitter" id="sp-detail" title="Drag to resize · double-click to reset"></div>
-          <div id="detail-right" class="detail-right"><div class="empty">Select a commit or file</div></div>
+          <div class="detail-rcol"><div id="detail-right" class="detail-right"><div class="empty">Select a commit or file</div></div><div id="wc-commit" class="wc-commit hidden"></div></div>
         </section>
       </main>
     </div>

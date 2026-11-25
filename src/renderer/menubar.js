@@ -91,12 +91,29 @@ const MENUS = [
   ] },
 ];
 
+// Only public details: the developer's name as it appears in the public repository and the GitHub profile.
+const ABOUT = {
+  developer: 'Keny Shirata Jolondek',
+  github: 'https://github.com/kenyshirata',
+  repo: 'https://github.com/kenyshirata/KGitty',
+};
+
 async function aboutDialog() {
   let version = '';
   try { version = await window.api.appVersion(); } catch { /* ignore */ }
+  const link = (href, text, raw) => `<a href="${esc(href)}" target="_blank" ${raw ? 'data-no-i18n' : ''}>${esc(text)}</a>`;
   modal({
     title: 'About KGitty',
-    body: `<div class="about"><img src="../../build/icon.png" alt="" onerror="this.remove()"><div><b>KGitty</b>${version ? ` <span class="dim" data-no-i18n>${esc(version)}</span>` : ''}<p>A simple Git client</p></div></div>`,
+    body: `<div class="about"><img src="img/icon.png" alt="" onerror="this.remove()"><div class="about-main">
+      <div class="about-name"><b>KGitty</b>${version ? ` <span class="dim" data-no-i18n>${esc(version)}</span>` : ''}</div>
+      <p class="about-slogan">A fast and easy-to-use Git client</p>
+      <dl class="about-info">
+        <dt>Developed by</dt><dd><span data-no-i18n>${esc(ABOUT.developer)}</span></dd>
+        <dt>GitHub</dt><dd>${link(ABOUT.github, '@kenyshirata', true)}</dd>
+        <dt>Source code</dt><dd>${link(ABOUT.repo, 'github.com/kenyshirata/KGitty', true)}</dd>
+        <dt>Feedback</dt><dd>${link(ABOUT.repo + '/issues', 'Report a problem or suggest an idea')}</dd>
+        <dt>License</dt><dd>MIT</dd>
+      </dl></div></div>`,
     buttons: [{ label: 'Close', value: true, primary: true }],
   });
 }

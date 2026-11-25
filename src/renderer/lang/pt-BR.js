@@ -1,6 +1,6 @@
 // Generated from i18n/*.tsv by tools/build-i18n.js — edit the tables, not this file.
 kgLang("pt-BR", "Português (Brasil)", {
-  "A simple Git client": "Um cliente Git simples",
+  "A fast and easy-to-use Git client": "Um cliente Git rápido e fácil de manusear",
   "Open repository…": "Abrir repositório…",
   "Clone repository…": "Clonar repositório…",
   "Repository manager…": "Gerenciador de repositórios…",
@@ -770,4 +770,20 @@ kgLang("pt-BR", "Português (Brasil)", {
   "Remote:": "Remoto:",
   "Fetch all remotes": "Fazer fetch de todos os remotos",
   "This repository has no remotes.": "Este repositório não tem remotos.",
+  "Change the avatar at": "Alterar o avatar em",
+  "Developed by": "Desenvolvido por",
+  "GitHub": "GitHub",
+  "Source code": "Código-fonte",
+  "Feedback": "Feedback",
+  "Report a problem or suggest an idea": "Relatar um problema ou sugerir uma ideia",
+  "License": "Licença",
+  "Repos": "Repos",
+  "Open in": "Abrir em",
+  "Console": "Console",
+  "Command palette (Ctrl+P)": "Paleta de comandos (Ctrl+P)",
+  "Fetch (Ctrl+Shift+F)": "Fetch (Ctrl+Shift+F)",
+  "Pull (Ctrl+Shift+L)": "Pull (Ctrl+Shift+L)",
+  "Push (Ctrl+Shift+P)": "Push (Ctrl+Shift+P)",
+  "Save stash (Ctrl+Shift+S)": "Salvar stash (Ctrl+Shift+S)",
+  "New branch (Ctrl+B)": "Nova branch (Ctrl+B)",
 });

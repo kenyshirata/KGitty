@@ -1,6 +1,6 @@
 // Generated from i18n/*.tsv by tools/build-i18n.js — edit the tables, not this file.
 kgLang("ru", "Русский", {
-  "A simple Git client": "Простой клиент Git",
+  "A fast and easy-to-use Git client": "Быстрый и удобный клиент Git",
   "Open repository…": "Открыть репозиторий…",
   "Clone repository…": "Клонировать репозиторий…",
   "Repository manager…": "Менеджер репозиториев…",
@@ -770,4 +770,20 @@ kgLang("ru", "Русский", {
   "Remote:": "Удалённый:",
   "Fetch all remotes": "Получить со всех удалённых",
   "This repository has no remotes.": "У этого репозитория нет удалённых.",
+  "Change the avatar at": "Изменить аватар на",
+  "Developed by": "Разработчик",
+  "GitHub": "GitHub",
+  "Source code": "Исходный код",
+  "Feedback": "Обратная связь",
+  "Report a problem or suggest an idea": "Сообщить о проблеме или предложить идею",
+  "License": "Лицензия",
+  "Repos": "Репозитории",
+  "Open in": "Открыть в",
+  "Console": "Консоль",
+  "Command palette (Ctrl+P)": "Палитра команд (Ctrl+P)",
+  "Fetch (Ctrl+Shift+F)": "Fetch (Ctrl+Shift+F)",
+  "Pull (Ctrl+Shift+L)": "Pull (Ctrl+Shift+L)",
+  "Push (Ctrl+Shift+P)": "Push (Ctrl+Shift+P)",
+  "Save stash (Ctrl+Shift+S)": "Сохранить stash (Ctrl+Shift+S)",
+  "New branch (Ctrl+B)": "Новая ветка (Ctrl+B)",
 });

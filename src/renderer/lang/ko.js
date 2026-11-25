@@ -1,6 +1,6 @@
 // Generated from i18n/*.tsv by tools/build-i18n.js — edit the tables, not this file.
 kgLang("ko", "한국어", {
-  "A simple Git client": "간단한 Git 클라이언트",
+  "A fast and easy-to-use Git client": "빠르고 다루기 쉬운 Git 클라이언트",
   "Open repository…": "저장소 열기…",
   "Clone repository…": "저장소 복제…",
   "Repository manager…": "저장소 관리자…",
@@ -770,4 +770,20 @@ kgLang("ko", "한국어", {
   "Remote:": "원격:",
   "Fetch all remotes": "모든 원격 가져오기",
   "This repository has no remotes.": "이 저장소에는 원격이 없습니다.",
+  "Change the avatar at": "아바타 변경:",
+  "Developed by": "개발자",
+  "GitHub": "GitHub",
+  "Source code": "소스 코드",
+  "Feedback": "피드백",
+  "Report a problem or suggest an idea": "문제 신고 또는 아이디어 제안",
+  "License": "라이선스",
+  "Repos": "저장소",
+  "Open in": "열기",
+  "Console": "콘솔",
+  "Command palette (Ctrl+P)": "명령 팔레트 (Ctrl+P)",
+  "Fetch (Ctrl+Shift+F)": "가져오기 (Ctrl+Shift+F)",
+  "Pull (Ctrl+Shift+L)": "풀 (Ctrl+Shift+L)",
+  "Push (Ctrl+Shift+P)": "푸시 (Ctrl+Shift+P)",
+  "Save stash (Ctrl+Shift+S)": "스태시 저장 (Ctrl+Shift+S)",
+  "New branch (Ctrl+B)": "새 브랜치 (Ctrl+B)",
 });

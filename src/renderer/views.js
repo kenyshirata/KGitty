@@ -60,6 +60,7 @@ function applyLayout() {
   $('#main').classList.toggle('wc-mode', t === 'wc');
   $('#dtabs').classList.toggle('hidden', t !== 'commit');
   $('#detail-left').classList.toggle('wc', t === 'wc');
+  if (t !== 'wc') { $('#wc-commit').classList.add('hidden'); $('#wc-commit').innerHTML = ''; }
   $('#detail-left').classList.toggle('full', commitTab === 'commit');
   $('#detail-right').classList.toggle('hidden', commitTab === 'commit');
   if (t === 'commit') {
@@ -91,30 +92,40 @@ function renderWorkingCopy() {
   const unstaged = state.status.filter((f) => f.unstaged);
   const conflicts = state.status.filter((f) => f.conflict);
   const left = $('#detail-left');
-  const keepMsg = readDraft();
-  const keepAmend = $('#amend') ? $('#amend').checked : false;
   const scroll = [...left.querySelectorAll('.wc-files')].map((el) => el.scrollTop);
   const fileActs = { unstaged: '<span class="acts"><button data-act="stage">Stage</button><button data-act="discard">Discard</button></span>', staged: '<span class="acts"><button data-act="unstage">Unstage</button></span>' };
-  const section = (title, list, area, allAct, allLabel) => `<div class="wc-sec"><div class="fhead"><span>${title} (${list.length})</span><span class="fh-act">${viewToggle()}<button data-act="${allAct}" ${list.length ? '' : 'disabled'}>${allLabel}</button></span></div>
+  const section = (title, list, area, allAct, allLabel) => `<div class="wc-sec wc-${area}"><div class="fhead"><span>${title} (${list.length})</span><span class="fh-act">${viewToggle()}<button data-act="${allAct}" ${list.length ? '' : 'disabled'}>${allLabel}</button></span></div>
     <div class="wc-files">${renderFileList(list, area, true,
     (f, d) => fileRow(f.path, area === 'staged' ? f.x : f.untracked ? '?' : f.y, { area, depth: d, acts: fileActs[area], lfs: f.lfs }),
     `<span class="acts"><button data-act="${area === 'staged' ? 'unstage-dir' : 'stage-dir'}">${area === 'staged' ? 'Unstage' : 'Stage'}</button></span>`)}</div></div>`;
   left.innerHTML = opBanner() +
     (conflicts.length ? `<div class="fhead conflict-head"><span>Conflicts (${conflicts.length})</span></div>` + conflicts.map((f) => fileRow(f.path, '!', { area: 'conflict' })).join('') : '') +
     section('Unstaged', unstaged, 'unstaged', 'stage-all', 'Stage all') +
-    section('Staged', staged, 'staged', 'unstage-all', 'Unstage all') +
-    `<div class="commitbox"><div class="subj-row"><input type="text" id="msg" placeholder="Commit subject" spellcheck="true"><span id="msg-count" class="subj-count"></span></div>
-      <textarea id="desc" placeholder="Description" spellcheck="true"></textarea>
-      <div class="cb-row"><label><input type="checkbox" id="amend"> Amend last commit</label>
-      <button class="primary" id="do-commit">Commit${state.head ? ' to ' + esc(state.head) : ''}</button></div></div>`;
-  const parts = splitMessage(keepMsg);
-  $('#msg').value = parts.subject;
-  $('#desc').value = parts.desc;
-  updateSubjectCount();
-  $('#amend').checked = keepAmend;
+    '<div class="splitter h" id="sp-wc" title="Drag to resize · double-click to reset"></div>' +
+    section('Staged', staged, 'staged', 'unstage-all', 'Unstage all');
+  makeWcSplitter($('#sp-wc'));
+  renderCommitBox();
   left.querySelectorAll('.wc-files').forEach((el, i) => { el.scrollTop = scroll[i] || 0; });
   if (state.file && !state.status.some((f) => f.path === state.file.path && (state.file.area !== 'conflict' || f.conflict))) state.file = null;
   if (state.file) showFileDiff(); else $('#detail-right').innerHTML = '<div class="empty">Select a file to see its changes</div>';
+}
+
+// The commit box sits under the diff, on the right. It is built once and kept while Local Changes is shown, so
+// a refresh (for example after an automatic fetch) never interrupts typing; only the button label follows HEAD.
+function renderCommitBox() {
+  const box = $('#wc-commit');
+  box.classList.remove('hidden');
+  const label = 'Commit' + (state.head ? ' to ' + state.head : '');
+  if ($('#wc-commit #msg')) { $('#do-commit').textContent = label; return; }
+  const keep = state.draft || '';
+  box.innerHTML = `<div class="commitbox"><div class="subj-row"><input type="text" id="msg" placeholder="Commit subject" spellcheck="true"><span id="msg-count" class="subj-count"></span></div>
+      <textarea id="desc" placeholder="Description" spellcheck="true"></textarea>
+      <div class="cb-row"><label><input type="checkbox" id="amend"> Amend last commit</label>
+      <button class="primary" id="do-commit">${esc(label)}</button></div></div>`;
+  const parts = splitMessage(keep);
+  $('#msg').value = parts.subject;
+  $('#desc').value = parts.desc;
+  updateSubjectCount();
 }
 
 /* ---------- All Commits: Commit / Changes / File Tree ---------- */
@@ -240,14 +251,15 @@ function fillMessage(m) {
 
 let amendFilled = null;
 
-$('#detail-left').addEventListener('input', (e) => { if (e.target.id === 'msg') updateSubjectCount(); });
+$('#wc-commit').addEventListener('input', (e) => { if (e.target.id === 'msg') updateSubjectCount(); });
+$('#wc-commit').addEventListener('click', (e) => { if (e.target.closest('#do-commit')) doCommit(); });
 
-$('#detail-left').addEventListener('keydown', (e) => {
+$('#wc-commit').addEventListener('keydown', (e) => {
   if (e.target.id === 'msg' && e.key === 'Enter' && !e.ctrlKey) { e.preventDefault(); $('#desc').focus(); }
 });
 
 // Ticking "Amend" on an empty message loads the last commit's message; unticking removes it again if untouched.
-$('#detail-left').addEventListener('change', async (e) => {
+$('#wc-commit').addEventListener('change', async (e) => {
   if (e.target.id !== 'amend') return;
   if (e.target.checked) {
     if ($('#msg').value || $('#desc').value) return;

@@ -1,7 +1,7 @@
 'use strict';
 // Git worktrees: list them in the sidebar, add / remove / lock / prune, and open one in its own tab.
 
-const samePath = (a, b) => a.replace(/[\\/]+$/, '').replace(/\\/g, '/').toLowerCase() === b.replace(/[\\/]+$/, '').replace(/\\/g, '/').toLowerCase();
+const samePath = (a, b) => !!a && !!b && a.replace(/[\\/]+$/, '').replace(/\\/g, '/').toLowerCase() === b.replace(/[\\/]+$/, '').replace(/\\/g, '/').toLowerCase();
 
 async function loadWorktrees() {
   const r = await window.api.git(state.repo, ['worktree', 'list', '--porcelain']);

@@ -1,6 +1,6 @@
 // Generated from i18n/*.tsv by tools/build-i18n.js — edit the tables, not this file.
 kgLang("zh-CN", "简体中文", {
-  "A simple Git client": "简洁的 Git 客户端",
+  "A fast and easy-to-use Git client": "快速易用的 Git 客户端",
   "Open repository…": "打开仓库…",
   "Clone repository…": "克隆仓库…",
   "Repository manager…": "仓库管理器…",
@@ -770,4 +770,20 @@ kgLang("zh-CN", "简体中文", {
   "Remote:": "远程：",
   "Fetch all remotes": "获取所有远程",
   "This repository has no remotes.": "此仓库没有远程。",
+  "Change the avatar at": "在此更改头像：",
+  "Developed by": "开发者",
+  "GitHub": "GitHub",
+  "Source code": "源代码",
+  "Feedback": "反馈",
+  "Report a problem or suggest an idea": "报告问题或提出建议",
+  "License": "许可证",
+  "Repos": "仓库",
+  "Open in": "打开方式",
+  "Console": "控制台",
+  "Command palette (Ctrl+P)": "命令面板 (Ctrl+P)",
+  "Fetch (Ctrl+Shift+F)": "获取 (Ctrl+Shift+F)",
+  "Pull (Ctrl+Shift+L)": "拉取 (Ctrl+Shift+L)",
+  "Push (Ctrl+Shift+P)": "推送 (Ctrl+Shift+P)",
+  "Save stash (Ctrl+Shift+S)": "保存储藏 (Ctrl+Shift+S)",
+  "New branch (Ctrl+B)": "新建分支 (Ctrl+B)",
 });

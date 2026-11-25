@@ -1,4 +1,4 @@
-// Renders build/icon.svg into build/icon.png (512 px) and build/icon.ico (16–256 px).
+// Renders build/icon.svg into build/icon.png (512 px), build/icon.ico (16–256 px) and src/renderer/img/icon.png (128 px).
 // Run with: npx electron tools/build-icon.js
 const { app, BrowserWindow } = require('electron');
 const fs = require('fs');
@@ -47,6 +47,9 @@ app.whenReady().then(async () => {
   })()`);
   const pngs = urls.map((u, i) => ({ size: sizes[i], data: Buffer.from(u.split(',')[1], 'base64') }));
   fs.writeFileSync(path.join(BUILD, 'icon.png'), pngs[0].data);
+  // A copy inside the app itself (build/ is not packaged), used by the About dialog.
+  fs.mkdirSync(path.join(__dirname, '..', 'src', 'renderer', 'img'), { recursive: true });
+  fs.writeFileSync(path.join(__dirname, '..', 'src', 'renderer', 'img', 'icon.png'), pngs.find((p) => p.size === 128).data);
   fs.writeFileSync(path.join(BUILD, 'icon.ico'), makeIco(pngs.slice(1)));
   console.log('icon.png and icon.ico written:', ICO_SIZES.join(', '));
   app.quit();

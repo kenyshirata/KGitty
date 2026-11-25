@@ -1,6 +1,6 @@
 // Generated from i18n/*.tsv by tools/build-i18n.js — edit the tables, not this file.
 kgLang("ja", "日本語", {
-  "A simple Git client": "シンプルな Git クライアント",
+  "A fast and easy-to-use Git client": "高速で扱いやすい Git クライアント",
   "Open repository…": "リポジトリを開く…",
   "Clone repository…": "リポジトリをクローン…",
   "Repository manager…": "リポジトリ管理…",
@@ -770,4 +770,20 @@ kgLang("ja", "日本語", {
   "Remote:": "リモート:",
   "Fetch all remotes": "すべてのリモートをフェッチ",
   "This repository has no remotes.": "このリポジトリにはリモートがありません。",
+  "Change the avatar at": "アバターの変更:",
+  "Developed by": "開発者",
+  "GitHub": "GitHub",
+  "Source code": "ソースコード",
+  "Feedback": "フィードバック",
+  "Report a problem or suggest an idea": "問題を報告、またはアイデアを提案",
+  "License": "ライセンス",
+  "Repos": "リポジトリ",
+  "Open in": "開く",
+  "Console": "コンソール",
+  "Command palette (Ctrl+P)": "コマンドパレット (Ctrl+P)",
+  "Fetch (Ctrl+Shift+F)": "フェッチ (Ctrl+Shift+F)",
+  "Pull (Ctrl+Shift+L)": "プル (Ctrl+Shift+L)",
+  "Push (Ctrl+Shift+P)": "プッシュ (Ctrl+Shift+P)",
+  "Save stash (Ctrl+Shift+S)": "スタッシュを保存 (Ctrl+Shift+S)",
+  "New branch (Ctrl+B)": "新しいブランチ (Ctrl+B)",
 });

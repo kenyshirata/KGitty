@@ -40,6 +40,8 @@ function renderTabs() {
 async function activate(i) {
   if (state.busy) return setStatus('Wait for the running operation to finish', true);
   snapshot();
+  // The commit box keeps its text across refreshes; a different tab starts from that tab's own draft.
+  $('#wc-commit').innerHTML = '';
   active = i;
   const t = tabs[i];
   $('#welcome').classList.add('hidden');
@@ -47,14 +49,14 @@ async function activate(i) {
   $('#app').classList.toggle('mgr-mode', !!t.mgr);
   if (t.mgr) {
     Object.assign(state, freshRepoState());
-    $('#repo-title').textContent = '';
     renderTabs();
     persistTabs();
     return showMgr();
   }
   hideMgr();
   Object.assign(state, t.snap || freshRepoState(), { repo: t.repo });
-  $('#repo-title').textContent = t.repo.split(/[\\/]/).pop();
+  $('#repo-title .rt-name').textContent = t.repo.split(/[\\/]/).pop();
+  $('#repo-title .rt-branch-name').textContent = '';
   $('#search').value = state.filter;
   $('#detail-left').innerHTML = '';
   renderTabs();
@@ -199,16 +201,21 @@ async function pickAndOpen() {
 
 async function refresh() {
   if (!state.repo) return;
+  // The user may switch tabs (or open the repository manager) while this runs; then the results and any error
+  // belong to a repository that is no longer shown, so they are dropped.
+  const repo = state.repo;
   try {
     await Promise.all([loadRefs(), loadLog(), loadStatus(), loadSubmodules(), loadWorktrees(), loadLfs(), loadFlow()]);
+    if (state.repo !== repo) return;
     renderSidebar();
     renderList();
     renderDetail();
     updateUndoUi();
     markActiveTabDirty();
     updateSyncBadges();
+    $('#repo-title .rt-branch-name').textContent = state.head || (state.headHash ? state.headHash.slice(0, 7) + ' (detached)' : '');
   } catch (e) {
-    setStatus(e.message.split('\n')[0], true);
+    if (state.repo === repo) setStatus(e.message.split('\n')[0], true);
   }
 }
 
@@ -1118,7 +1125,6 @@ $('#commit-list').oncontextmenu = (e) => {
 $('#detail-left').onclick = async (e) => {
   const goto = e.target.closest('[data-goto]');
   if (goto) { e.preventDefault(); return selectCommit(goto.dataset.goto, true); }
-  if (e.target.closest('#do-commit')) return doCommit();
   if (e.target.closest('[data-act=toggle-files]')) return toggleFileView();
   const dr = e.target.closest('.drow');
   if (dr) {

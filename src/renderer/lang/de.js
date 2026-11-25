@@ -1,6 +1,6 @@
 // Generated from i18n/*.tsv by tools/build-i18n.js — edit the tables, not this file.
 kgLang("de", "Deutsch", {
-  "A simple Git client": "Ein einfacher Git-Client",
+  "A fast and easy-to-use Git client": "Ein schneller und einfach zu bedienender Git-Client",
   "Open repository…": "Repository öffnen…",
   "Clone repository…": "Repository klonen…",
   "Repository manager…": "Repository-Verwaltung…",
@@ -770,4 +770,20 @@ kgLang("de", "Deutsch", {
   "Remote:": "Remote:",
   "Fetch all remotes": "Alle Remotes abrufen",
   "This repository has no remotes.": "Dieses Repository hat keine Remotes.",
+  "Change the avatar at": "Avatar ändern auf",
+  "Developed by": "Entwickelt von",
+  "GitHub": "GitHub",
+  "Source code": "Quellcode",
+  "Feedback": "Feedback",
+  "Report a problem or suggest an idea": "Problem melden oder Idee vorschlagen",
+  "License": "Lizenz",
+  "Repos": "Repos",
+  "Open in": "Öffnen in",
+  "Console": "Konsole",
+  "Command palette (Ctrl+P)": "Befehlspalette (Ctrl+P)",
+  "Fetch (Ctrl+Shift+F)": "Abrufen (Ctrl+Shift+F)",
+  "Pull (Ctrl+Shift+L)": "Pull (Ctrl+Shift+L)",
+  "Push (Ctrl+Shift+P)": "Push (Ctrl+Shift+P)",
+  "Save stash (Ctrl+Shift+S)": "Stash speichern (Ctrl+Shift+S)",
+  "New branch (Ctrl+B)": "Neuer Branch (Ctrl+B)",
 });

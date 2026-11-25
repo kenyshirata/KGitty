@@ -119,4 +119,3 @@ function showShortcuts() {
   ov.onkeydown = (e) => { if (e.key === 'Escape' || e.key === 'F1') { e.preventDefault(); close(); } };
 }
 
-$('#tb-keys').onclick = showShortcuts;
