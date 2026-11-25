@@ -101,7 +101,7 @@ async function renderStashDetail() {
       <div class="meta">${esc(ref)} · ${hash.slice(0, 7)}</div>
       <div class="meta"><b>${esc(author)}</b> · ${date ? new Date(date).toLocaleString(kgLocale()) : ''}</div></div>
     <div class="st-actions"><button data-st="apply" class="primary">Apply</button><button data-st="pop">Pop</button><button data-st="branch">Branch…</button><button data-st="drop" class="danger">Drop</button></div>
-    <div class="fhead"><span>Stashed files (${files.length})</span><span class="fh-act">${viewToggle()}</span></div>` +
+    <div class="fhead"><span>Stashed files (${files.length})</span><span class="fh-act">${viewToggle('stash', files)}</span></div>` +
     renderFileList(files, 'stash', true, (f, d) => fileRow(f.path, f.code, { area: 'stash', depth: d }));
   const keep = state.file && files.some((f) => f.path === state.file.path);
   if (keep) showFileDiff();

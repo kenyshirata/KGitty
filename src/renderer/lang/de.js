@@ -790,4 +790,6 @@ kgLang("de", "Deutsch", {
   "No open tabs": "Keine offenen Tabs",
   "Appearance changes apply immediately, also without Save.": "Änderungen am Erscheinungsbild gelten sofort, auch ohne Speichern.",
   "Stage the new, changed or deleted files to commit": "Neue, geänderte oder gelöschte Dateien stagen, um zu committen",
+  "Collapse all folders": "Alle Ordner einklappen",
+  "Expand all folders": "Alle Ordner ausklappen",
 });

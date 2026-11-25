@@ -1127,6 +1127,8 @@ $('#detail-left').onclick = async (e) => {
   const goto = e.target.closest('[data-goto]');
   if (goto) { e.preventDefault(); return selectCommit(goto.dataset.goto, true); }
   if (e.target.closest('[data-act=toggle-files]')) return toggleFileView();
+  const ta = e.target.closest('[data-act=tree-all]');
+  if (ta) return setAllDirs(ta.dataset.area, ta.dataset.open === '1');
   const dr = e.target.closest('.drow');
   if (dr) {
     const dact = e.target.closest('[data-act]');

@@ -790,4 +790,6 @@ kgLang("pt-BR", "Português (Brasil)", {
   "No open tabs": "Nenhuma aba aberta",
   "Appearance changes apply immediately, also without Save.": "As alterações de aparência valem na hora, mesmo sem Salvar.",
   "Stage the new, changed or deleted files to commit": "Coloque no stage os arquivos novos, alterados ou excluídos para commitar",
+  "Collapse all folders": "Recolher todas as pastas",
+  "Expand all folders": "Expandir todas as pastas",
 });

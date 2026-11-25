@@ -790,4 +790,6 @@ kgLang("ru", "Русский", {
   "No open tabs": "Нет открытых вкладок",
   "Appearance changes apply immediately, also without Save.": "Изменения оформления применяются сразу, даже без сохранения.",
   "Stage the new, changed or deleted files to commit": "Добавьте в stage новые, изменённые или удалённые файлы, чтобы сделать коммит",
+  "Collapse all folders": "Свернуть все папки",
+  "Expand all folders": "Развернуть все папки",
 });

@@ -790,4 +790,6 @@ kgLang("ja", "日本語", {
   "No open tabs": "開いているタブはありません",
   "Appearance changes apply immediately, also without Save.": "外観の変更は「保存」しなくてもすぐに反映されます。",
   "Stage the new, changed or deleted files to commit": "コミットするには新規・変更・削除したファイルをステージしてください",
+  "Collapse all folders": "すべてのフォルダーを折りたたむ",
+  "Expand all folders": "すべてのフォルダーを展開",
 });

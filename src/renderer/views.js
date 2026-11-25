@@ -38,7 +38,36 @@ function renderFileList(files, area, defaultOpen, rowFn, dirActs = '') {
   return [...files].sort((a, b) => cmpName(a.path, b.path)).map((f) => rowFn(f, null)).join('');
 }
 
-const viewToggle = () => `<button class="vtoggle" data-act="toggle-files" title="${fileView === 'tree' ? 'Show as a flat list' : 'Show as a tree'}">${fileView === 'tree' ? '☰' : '🗂'}</button>`;
+// Every folder of a file list ("src", "src/app", …), for collapsing or expanding them all.
+const dirsOf = (files) => {
+  const dirs = new Set();
+  for (const f of files) { const p = f.path.split('/'); for (let i = 1; i < p.length; i++) dirs.add(p.slice(0, i).join('/')); }
+  return [...dirs];
+};
+const treeFiles = {}; // area -> the files last shown there, for the collapse / expand all button
+
+const COLLAPSE_SVG = '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"/><path d="M5.5 8h5"/></svg>';
+const EXPAND_SVG = '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"/><path d="M5.5 8h5M8 5.5v5"/></svg>';
+
+// Buttons at the top of a file list: collapse / expand all folders (tree view, when there are folders), then
+// tree / flat list. A folder counts as open unless closed, the same default renderTree uses for these lists.
+const viewToggle = (area, files) => {
+  let all = '';
+  if (fileView === 'tree' && area && files) {
+    treeFiles[area] = files;
+    const dirs = dirsOf(files);
+    if (dirs.length) {
+      const anyOpen = dirs.some((d) => state.treeOpen[`${area}:${d}`] ?? true);
+      all = `<button class="vtoggle" data-act="tree-all" data-area="${area}" data-open="${anyOpen ? '0' : '1'}" title="${anyOpen ? 'Collapse all folders' : 'Expand all folders'}">${anyOpen ? COLLAPSE_SVG : EXPAND_SVG}</button>`;
+    }
+  }
+  return all + `<button class="vtoggle" data-act="toggle-files" title="${fileView === 'tree' ? 'Show as a flat list' : 'Show as a tree'}">${fileView === 'tree' ? '☰' : '🗂'}</button>`;
+};
+
+function setAllDirs(area, open) {
+  for (const d of dirsOf(treeFiles[area] || [])) state.treeOpen[`${area}:${d}`] = open;
+  if (state.repo) renderDetail();
+}
 
 function toggleFileView() {
   fileView = fileView === 'tree' ? 'flat' : 'tree';
@@ -63,6 +92,8 @@ function applyLayout() {
   if (t !== 'wc') { $('#wc-commit').classList.add('hidden'); $('#wc-commit').innerHTML = ''; }
   $('#detail-left').classList.toggle('full', commitTab === 'commit');
   $('#detail-right').classList.toggle('hidden', commitTab === 'commit');
+  // The diff sits in a column with the commit box; hide the column too, or it keeps half the width empty.
+  $('.detail-rcol').classList.toggle('hidden', commitTab === 'commit');
   if (t === 'commit') {
     $('#dtabs').innerHTML = [['commit', 'Commit'], ['changes', 'Changes'], ['tree', 'File Tree']]
       .map(([v, l]) => `<button class="dtab ${state.dtab === v ? 'active' : ''}" data-dtab="${v}">${l}</button>`).join('');
@@ -94,7 +125,7 @@ function renderWorkingCopy() {
   const left = $('#detail-left');
   const scroll = [...left.querySelectorAll('.wc-files')].map((el) => el.scrollTop);
   const fileActs = { unstaged: '<span class="acts"><button data-act="stage">Stage</button><button data-act="discard">Discard</button></span>', staged: '<span class="acts"><button data-act="unstage">Unstage</button></span>' };
-  const section = (title, list, area, allAct, allLabel) => `<div class="wc-sec wc-${area}"><div class="fhead"><span>${title} (${list.length})</span><span class="fh-act">${viewToggle()}<button data-act="${allAct}" ${list.length ? '' : 'disabled'}>${allLabel}</button></span></div>
+  const section = (title, list, area, allAct, allLabel) => `<div class="wc-sec wc-${area}"><div class="fhead"><span>${title} (${list.length})</span><span class="fh-act">${viewToggle(area, list)}<button data-act="${allAct}" ${list.length ? '' : 'disabled'}>${allLabel}</button></span></div>
     <div class="wc-files">${renderFileList(list, area, true,
     (f, d) => fileRow(f.path, area === 'staged' ? f.x : f.untracked ? '?' : f.y, { area, depth: d, acts: fileActs[area], lfs: f.lfs }),
     `<span class="acts"><button data-act="${area === 'staged' ? 'unstage-dir' : 'stage-dir'}">${area === 'staged' ? 'Unstage' : 'Stage'}</button></span>`)}</div></div>`;
@@ -182,14 +213,14 @@ async function renderCommitDetail() {
         <span class="dim">SHA</span><span class="ci-sha">${c.hash}</span>
         <span class="dim">PARENTS</span><span>${c.parents.map((p) => `<a href="#" data-goto="${p}" style="color:var(--accent)">${p.slice(0, 7)}</a>`).join(', ') || '<span class="dim">none</span>'}</span></div>
       <div class="ci-subject">${esc(c.subject)}</div>${body ? `<div class="cbody">${esc(body)}</div>` : ''}
-      <div class="fhead"><span>Changed files (${files.length})</span><span class="fh-act">${viewToggle()}</span></div>
+      <div class="fhead"><span>Changed files (${files.length})</span><span class="fh-act">${viewToggle('commit', files)}</span></div>
       <div class="ci-files">${renderFileList(files, 'commit', true, (f, d) => fileRow(f.path, f.code, { area: 'commit', depth: d }))}</div></div>`;
     return;
   }
 
   // Changes tab
   if (!state.file && files.length) state.file = { path: files[0].path, area: 'commit' };
-  left.innerHTML = `<div class="fhead"><span>Changed files (${files.length})</span><span class="fh-act">${viewToggle()}</span></div>` +
+  left.innerHTML = `<div class="fhead"><span>Changed files (${files.length})</span><span class="fh-act">${viewToggle('commit', files)}</span></div>` +
     renderFileList(files, 'commit', true, (f, d) => fileRow(f.path, f.code, { area: 'commit', depth: d }));
   if (state.file && files.some((f) => f.path === state.file.path)) showFileDiff();
   else { state.file = null; $('#detail-right').innerHTML = '<div class="empty">Select a file to see its changes</div>'; }

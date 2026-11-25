@@ -790,4 +790,6 @@ kgLang("ko", "한국어", {
   "No open tabs": "열린 탭 없음",
   "Appearance changes apply immediately, also without Save.": "모양 변경은 저장하지 않아도 바로 적용됩니다.",
   "Stage the new, changed or deleted files to commit": "커밋하려면 새 파일, 변경되거나 삭제된 파일을 스테이지하세요",
+  "Collapse all folders": "모든 폴더 접기",
+  "Expand all folders": "모든 폴더 펼치기",
 });

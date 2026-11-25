@@ -790,4 +790,6 @@ kgLang("zh-CN", "简体中文", {
   "No open tabs": "没有打开的标签页",
   "Appearance changes apply immediately, also without Save.": "外观更改会立即生效，无需保存。",
   "Stage the new, changed or deleted files to commit": "请暂存新建、修改或删除的文件后再提交",
+  "Collapse all folders": "折叠所有文件夹",
+  "Expand all folders": "展开所有文件夹",
 });
