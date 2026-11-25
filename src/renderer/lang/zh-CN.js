@@ -786,4 +786,8 @@ kgLang("zh-CN", "简体中文", {
   "Push (Ctrl+Shift+P)": "推送 (Ctrl+Shift+P)",
   "Save stash (Ctrl+Shift+S)": "保存储藏 (Ctrl+Shift+S)",
   "New branch (Ctrl+B)": "新建分支 (Ctrl+B)",
+  "Show the tabs as a list": "以列表显示标签页",
+  "No open tabs": "没有打开的标签页",
+  "Appearance changes apply immediately, also without Save.": "外观更改会立即生效，无需保存。",
+  "Stage the new, changed or deleted files to commit": "请暂存新建、修改或删除的文件后再提交",
 });

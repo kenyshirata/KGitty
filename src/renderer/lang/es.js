@@ -786,4 +786,8 @@ kgLang("es", "Español", {
   "Push (Ctrl+Shift+P)": "Push (Ctrl+Shift+P)",
   "Save stash (Ctrl+Shift+S)": "Guardar stash (Ctrl+Shift+S)",
   "New branch (Ctrl+B)": "Nueva rama (Ctrl+B)",
+  "Show the tabs as a list": "Mostrar las pestañas como lista",
+  "No open tabs": "No hay pestañas abiertas",
+  "Appearance changes apply immediately, also without Save.": "Los cambios de apariencia se aplican al instante, incluso sin Guardar.",
+  "Stage the new, changed or deleted files to commit": "Pasa al stage los archivos nuevos, modificados o eliminados para confirmar",
 });

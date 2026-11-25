@@ -21,6 +21,7 @@ function wsApplyTitle() {
   document.title = d.showInTitle ? `KGitty — ${d.current}` : 'KGitty';
   const b = $('#tb-ws');
   if (b) b.querySelector('.tb-ws-name').textContent = d.current.split('/').pop();
+  if (typeof renderTabList === 'function') renderTabList();
 }
 
 async function switchWorkspace(name) {

@@ -45,7 +45,7 @@ async function loadPrefs(scope) {
   return { name, email, signkey, gpgsign: gpgsign === 'true', format: format || 'openpgp', effective };
 }
 
-const PREF_TABS = [['general', 'General'], ['commit', 'Commit'], ['git', 'Git'], ['integration', 'Integration'], ['updates', 'Updates']];
+const PREF_TABS = [['general', 'General'], ['appearance', 'Appearance'], ['commit', 'Commit'], ['git', 'Git'], ['integration', 'Integration'], ['updates', 'Updates']];
 let prefTab = 'general';
 
 async function prefsDialog(tab) {
@@ -90,6 +90,10 @@ async function prefsDialog(tab) {
         <label class="cl-opt"><input type="checkbox" id="go-compactLabels" ${go.compactLabels ? 'checked' : ''}> Compact branch labels</label>
         <p class="hint">Automatic fetch runs every 10 minutes for the open repository and never asks for a password.</p>
       </div>
+      </div>
+      <div ${panel('appearance')}>
+      <p class="hint">Appearance changes apply immediately, also without Save.</p>
+      <div id="pf-ap">${appearanceHtml()}</div>
       </div>
       <div ${panel('git')}>
       <div class="pf-sec"><div class="sb-head">Identity</div>
@@ -152,7 +156,16 @@ async function prefsDialog(tab) {
     clearTimeout(avTimer);
     avTimer = setTimeout(drawAvatar, 400);
   };
+  // The Appearance tab works like View › Appearance…; after "Reset appearance" only that area is drawn again.
+  const wireAp = () => wireAppearance($('#pf-ap'), () => {
+    const old = $('#pf-ap');
+    const fresh = old.cloneNode(false);
+    fresh.innerHTML = appearanceHtml();
+    old.replaceWith(fresh);
+    wireAp();
+  });
   draw();
+  wireAp();
   drawAvatar();
   const focusTab = () => { const f = ov.querySelector('.pf-panel:not(.hidden) input[type=text], .pf-panel:not(.hidden) select'); (f || ov.querySelector('.pf-tab.on')).focus(); };
   focusTab();
@@ -201,6 +214,7 @@ async function prefsDialog(tab) {
     p = await loadPrefs(scope);
     helper = keep;
     draw();
+    wireAp();
     drawAvatar();
     $('#pf-gcm').checked = gcm;
   };

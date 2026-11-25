@@ -786,4 +786,8 @@ kgLang("fr", "Français", {
   "Push (Ctrl+Shift+P)": "Pousser (Ctrl+Shift+P)",
   "Save stash (Ctrl+Shift+S)": "Enregistrer un stash (Ctrl+Shift+S)",
   "New branch (Ctrl+B)": "Nouvelle branche (Ctrl+B)",
+  "Show the tabs as a list": "Afficher les onglets en liste",
+  "No open tabs": "Aucun onglet ouvert",
+  "Appearance changes apply immediately, also without Save.": "Les changements d’apparence s’appliquent immédiatement, même sans Enregistrer.",
+  "Stage the new, changed or deleted files to commit": "Indexez les fichiers nouveaux, modifiés ou supprimés pour valider",
 });

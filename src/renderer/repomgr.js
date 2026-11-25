@@ -219,5 +219,4 @@ async function repoManager() {
 }
 
 // mgrtab.js loads after this file.
-$('#tb-repos').onclick = () => openMgrTab();
 $('#btn-repos').onclick = () => openMgrTab();

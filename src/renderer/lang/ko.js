@@ -786,4 +786,8 @@ kgLang("ko", "한국어", {
   "Push (Ctrl+Shift+P)": "푸시 (Ctrl+Shift+P)",
   "Save stash (Ctrl+Shift+S)": "스태시 저장 (Ctrl+Shift+S)",
   "New branch (Ctrl+B)": "새 브랜치 (Ctrl+B)",
+  "Show the tabs as a list": "탭을 목록으로 표시",
+  "No open tabs": "열린 탭 없음",
+  "Appearance changes apply immediately, also without Save.": "모양 변경은 저장하지 않아도 바로 적용됩니다.",
+  "Stage the new, changed or deleted files to commit": "커밋하려면 새 파일, 변경되거나 삭제된 파일을 스테이지하세요",
 });

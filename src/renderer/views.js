@@ -116,7 +116,7 @@ function renderCommitBox() {
   const box = $('#wc-commit');
   box.classList.remove('hidden');
   const label = 'Commit' + (state.head ? ' to ' + state.head : '');
-  if ($('#wc-commit #msg')) { $('#do-commit').textContent = label; return; }
+  if ($('#wc-commit #msg')) { $('#do-commit').textContent = label; return updateCommitButton(); }
   const keep = state.draft || '';
   box.innerHTML = `<div class="commitbox"><div class="subj-row"><input type="text" id="msg" placeholder="Commit subject" spellcheck="true"><span id="msg-count" class="subj-count"></span></div>
       <textarea id="desc" placeholder="Description" spellcheck="true"></textarea>
@@ -126,6 +126,21 @@ function renderCommitBox() {
   $('#msg').value = parts.subject;
   $('#desc').value = parts.desc;
   updateSubjectCount();
+  updateCommitButton();
+}
+
+// Commit is available once something is staged (a new, changed or deleted file) and no conflict is left.
+// Amending works without staged files, since it may only change the message of the last commit.
+function updateCommitButton() {
+  const btn = $('#do-commit');
+  if (!btn) return;
+  const amend = $('#amend') && $('#amend').checked;
+  const conflicts = state.status.some((f) => f.conflict);
+  const staged = state.status.some((f) => f.staged);
+  const why = conflicts ? 'Resolve all conflicts before committing'
+    : !staged && !amend ? 'Stage the new, changed or deleted files to commit' : '';
+  btn.disabled = !!why;
+  btn.title = why ? window.t(why) : '';
 }
 
 /* ---------- All Commits: Commit / Changes / File Tree ---------- */
@@ -254,13 +269,23 @@ let amendFilled = null;
 $('#wc-commit').addEventListener('input', (e) => { if (e.target.id === 'msg') updateSubjectCount(); });
 $('#wc-commit').addEventListener('click', (e) => { if (e.target.closest('#do-commit')) doCommit(); });
 
+// Enter in the subject moves to the description; Backspace at the very start of the description (nothing
+// selected) goes back to the end of the subject — the reverse of that Enter, so nothing is deleted.
 $('#wc-commit').addEventListener('keydown', (e) => {
   if (e.target.id === 'msg' && e.key === 'Enter' && !e.ctrlKey) { e.preventDefault(); $('#desc').focus(); }
+  if (e.target.id === 'desc' && e.key === 'Backspace' && !e.ctrlKey && !e.altKey && !e.shiftKey &&
+      e.target.selectionStart === 0 && e.target.selectionEnd === 0) {
+    e.preventDefault();
+    const s = $('#msg');
+    s.focus();
+    s.setSelectionRange(s.value.length, s.value.length);
+  }
 });
 
 // Ticking "Amend" on an empty message loads the last commit's message; unticking removes it again if untouched.
 $('#wc-commit').addEventListener('change', async (e) => {
   if (e.target.id !== 'amend') return;
+  updateCommitButton();
   if (e.target.checked) {
     if ($('#msg').value || $('#desc').value) return;
     const r = await window.api.git(state.repo, ['log', '-1', '--format=%B']);

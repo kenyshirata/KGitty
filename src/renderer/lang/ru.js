@@ -786,4 +786,8 @@ kgLang("ru", "Русский", {
   "Push (Ctrl+Shift+P)": "Push (Ctrl+Shift+P)",
   "Save stash (Ctrl+Shift+S)": "Сохранить stash (Ctrl+Shift+S)",
   "New branch (Ctrl+B)": "Новая ветка (Ctrl+B)",
+  "Show the tabs as a list": "Показывать вкладки списком",
+  "No open tabs": "Нет открытых вкладок",
+  "Appearance changes apply immediately, also without Save.": "Изменения оформления применяются сразу, даже без сохранения.",
+  "Stage the new, changed or deleted files to commit": "Добавьте в stage новые, изменённые или удалённые файлы, чтобы сделать коммит",
 });

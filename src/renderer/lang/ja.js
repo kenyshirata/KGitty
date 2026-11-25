@@ -786,4 +786,8 @@ kgLang("ja", "日本語", {
   "Push (Ctrl+Shift+P)": "プッシュ (Ctrl+Shift+P)",
   "Save stash (Ctrl+Shift+S)": "スタッシュを保存 (Ctrl+Shift+S)",
   "New branch (Ctrl+B)": "新しいブランチ (Ctrl+B)",
+  "Show the tabs as a list": "タブを一覧で表示",
+  "No open tabs": "開いているタブはありません",
+  "Appearance changes apply immediately, also without Save.": "外観の変更は「保存」しなくてもすぐに反映されます。",
+  "Stage the new, changed or deleted files to commit": "コミットするには新規・変更・削除したファイルをステージしてください",
 });

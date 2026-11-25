@@ -35,6 +35,7 @@ function renderTabs() {
   $('#tabs').innerHTML =
     tabs.map((t, i) => `<div class="tab ${i === active ? 'active' : ''}${t.mgr ? ' mgr-tab' : ''}" data-i="${i}" title="${esc(t.mgr ? window.t('Repository Manager') : t.repo)}">${t.dirty && gitOpts().tabDirty ? `<span class="tab-dot" title="${esc(window.t('Uncommitted changes'))}">●</span>` : ''}<span class="tname">${esc(t.mgr ? window.t('Repository Manager') : t.repo.split(/[\\/]/).pop())}</span><span class="x" data-close="${i}">✕</span></div>`).join('') +
     '<button class="tab-add" id="tab-add" title="New tab — repository manager">+</button>';
+  if (typeof renderTabList === 'function') renderTabList();
 }
 
 async function activate(i) {

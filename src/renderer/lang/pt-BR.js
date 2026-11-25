@@ -786,4 +786,8 @@ kgLang("pt-BR", "Português (Brasil)", {
   "Push (Ctrl+Shift+P)": "Push (Ctrl+Shift+P)",
   "Save stash (Ctrl+Shift+S)": "Salvar stash (Ctrl+Shift+S)",
   "New branch (Ctrl+B)": "Nova branch (Ctrl+B)",
+  "Show the tabs as a list": "Mostrar as abas em lista",
+  "No open tabs": "Nenhuma aba aberta",
+  "Appearance changes apply immediately, also without Save.": "As alterações de aparência valem na hora, mesmo sem Salvar.",
+  "Stage the new, changed or deleted files to commit": "Coloque no stage os arquivos novos, alterados ou excluídos para commitar",
 });
