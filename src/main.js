@@ -23,6 +23,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: false,
     },
   }));
   // Keyboard shortcuts live in the renderer; the default menu would claim Ctrl+R / Ctrl+W for itself.
