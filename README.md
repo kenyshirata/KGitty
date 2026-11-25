@@ -39,7 +39,7 @@ git tag v0.2.0
 git push origin main --tags
 ```
 
-Pushing the tag runs `.github/workflows/release.yml`, which builds the installer and publishes it, together with `latest.yml`, as a GitHub release. Installed copies pick it up from there. While the repository is private, the app needs a GitHub access token that can read releases (`repo` scope); paste it in Preferences → Updates — it is stored encrypted by the operating system. Making the repository public removes that need.
+Pushing the tag runs `.github/workflows/release.yml`, which builds the installer and publishes it, together with `latest.yml`, as a GitHub release. Installed copies pick it up from there.
 
 Set `KGITTY_UPDATE_URL` to a folder that serves `latest.yml` to test updates against a local server instead of GitHub.
 

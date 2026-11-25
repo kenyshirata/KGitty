@@ -56,8 +56,6 @@ async function prefsDialog(tab) {
   const helperOrig = await cfgGet('--global', 'credential.helper');
   let helper = helperOrig;
   const appVersion = await window.api.appVersion();
-  const updInfo = await window.api.updateState();
-  let hasToken = updInfo.hasToken;
   const effHelpers = (await window.api.git(cfgCwd(), ['config', '--get-all', 'credential.helper'])).stdout.split('\n').filter(Boolean);
   const mt = await cfgGet('--global', 'merge.tool');
   const mtPath = mt ? await cfgGet('--global', `mergetool.${mt}.path`) : '';
@@ -126,8 +124,7 @@ async function prefsDialog(tab) {
       <div class="pf-sec"><div class="sb-head">Updates</div>
         <p class="hint">KGitty ${esc(appVersion)} · <span id="upd-line">${esc(updateLine(updState))}</span></p>
         <label class="cl-opt"><input type="checkbox" id="pf-upd-auto" ${updateOpts().auto ? 'checked' : ''}> Check for updates automatically</label>
-        <div class="field"><label>Access token (only needed while the GitHub repository is private)</label><input type="password" id="pf-upd-token" autocomplete="off" placeholder="${hasToken ? 'A token is saved — type to replace it' : 'Optional'}"></div>
-        <button id="pf-upd-check">Check now</button> <button id="pf-upd-clear" ${hasToken ? '' : 'class="hidden"'}>Remove saved token</button>
+        <button id="pf-upd-check">Check now</button>
       </div>
       </div>
       </div>
@@ -160,8 +157,6 @@ async function prefsDialog(tab) {
       const upd = { auto: $('#pf-upd-auto').checked };
       try { localStorage.setItem('updateOpts', JSON.stringify(upd)); } catch { /* ignore */ }
       await window.api.setUpdateOpts(upd);
-      const tok = $('#pf-upd-token').value.trim();
-      if (tok) { const res = await window.api.setUpdateToken(tok); if (!res.ok) throw new Error(res.error); }
       setGitOpts({
         ...Object.fromEntries(['autoFetch', 'fetchTags', 'tabDirty', 'submodulesOnCheckout', 'pushOnCommit', 'compactLabels'].map((k) => [k, $('#go-' + k).checked])),
         branchSpace: $('#go-branchSpace').value,
@@ -195,7 +190,6 @@ async function prefsDialog(tab) {
       return focusTab();
     }
     if (e.target.closest('#pf-upd-check')) checkForUpdates();
-    else if (e.target.closest('#pf-upd-clear')) { window.api.setUpdateToken('').then(() => { hasToken = false; $('#pf-upd-clear').classList.add('hidden'); $('#pf-upd-token').placeholder = 'Optional'; }); }
     else if (e.target.closest('#pf-cancel')) close();
     else if (e.target.closest('#pf-save')) save();
   };

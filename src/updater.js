@@ -1,10 +1,8 @@
 // Automatic updates from GitHub Releases (electron-updater). The app checks shortly after start and every few
 // hours, tells the window when a newer version exists, and only downloads it when the user agrees.
-//
-// Private repositories need an access token that can read releases; it is stored encrypted with the operating
-// system's protection (safeStorage) and never sent back to the window.
+// The repository is public, so no access token is needed.
 // KGITTY_UPDATE_URL points the updater at any folder that serves latest.yml (for testing or self-hosting).
-const { app, ipcMain, safeStorage } = require('electron');
+const { app, ipcMain } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
@@ -15,16 +13,12 @@ let getWin = () => null;
 let updater = null;
 let state = { state: 'idle' };
 let opts = { auto: true };
-let token = '';
 let timer = null;
 let manual = false;
 
-const tokenFile = () => path.join(app.getPath('userData'), 'update-token');
-
-function loadToken() {
-  try {
-    if (safeStorage.isEncryptionAvailable() && fs.existsSync(tokenFile())) token = safeStorage.decryptString(fs.readFileSync(tokenFile()));
-  } catch { token = ''; }
+// Earlier versions could save an access token for a private repository; it is no longer used, so remove it.
+function removeOldToken() {
+  try { fs.rmSync(path.join(app.getPath('userData'), 'update-token'), { force: true }); } catch { /* ignore */ }
 }
 
 function send(patch) {
@@ -62,7 +56,7 @@ function setup() {
 function configureFeed() {
   const u = setup();
   if (process.env.KGITTY_UPDATE_URL) u.setFeedURL({ provider: 'generic', url: process.env.KGITTY_UPDATE_URL });
-  else u.setFeedURL(token ? { ...REPO, private: true, token } : REPO);
+  else u.setFeedURL(REPO);
   return u;
 }
 
@@ -82,10 +76,10 @@ function schedule() {
 
 function init(winGetter) {
   getWin = winGetter;
-  loadToken();
+  removeOldToken();
 
   ipcMain.handle('app-version', () => app.getVersion());
-  ipcMain.handle('update-state', () => ({ ...state, hasToken: !!token, canCheck: canCheck() }));
+  ipcMain.handle('update-state', () => ({ ...state, canCheck: canCheck() }));
   ipcMain.handle('update-opts', (_e, o) => {
     const first = !timer && !opts.started;
     opts = { auto: !(o && o.auto === false), started: true };
@@ -98,18 +92,6 @@ function init(winGetter) {
     try { await setup().downloadUpdate(); } catch (e) { send({ state: 'error', error: String((e && e.message) || e).split('\n')[0].slice(0, 300) }); }
   });
   ipcMain.handle('update-install', () => { if (updater) updater.quitAndInstall(true, true); });
-  ipcMain.handle('update-set-token', (_e, t) => {
-    t = String(t || '').trim();
-    if (!t) {
-      token = '';
-      try { fs.rmSync(tokenFile(), { force: true }); } catch { /* ignore */ }
-      return { ok: true };
-    }
-    if (!safeStorage.isEncryptionAvailable()) return { ok: false, error: 'Secure storage is not available on this system.' };
-    fs.writeFileSync(tokenFile(), safeStorage.encryptString(t));
-    token = t;
-    return { ok: true };
-  });
 }
 
 module.exports = { init };

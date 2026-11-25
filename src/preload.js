@@ -19,7 +19,6 @@ contextBridge.exposeInMainWorld('api', {
   checkUpdate: () => ipcRenderer.invoke('update-check'),
   downloadUpdate: () => ipcRenderer.invoke('update-download'),
   installUpdate: () => ipcRenderer.invoke('update-install'),
-  setUpdateToken: (t) => ipcRenderer.invoke('update-set-token', t),
   setZoom: (f) => ipcRenderer.invoke('set-zoom', f),
   setThemeSource: (pref) => ipcRenderer.invoke('set-theme-source', pref),
   reveal: (p) => ipcRenderer.invoke('reveal', p),
