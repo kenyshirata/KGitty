@@ -10,7 +10,7 @@ const COLORS = ['#4a8cf0', '#e2b340', '#4fc26b', '#d96fd0', '#f0605a', '#3ec9c9'
 const freshRepoState = () => ({
   repo: null, commits: [], graph: [], graphW: 0,
   branches: [], remotes: [], tags: [], stashes: [], head: null, headHash: null,
-  status: [], sel: { type: 'wc' }, file: null, filter: '', draft: '', hunks: null, op: null, conflict: null, undo: [], redo: [], submodules: [], worktrees: [], flow: null, lfs: { available: false, patterns: [] }, dtab: 'commit', treeOpen: {}, lastCommit: null,
+  status: [], sel: { type: 'log' }, file: null, filter: '', draft: '', hunks: null, op: null, conflict: null, undo: [], redo: [], submodules: [], worktrees: [], flow: null, lfs: { available: false, patterns: [] }, dtab: 'commit', treeOpen: {}, lastCommit: null,
 });
 const state = { busy: false, ...freshRepoState() };
 
@@ -196,7 +196,7 @@ async function openRepo(dir) {
 }
 
 async function pickAndOpen() {
-  const dir = await window.api.pickFolder();
+  const dir = await window.api.pickFolder(gitOpts().sourceDir);
   if (dir) openRepo(dir);
 }
 
@@ -1019,12 +1019,12 @@ function cloneDialog() {
       <div class="btns"><button id="cl-cancel">Cancel</button><button class="primary" id="cl-ok">Clone</button></div></div>`;
     ov.classList.remove('hidden');
     const url = $('#cl-url'), dir = $('#cl-dir'), name = $('#cl-name');
-    dir.value = localStorage.getItem('cloneDir') || '';
+    dir.value = localStorage.getItem('cloneDir') || gitOpts().sourceDir || '';
     let nameEdited = false;
     const close = (v) => { ov.classList.add('hidden'); ov.innerHTML = ''; ov.onkeydown = null; resolve(v); };
     url.oninput = () => { if (!nameEdited) name.value = repoNameFromUrl(url.value); };
     name.oninput = () => { nameEdited = true; };
-    $('#cl-browse').onclick = async () => { const d = await window.api.pickFolder(); if (d) dir.value = d; };
+    $('#cl-browse').onclick = async () => { const d = await window.api.pickFolder(dir.value || gitOpts().sourceDir); if (d) dir.value = d; };
     $('#cl-cancel').onclick = () => close(null);
     const submit = () => {
       if (!url.value.trim() || !dir.value.trim() || !name.value.trim()) return;

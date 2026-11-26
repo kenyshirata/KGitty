@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('api', {
   gitBlob: (repo, spec) => ipcRenderer.invoke('git-blob', repo, spec),
   readFileB64: (repo, rel) => ipcRenderer.invoke('read-file-b64', repo, rel),
   scanRepos: (root, depth) => ipcRenderer.invoke('scan-repos', root, depth),
-  pickFolder: () => ipcRenderer.invoke('pick-folder'),
+  pickFolder: (defaultPath) => ipcRenderer.invoke('pick-folder', defaultPath),
   initialRepo: () => ipcRenderer.invoke('initial-repo'),
   readFile: (repo, rel) => ipcRenderer.invoke('read-file', repo, rel),
   writeFile: (repo, rel, text) => ipcRenderer.invoke('write-file', repo, rel, text),

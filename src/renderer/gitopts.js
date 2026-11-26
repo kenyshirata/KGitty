@@ -11,6 +11,7 @@ const GIT_OPTS_DEFAULT = {
   branchSpace: '-',
   pushOnCommit: false,
   compactLabels: true,
+  sourceDir: '',
 };
 const AUTO_FETCH_MS = 10 * 60 * 1000;
 

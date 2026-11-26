@@ -248,8 +248,8 @@ ipcMain.handle('set-theme-source', (_e, pref) => {
   if (['system', 'light', 'dark'].includes(pref)) nativeTheme.themeSource = pref;
 });
 
-ipcMain.handle('pick-folder', async () => {
-  const r = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+ipcMain.handle('pick-folder', async (_e, defaultPath) => {
+  const r = await dialog.showOpenDialog({ properties: ['openDirectory'], ...(typeof defaultPath === 'string' && defaultPath && fs.existsSync(defaultPath) ? { defaultPath } : {}) });
   return r.canceled ? null : r.filePaths[0];
 });
 

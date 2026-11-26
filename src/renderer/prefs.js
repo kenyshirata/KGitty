@@ -77,6 +77,9 @@ async function prefsDialog(tab) {
       <div class="pf-tabs">${PREF_TABS.map(([k, l]) => `<button class="pf-tab${prefTab === k ? ' on' : ''}" data-tab="${k}">${esc(l)}</button>`).join('')}</div>
       <div class="pf-body">
       <div ${panel('general')}>
+      <div class="pf-sec"><div class="sb-head">Source Code Folder</div>
+        <div class="row"><input type="text" id="go-sourceDir" value="${esc(go.sourceDir || '')}" placeholder="C:\Repos" data-no-i18n><button id="go-sourceDir-pick" title="Choose folder">${'📁'}</button></div>
+        <p class="hint">The folder where the Open and Clone dialogs start.</p></div>
       <div class="pf-sec"><div class="sb-head">Language</div>
         <div class="field"><select id="pf-lang">${[['', 'Automatic (system language)'], ...kgLanguages()].map(([v, l]) => `<option value="${v}" ${kgLanguagePref() === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div>
         <p class="hint">Choose the language of the interface. It changes immediately.</p></div>
@@ -193,6 +196,7 @@ async function prefsDialog(tab) {
       try { localStorage.setItem('updateOpts', JSON.stringify(upd)); } catch { /* ignore */ }
       await window.api.setUpdateOpts(upd);
       setGitOpts({
+        sourceDir: $('#go-sourceDir').value.trim(),
         ...Object.fromEntries(['autoFetch', 'fetchTags', 'tabDirty', 'submodulesOnCheckout', 'pushOnCommit', 'compactLabels'].map((k) => [k, $('#go-' + k).checked])),
         branchSpace: $('#go-branchSpace').value,
       });
@@ -218,7 +222,12 @@ async function prefsDialog(tab) {
     drawAvatar();
     $('#pf-gcm').checked = gcm;
   };
-  ov.onclick = (e) => {
+  ov.onclick = async (e) => {
+    if (e.target.closest('#go-sourceDir-pick')) {
+      const d = await window.api.pickFolder($('#go-sourceDir').value.trim());
+      if (d) $('#go-sourceDir').value = d;
+      return;
+    }
     const t = e.target.closest('.pf-tab');
     if (t) {
       prefTab = t.dataset.tab;
