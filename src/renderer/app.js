@@ -1173,6 +1173,7 @@ $('#sidebar').onclick = (e) => {
   if (e.target.closest('[data-act=log]')) { selectLog(); return; }
   const it = e.target.closest('.sb-item[data-kind]');
   if (!it) return;
+  if (e.detail === 2 && !(e.ctrlKey || e.metaKey || e.shiftKey)) return sidebarActivate(it);
   if (sbPickable(it) && (e.ctrlKey || e.metaKey || e.shiftKey)) return pickSb(it, e);
   if (sbPickable(it)) pickSb(it, {}); else { sbPicked.clear(); applySbPicked(); }
   if (it.dataset.kind === 'stash') return selectStash(it.dataset.name);
@@ -1180,9 +1181,8 @@ $('#sidebar').onclick = (e) => {
   const hit = target && target.find((x) => x.name === it.dataset.name);
   if (hit) selectCommit(hit.hash, true);
 };
-$('#sidebar').ondblclick = (e) => {
-  const it = e.target.closest('.sb-item[data-kind]');
-  if (!it) return;
+// A click selects (and redraws the lists), so a double-click is recognised by the click count, not by a 'dblclick' event.
+function sidebarActivate(it) {
   if (it.dataset.kind === 'worktree') {
     const w = state.worktrees.find((x) => x.path === it.dataset.name);
     return w && !w.current && !w.prunable ? openRepo(w.path) : undefined;
@@ -1194,7 +1194,7 @@ $('#sidebar').ondblclick = (e) => {
   if ((it.dataset.kind === 'branch' || it.dataset.kind === 'flow') && it.dataset.name !== state.head) checkout(it.dataset.name);
   if (it.dataset.kind === 'remote') checkoutRemote(it.dataset.name);
   if (it.dataset.kind === 'tag') checkout(it.dataset.name);
-};
+}
 $('#sidebar').oncontextmenu = (e) => {
   const it = e.target.closest('.sb-item[data-kind]');
   if (!it) return;
@@ -1246,11 +1246,11 @@ $('#commit-list').onclick = (e) => {
   const row = e.target.closest('.crow');
   if (!row) return;
   if (row.dataset.wc) selectWc(); else selectCommit(row.dataset.hash);
+  if (e.detail === 2) commitActivate(row);
 };
 // Double-click on a commit checks out its branch: a local branch pointing at it, else the remote one (as a new
 // tracking branch), else the commit itself with a detached HEAD.
-$('#commit-list').ondblclick = async (e) => {
-  const row = e.target.closest('.crow');
+async function commitActivate(row) {
   if (!row || row.dataset.wc || !row.dataset.hash || state.busy) return;
   const c = state.commits.find((x) => x.hash === row.dataset.hash);
   if (!c) return;
@@ -1261,7 +1261,7 @@ $('#commit-list').ondblclick = async (e) => {
   if (remotes.length) return checkoutRemote(remotes[0].name);
   if (c.hash === state.headHash) return setStatus(window.t('Already on {0}').replace('{0}', c.hash.slice(0, 7)));
   if (await confirm2('Checkout (detached)', `Check out ${c.hash.slice(0, 7)} with a detached HEAD?`)) checkout(c.hash);
-};
+}
 $('#commit-list').oncontextmenu = (e) => {
   const row = e.target.closest('.crow[data-hash]');
   if (row) commitMenu(e, row.dataset.hash);
