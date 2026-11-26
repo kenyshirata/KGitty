@@ -859,4 +859,6 @@ kgLang("es", "Español", {
   "Merge {0} into {1}?": "¿Fusionar {0} en {1}?",
   "Delete the merged branch {0}?": "¿Eliminar la rama {0}, ya fusionada?",
   "More branching actions": "Más acciones de ramas",
+  "Already on {0}": "Ya estás en {0}",
+  "Check out {0} with a detached HEAD?": "¿Hacer checkout de {0} con HEAD desacoplado?",
 });

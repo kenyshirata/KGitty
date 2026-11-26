@@ -859,4 +859,6 @@ kgLang("de", "Deutsch", {
   "Merge {0} into {1}?": "{0} in {1} mergen?",
   "Delete the merged branch {0}?": "Den gemergten Branch {0} löschen?",
   "More branching actions": "Weitere Branch-Aktionen",
+  "Already on {0}": "Bereits auf {0}",
+  "Check out {0} with a detached HEAD?": "{0} mit losgelöstem HEAD auschecken?",
 });

@@ -859,4 +859,6 @@ kgLang("ko", "한국어", {
   "Merge {0} into {1}?": "{0}을(를) {1}에 병합할까요?",
   "Delete the merged branch {0}?": "병합된 브랜치 {0}을(를) 삭제할까요?",
   "More branching actions": "더 많은 브랜치 작업",
+  "Already on {0}": "이미 {0}입니다",
+  "Check out {0} with a detached HEAD?": "{0}을(를) detached HEAD로 체크아웃할까요?",
 });

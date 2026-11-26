@@ -1247,6 +1247,21 @@ $('#commit-list').onclick = (e) => {
   if (!row) return;
   if (row.dataset.wc) selectWc(); else selectCommit(row.dataset.hash);
 };
+// Double-click on a commit checks out its branch: a local branch pointing at it, else the remote one (as a new
+// tracking branch), else the commit itself with a detached HEAD.
+$('#commit-list').ondblclick = async (e) => {
+  const row = e.target.closest('.crow');
+  if (!row || row.dataset.wc || !row.dataset.hash || state.busy) return;
+  const c = state.commits.find((x) => x.hash === row.dataset.hash);
+  if (!c) return;
+  const locals = c.refs.filter((r) => r.type === 'local' || (r.type === 'head' && r.name !== 'HEAD'));
+  const remotes = c.refs.filter((r) => r.type === 'remote');
+  if (locals.some((r) => r.name === state.head)) return setStatus(window.t('Already on {0}').replace('{0}', state.head));
+  if (locals.length) return checkout(locals[0].name);
+  if (remotes.length) return checkoutRemote(remotes[0].name);
+  if (c.hash === state.headHash) return setStatus(window.t('Already on {0}').replace('{0}', c.hash.slice(0, 7)));
+  if (await confirm2('Checkout (detached)', `Check out ${c.hash.slice(0, 7)} with a detached HEAD?`)) checkout(c.hash);
+};
 $('#commit-list').oncontextmenu = (e) => {
   const row = e.target.closest('.crow[data-hash]');
   if (row) commitMenu(e, row.dataset.hash);

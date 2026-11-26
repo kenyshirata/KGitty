@@ -859,4 +859,6 @@ kgLang("zh-CN", "简体中文", {
   "Merge {0} into {1}?": "将 {0} 合并到 {1}？",
   "Delete the merged branch {0}?": "删除已合并的分支 {0}？",
   "More branching actions": "更多分支操作",
+  "Already on {0}": "已在 {0}",
+  "Check out {0} with a detached HEAD?": "以分离 HEAD 方式检出 {0}？",
 });

@@ -859,4 +859,6 @@ kgLang("ru", "Русский", {
   "Merge {0} into {1}?": "Слить {0} в {1}?",
   "Delete the merged branch {0}?": "Удалить слитую ветку {0}?",
   "More branching actions": "Другие действия с ветками",
+  "Already on {0}": "Уже на {0}",
+  "Check out {0} with a detached HEAD?": "Перейти на {0} в состоянии detached HEAD?",
 });

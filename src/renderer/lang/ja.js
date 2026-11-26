@@ -859,4 +859,6 @@ kgLang("ja", "日本語", {
   "Merge {0} into {1}?": "{0} を {1} にマージしますか？",
   "Delete the merged branch {0}?": "マージ済みのブランチ {0} を削除しますか？",
   "More branching actions": "その他のブランチ操作",
+  "Already on {0}": "既に {0} です",
+  "Check out {0} with a detached HEAD?": "{0} を detached HEAD でチェックアウトしますか？",
 });

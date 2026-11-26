@@ -859,4 +859,6 @@ kgLang("pt-BR", "Português (Brasil)", {
   "Merge {0} into {1}?": "Fazer merge de {0} em {1}?",
   "Delete the merged branch {0}?": "Excluir a branch {0}, já mesclada?",
   "More branching actions": "Mais ações de branch",
+  "Already on {0}": "Já está em {0}",
+  "Check out {0} with a detached HEAD?": "Fazer checkout de {0} com HEAD destacado?",
 });
