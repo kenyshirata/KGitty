@@ -244,3 +244,12 @@ Remote branch	Branch remota	Rama remota	Branche distante	Remote-Branch	Удал�
 Close All	Fechar todas	Cerrar todas	Tout fermer	Alle schließen	Закрыть все	全部关闭	すべて閉じる	모두 닫기
 Close All But This	Fechar todas, exceto esta	Cerrar todas menos esta	Fermer tout sauf celui-ci	Alle außer diesem schließen	Закрыть все, кроме этой	关闭其他全部	これ以外をすべて閉じる	이 탭만 남기고 모두 닫기
 Move to Workspace	Mover para o workspace	Mover al espacio de trabajo	Déplacer vers l’espace de travail	In Arbeitsbereich verschieben	Переместить в рабочую область	移动到工作区	ワークスペースに移動	작업 공간으로 이동
+Search Commits	Buscar commits	Buscar commits	Rechercher des commits	Commits durchsuchen	Поиск коммитов	搜索提交	コミットを検索	커밋 검색
+Commit Message	Mensagem do commit	Mensaje del commit	Message du commit	Commit-Nachricht	Сообщение коммита	提交信息	コミットメッセージ	커밋 메시지
+Path	Caminho	Ruta	Chemin	Pfad	Путь	路径	パス	경로
+Diff Content	Conteúdo do diff	Contenido del diff	Contenu du diff	Diff-Inhalt	Содержимое diff	差异内容	差分の内容	차이 내용
+Search	Buscar	Buscar	Rechercher	Suche	Поиск	搜索	検索	검색
+Current Branch	Branch atual	Rama actual	Branche actuelle	Aktueller Branch	Текущая ветка	当前分支	現在のブランチ	현재 브랜치
+Commit message	Mensagem do commit	Mensaje del commit	Message du commit	Commit-Nachricht	Сообщение коммита	提交信息	コミットメッセージ	커밋 메시지
+Diff content	Conteúdo do diff	Contenido del diff	Contenu du diff	Diff-Inhalt	Содержимое diff	差异内容	差分の内容	차이 내용
+Searching…	Buscando…	Buscando…	Recherche…	Suche läuft…	Поиск…	正在搜索…	検索中…	검색 중…

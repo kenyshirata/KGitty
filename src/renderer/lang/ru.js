@@ -806,4 +806,13 @@ kgLang("ru", "Русский", {
   "Close All": "Закрыть все",
   "Close All But This": "Закрыть все, кроме этой",
   "Move to Workspace": "Переместить в рабочую область",
+  "Search Commits": "Поиск коммитов",
+  "Commit Message": "Сообщение коммита",
+  "Path": "Путь",
+  "Diff Content": "Содержимое diff",
+  "Search": "Поиск",
+  "Current Branch": "Текущая ветка",
+  "Commit message": "Сообщение коммита",
+  "Diff content": "Содержимое diff",
+  "Searching…": "Поиск…",
 });

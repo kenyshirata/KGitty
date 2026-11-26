@@ -806,4 +806,13 @@ kgLang("de", "Deutsch", {
   "Close All": "Alle schließen",
   "Close All But This": "Alle außer diesem schließen",
   "Move to Workspace": "In Arbeitsbereich verschieben",
+  "Search Commits": "Commits durchsuchen",
+  "Commit Message": "Commit-Nachricht",
+  "Path": "Pfad",
+  "Diff Content": "Diff-Inhalt",
+  "Search": "Suche",
+  "Current Branch": "Aktueller Branch",
+  "Commit message": "Commit-Nachricht",
+  "Diff content": "Diff-Inhalt",
+  "Searching…": "Suche läuft…",
 });

@@ -806,4 +806,13 @@ kgLang("zh-CN", "简体中文", {
   "Close All": "全部关闭",
   "Close All But This": "关闭其他全部",
   "Move to Workspace": "移动到工作区",
+  "Search Commits": "搜索提交",
+  "Commit Message": "提交信息",
+  "Path": "路径",
+  "Diff Content": "差异内容",
+  "Search": "搜索",
+  "Current Branch": "当前分支",
+  "Commit message": "提交信息",
+  "Diff content": "差异内容",
+  "Searching…": "正在搜索…",
 });

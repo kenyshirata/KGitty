@@ -338,7 +338,7 @@ function graphSvg(g, wc) {
 /* ---------- rendering ---------- */
 
 function renderSidebar() {
-  const sb = $('#sidebar');
+  const sb = $('#sb-refs');
   const n = state.status.length;
   const sect = (title, items) => items.length ? `<div class="sb-head">${title}</div>${items.join('')}` : '';
   sb.innerHTML =
@@ -363,7 +363,7 @@ const sbFolded = (() => {
 })();
 function applySbSections() {
   let folded = false;
-  for (const el of [...$('#sidebar').children]) {
+  for (const el of [...$('#sb-refs').children]) {
     if (el.classList.contains('sb-head')) {
       const t = [...el.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
       const title = t ? t.textContent.trim() : '';
@@ -643,10 +643,10 @@ const LIST_MARGIN = 30;
 
 function renderList() {
   const list = $('#commit-list');
-  const f = state.filter.toLowerCase();
+  const match = searchPredicate();
   listRows = [];
-  state.commits.forEach((c, i) => { if (!f || `${c.subject} ${c.author} ${c.hash}`.toLowerCase().includes(f)) listRows.push(i); });
-  if (!listRows.length) { list.innerHTML = '<div class="empty">No commits</div>'; listDrawn = ''; return; }
+  state.commits.forEach((c, i) => { if (!match || match(c)) listRows.push(i); });
+  if (!listRows.length) { list.innerHTML = `<div class="empty">${esc(window.t(searchBusy ? 'Searching…' : 'No commits'))}</div>`; listDrawn = ''; return; }
   if (!list.querySelector('.cl-spacer')) list.innerHTML = '<div class="cl-spacer"><div class="cl-win"></div></div>';
   list.querySelector('.cl-spacer').style.height = listRows.length * ROW + 'px';
   listDrawn = '';
@@ -1117,7 +1117,6 @@ $('#tb-push').oncontextmenu = (e) => {
 $('#tb-branch').onclick = () => newBranch();
 $('#tb-stash').onclick = () => stashDialog();
 $('#tb-reflog').onclick = () => showReflog();
-$('#search').oninput = (e) => { state.filter = e.target.value.trim(); renderList(); };
 
 $('#sidebar').onclick = (e) => {
   const sh = e.target.closest('.sb-sect');

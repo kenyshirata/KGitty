@@ -806,4 +806,13 @@ kgLang("pt-BR", "Português (Brasil)", {
   "Close All": "Fechar todas",
   "Close All But This": "Fechar todas, exceto esta",
   "Move to Workspace": "Mover para o workspace",
+  "Search Commits": "Buscar commits",
+  "Commit Message": "Mensagem do commit",
+  "Path": "Caminho",
+  "Diff Content": "Conteúdo do diff",
+  "Search": "Buscar",
+  "Current Branch": "Branch atual",
+  "Commit message": "Mensagem do commit",
+  "Diff content": "Conteúdo do diff",
+  "Searching…": "Buscando…",
 });

@@ -806,4 +806,13 @@ kgLang("ko", "한국어", {
   "Close All": "모두 닫기",
   "Close All But This": "이 탭만 남기고 모두 닫기",
   "Move to Workspace": "작업 공간으로 이동",
+  "Search Commits": "커밋 검색",
+  "Commit Message": "커밋 메시지",
+  "Path": "경로",
+  "Diff Content": "차이 내용",
+  "Search": "검색",
+  "Current Branch": "현재 브랜치",
+  "Commit message": "커밋 메시지",
+  "Diff content": "차이 내용",
+  "Searching…": "검색 중…",
 });

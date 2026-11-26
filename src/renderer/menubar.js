@@ -28,7 +28,7 @@ const MENUS = [
     { label: 'Show All Commits', keys: 'Ctrl+1', when: hasRepo, run: () => selectLog() },
     { label: 'Show Local Changes', keys: 'Ctrl+2', when: hasRepo, run: () => selectWc() },
     '-',
-    { label: 'Filter Commits', keys: 'Ctrl+K', when: hasRepo, run: () => { const s = $('#search'); s.focus(); s.select(); } },
+    { label: 'Filter Commits', keys: 'Ctrl+K', when: hasRepo, run: () => focusSearch() },
     { label: 'Toggle File Tree / Flat List', keys: 'Ctrl+Shift+E', when: hasRepo, run: () => toggleFileView() },
     { label: 'Toggle Unified / Side-by-side Diff', keys: 'Ctrl+Shift+D', when: hasRepo, run: () => toggleDiffView() },
     '-',

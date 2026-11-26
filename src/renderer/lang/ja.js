@@ -806,4 +806,13 @@ kgLang("ja", "日本語", {
   "Close All": "すべて閉じる",
   "Close All But This": "これ以外をすべて閉じる",
   "Move to Workspace": "ワークスペースに移動",
+  "Search Commits": "コミットを検索",
+  "Commit Message": "コミットメッセージ",
+  "Path": "パス",
+  "Diff Content": "差分の内容",
+  "Search": "検索",
+  "Current Branch": "現在のブランチ",
+  "Commit message": "コミットメッセージ",
+  "Diff content": "差分の内容",
+  "Searching…": "検索中…",
 });

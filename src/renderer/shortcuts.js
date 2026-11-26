@@ -39,8 +39,8 @@ const SHORTCUTS = [
   { group: 'Tabs', keys: 'Ctrl+Shift+Tab', label: 'Previous tab', repo: true, run: () => switchTab(-1) },
   ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({ group: 'Tabs', keys: 'Alt+' + n, label: n === 1 ? 'Go to tab 1–9' : 'Go to tab ' + n, show: n === 1 ? 'Alt+1–9' : undefined, hidden: n > 1, run: () => { if (tabs[n - 1] && active !== n - 1) activate(n - 1); } })),
 
-  { group: 'Commits & changes', keys: 'Ctrl+K', label: 'Filter commits', repo: true, run: () => { const s = $('#search'); s.focus(); s.select(); } },
-  { group: 'Commits & changes', keys: 'Ctrl+F', label: 'Filter commits', repo: true, hidden: true, run: () => { const s = $('#search'); s.focus(); s.select(); } },
+  { group: 'Commits & changes', keys: 'Ctrl+K', label: 'Filter commits', repo: true, run: () => focusSearch() },
+  { group: 'Commits & changes', keys: 'Ctrl+F', label: 'Filter commits', repo: true, hidden: true, run: () => focusSearch() },
   { group: 'Commits & changes', keys: 'ArrowDown', alt: 'J', label: 'Next commit', repo: true, free: true, run: () => moveSelection(1) },
   { group: 'Commits & changes', keys: 'ArrowUp', alt: 'K', label: 'Previous commit', repo: true, free: true, run: () => moveSelection(-1) },
   { group: 'Commits & changes', keys: 'Ctrl+1', alt: 'Ctrl+L', label: 'Show All Commits', repo: true, run: () => selectLog() },
