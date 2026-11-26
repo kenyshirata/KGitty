@@ -25,9 +25,9 @@ function renderTabList() {
   el.innerHTML = `<div class="tl-head"><button class="tl-ws" data-tl="ws" title="Workspaces"><span data-no-i18n>${esc(ws.split('/').pop())}</span><span class="tb-caret">▾</span></button>
       <button class="tl-add" data-tl="add" title="New tab — repository manager">+</button></div>
     <div class="tl-list">${tabs.map((t, i) => {
-      const name = t.mgr ? window.t('Repository Manager') : t.repo.split(/[\\/]/).pop();
+      const name = tabLabel(t);
       const dot = t.dirty && gitOpts().tabDirty ? `<span class="tab-dot" title="${esc(window.t('Uncommitted changes'))}">●</span>` : '';
-      return `<div class="tl-row${i === active ? ' active' : ''}${t.mgr ? ' mgr' : ''}" data-i="${i}" draggable="true" title="${esc(t.mgr ? name : t.repo)}">${dot}<span class="tl-name" data-no-i18n>${esc(name)}</span><span class="tl-x" data-close="${i}" title="Close tab">✕</span></div>`;
+      return `<div class="tl-row${i === active ? ' active' : ''}${t.mgr ? ' mgr' : ''}${tabMeta(t).color ? ' colored' : ''}" style="${tabMeta(t).color ? `--tc:${tabMeta(t).color}` : ''}" data-i="${i}" draggable="true" title="${esc(t.mgr ? name : t.repo)}">${dot}<span class="tl-name" data-no-i18n>${esc(name)}</span><span class="tl-x" data-close="${i}" title="Close tab">✕</span></div>`;
     }).join('') || '<div class="tl-empty">No open tabs</div>'}</div>`;
 }
 

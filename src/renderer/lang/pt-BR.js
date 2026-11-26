@@ -803,4 +803,7 @@ kgLang("pt-BR", "Português (Brasil)", {
   "Colourful": "Colorido",
   "Classic": "Clássico",
   "Remote branch": "Branch remota",
+  "Close All": "Fechar todas",
+  "Close All But This": "Fechar todas, exceto esta",
+  "Move to Workspace": "Mover para o workspace",
 });

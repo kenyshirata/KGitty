@@ -803,4 +803,7 @@ kgLang("ko", "한국어", {
   "Colourful": "컬러풀",
   "Classic": "클래식",
   "Remote branch": "원격 브랜치",
+  "Close All": "모두 닫기",
+  "Close All But This": "이 탭만 남기고 모두 닫기",
+  "Move to Workspace": "작업 공간으로 이동",
 });

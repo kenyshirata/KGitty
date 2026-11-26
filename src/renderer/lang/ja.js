@@ -803,4 +803,7 @@ kgLang("ja", "日本語", {
   "Colourful": "カラフル",
   "Classic": "クラシック",
   "Remote branch": "リモートブランチ",
+  "Close All": "すべて閉じる",
+  "Close All But This": "これ以外をすべて閉じる",
+  "Move to Workspace": "ワークスペースに移動",
 });

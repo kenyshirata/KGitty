@@ -33,7 +33,7 @@ function persistTabs() {
 
 function renderTabs() {
   $('#tabs').innerHTML =
-    tabs.map((t, i) => `<div class="tab ${i === active ? 'active' : ''}${t.mgr ? ' mgr-tab' : ''}" data-i="${i}" draggable="true" title="${esc(t.mgr ? window.t('Repository Manager') : t.repo)}">${t.dirty && gitOpts().tabDirty ? `<span class="tab-dot" title="${esc(window.t('Uncommitted changes'))}">●</span>` : ''}<span class="tname">${esc(t.mgr ? window.t('Repository Manager') : t.repo.split(/[\\/]/).pop())}</span><span class="x" data-close="${i}">✕</span></div>`).join('') +
+    tabs.map((t, i) => `<div class="tab ${i === active ? 'active' : ''}${t.mgr ? ' mgr-tab' : ''}${tabMeta(t).color ? ' colored' : ''}" style="${tabMeta(t).color ? `--tc:${tabMeta(t).color}` : ''}" data-i="${i}" draggable="true" title="${esc(t.mgr ? window.t('Repository Manager') : t.repo)}">${t.dirty && gitOpts().tabDirty ? `<span class="tab-dot" title="${esc(window.t('Uncommitted changes'))}">●</span>` : ''}<span class="tname">${esc(tabLabel(t))}</span><span class="x" data-close="${i}">✕</span></div>`).join('') +
     '<button class="tab-add" id="tab-add" title="New tab — repository manager">+</button>';
   if (typeof renderTabList === 'function') renderTabList();
 }

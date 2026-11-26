@@ -803,4 +803,7 @@ kgLang("zh-CN", "简体中文", {
   "Colourful": "彩色",
   "Classic": "经典",
   "Remote branch": "远程分支",
+  "Close All": "全部关闭",
+  "Close All But This": "关闭其他全部",
+  "Move to Workspace": "移动到工作区",
 });

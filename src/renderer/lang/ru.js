@@ -803,4 +803,7 @@ kgLang("ru", "Русский", {
   "Colourful": "Цветные",
   "Classic": "Классические",
   "Remote branch": "Удалённая ветка",
+  "Close All": "Закрыть все",
+  "Close All But This": "Закрыть все, кроме этой",
+  "Move to Workspace": "Переместить в рабочую область",
 });

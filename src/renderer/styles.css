@@ -665,3 +665,12 @@ body { display: flex; flex-direction: column; }
 .sb-sect:hover { color: var(--fg); }
 .sb-title { display: flex; align-items: center; gap: 5px; }
 .sb-hidden { display: none !important; }
+
+/* ---------- tab context menu and tab colours ---------- */
+.tab.colored { box-shadow: inset 0 3px 0 var(--tc); }
+.tl-row.colored { box-shadow: inset 3px 0 0 var(--tc); }
+.tc-colors { display: flex; align-items: center; gap: 8px; padding: 8px 14px 6px; }
+.tc-dot { width: 15px; height: 15px; padding: 0; border: 1px solid transparent; border-radius: 50%; line-height: 1; }
+.tc-dot.on { outline: 2px solid var(--fg); outline-offset: 1px; }
+.tc-none { background: none; color: var(--dim); font-size: 15px; width: auto; height: auto; border: 0; }
+.tab-ctx, .tab-ctx-sub { min-width: 200px; }
