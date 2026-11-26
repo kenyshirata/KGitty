@@ -731,3 +731,5 @@ body { display: flex; flex-direction: column; }
 
 .sb-filter { padding: 8px 8px 2px; flex-shrink: 0; }
 .sb-filter .ss-box input { padding: 4px 0; }
+
+.tb-caretbtn { min-width: 0; width: 18px; padding: 3px 0; height: 30px; font-size: 10px; color: var(--dim); align-self: center; }
