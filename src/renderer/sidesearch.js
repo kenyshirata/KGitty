@@ -30,6 +30,7 @@ function showSbTab(name) {
   if (name !== 'refs' && name !== 'search') name = 'refs';
   try { localStorage.setItem('sbTab', name); } catch { /* ignore */ }
   $('#sb-refs').classList.toggle('hidden', name !== 'refs');
+  $('#sb-filter').classList.toggle('hidden', name !== 'refs');
   $('#sb-search').classList.toggle('hidden', name !== 'search');
   document.querySelectorAll('#sidebar .sb-tab').forEach((b) => b.classList.toggle('on', b.dataset.sbtab === name));
 }
@@ -117,6 +118,9 @@ $('#sidebar').addEventListener('click', (e) => {
 
 $('#search').oninput = (e) => { state.filter = e.target.value.trim(); renderList(); };
 $('#search').onkeydown = (e) => { if (e.key === 'Escape' && state.filter) { e.target.value = ''; state.filter = ''; renderList(); } };
+
+$('#sb-filter-input').oninput = (e) => { sbFilter = e.target.value.trim().toLowerCase(); renderSidebar(); };
+$('#sb-filter-input').onkeydown = (e) => { if (e.key === 'Escape' && sbFilter) { e.target.value = ''; sbFilter = ''; renderSidebar(); } };
 
 drawSearchPane();
 {

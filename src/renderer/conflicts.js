@@ -83,18 +83,49 @@ function parseConflicts(text) {
   return parts;
 }
 
-function resolvedText(parts, choices) {
+/* ---------- choices ---------- */
+
+// Every conflict keeps which lines of each side are taken (the checkboxes), in which order, and, once the
+// result was typed by hand, that text. "touched" means the user (or the automatic rules) decided something.
+const newChoice = (b) => ({ touched: false, auto: '', ours: b.ours.map(() => false), theirs: b.theirs.map(() => false), order: 'ot', edited: null });
+
+// The lines a conflict turns into, as they will be written to the file (end-of-line characters included).
+function blockLines(b, ch, crlf) {
+  if (ch.edited !== null) return ch.edited === '' ? [] : ch.edited.split('\n').map((l) => (crlf ? l + '\r' : l));
+  const o = b.ours.filter((_, k) => ch.ours[k]), t = b.theirs.filter((_, k) => ch.theirs[k]);
+  return ch.order === 'to' ? [...t, ...o] : [...o, ...t];
+}
+
+function resolvedText(parts, choices, crlf) {
   const out = [];
   let ci = 0;
   for (const p of parts) {
     if (p.type === 'text') { out.push(...p.lines); continue; }
-    const c = choices[ci++];
-    if (c.kind === 'ours') out.push(...p.ours);
-    else if (c.kind === 'theirs') out.push(...p.theirs);
-    else if (c.kind === 'both') out.push(...p.ours, ...p.theirs);
-    else if (c.kind === 'custom' && c.text !== '') out.push(...c.text.split('\n'));
+    out.push(...blockLines(p, choices[ci++], crlf));
   }
   return out.join('\n');
+}
+
+// Applies a preset to one conflict: ours, theirs, both (in either order), base, none, or back to undecided.
+function applyPreset(b, ch, kind) {
+  const all = (n, v) => new Array(n).fill(v);
+  if (kind === 'reset') { Object.assign(ch, newChoice(b)); return; }
+  ch.touched = true;
+  ch.auto = '';
+  ch.edited = null;
+  ch.order = kind === 'both-rev' ? 'to' : 'ot';
+  ch.ours = all(b.ours.length, kind === 'ours' || kind === 'both' || kind === 'both-rev');
+  ch.theirs = all(b.theirs.length, kind === 'theirs' || kind === 'both' || kind === 'both-rev');
+  if (kind === 'base') ch.edited = (b.base || []).map(stripCr).join('\n');
+}
+
+const sameLines = (a, b) => a.length === b.length && a.every((l, k) => stripCr(l) === stripCr(b[k]));
+
+// Conflicts that need no decision are settled up front: both sides identical, or only one side changed from the base.
+function autoResolve(b, ch) {
+  if (sameLines(b.ours, b.theirs)) { applyPreset(b, ch, 'ours'); ch.auto = 'Both sides are identical'; }
+  else if (b.base && sameLines(b.ours, b.base)) { applyPreset(b, ch, 'theirs'); ch.auto = 'Only theirs changed this part'; }
+  else if (b.base && sameLines(b.theirs, b.base)) { applyPreset(b, ch, 'ours'); ch.auto = 'Only ours changed this part'; }
 }
 
 /* ---------- UI ---------- */
@@ -108,67 +139,148 @@ async function showConflict(path) {
   const sig = JSON.stringify(blocks.map((b) => [b.ours, b.theirs]));
   const prev = state.conflict;
   const keep = prev && prev.path === path && prev.sig === sig;
-  state.conflict = { path, parts, sig, exists: r.ok, choices: keep ? prev.choices : blocks.map(() => ({ kind: null, text: '' })) };
+  const choices = keep ? prev.choices : blocks.map((b) => { const ch = newChoice(b); autoResolve(b, ch); return ch; });
+  state.conflict = { path, parts, sig, exists: r.ok, choices, crlf: text.includes('\r\n'), expanded: keep ? prev.expanded : new Set(), cur: keep ? prev.cur : 0 };
   renderConflict();
 }
 
 const codeHtml = (lines, lang) => highlightLines(lines, lang).join('\n') || ' ';
 
-const sideHtml = (cls, label, lines, lang) =>
-  `<div class="cside ${cls}"><div class="clabel">${esc(label)}</div><pre>${codeHtml(lines, lang)}</pre></div>`;
+// Lines changed on both sides are paired up (in order) so the words that differ can be marked.
+function conflictMarks(b) {
+  const oursSet = new Set(b.ours.map(stripCr)), theirsSet = new Set(b.theirs.map(stripCr));
+  const uo = [], ut = [];
+  b.ours.forEach((l, k) => { if (!theirsSet.has(stripCr(l))) uo.push(k); });
+  b.theirs.forEach((l, k) => { if (!oursSet.has(stripCr(l))) ut.push(k); });
+  const mo = {}, mt = {};
+  for (let p = 0; p < Math.min(uo.length, ut.length); p++) {
+    const d = wordDiff(stripCr(b.ours[uo[p]]), stripCr(b.theirs[ut[p]]));
+    if (d) { mo[uo[p]] = d.a; mt[ut[p]] = d.b; }
+  }
+  return { ours: mo, theirs: mt, oursSet, theirsSet };
+}
 
-function contextHtml(raw, first, last, lang) {
-  const lines = highlightLines(raw, lang);
+function sideHtml(i, side, label, b, ch, lang, marks) {
+  const lines = b[side];
+  const html = highlightLines(lines.map(stripCr), lang);
+  const other = side === 'ours' ? marks.theirsSet : marks.oursSet;
+  const picked = ch[side];
+  const n = picked.filter(Boolean).length;
+  const rows = lines.map((l, k) => `<label class="cl${picked[k] ? ' on' : ''}${other.has(stripCr(l)) ? ' common' : ''}"><input type="checkbox" data-cl="${i}" data-side="${side}" data-k="${k}"${picked[k] ? ' checked' : ''}><code>${markRanges(html[k], marks[side][k]) || ' '}</code></label>`).join('');
+  return `<div class="cside ${side}">
+    <label class="clabel"><input type="checkbox" data-call="${i}" data-side="${side}"${lines.length && n === lines.length ? ' checked' : ''}${lines.length ? '' : ' disabled'}><span data-no-i18n>${esc(label)}</span><small>${n}/${lines.length}</small></label>
+    <div class="clines">${rows || `<div class="cempty">${esc(window.t('(no lines)'))}</div>`}</div></div>`;
+}
+
+function contextHtml(raw, pi, first, last, lang, expanded) {
+  const lines = highlightLines(raw.map(stripCr), lang);
   const pre = (ls) => `<pre class="ctxl">${ls.join('\n') || ' '}</pre>`;
   if (lines.length <= 8) return lines.length ? pre(lines) : '';
+  if (expanded.has(pi)) return `<div class="gap" data-expand="${pi}" data-collapse="1">${esc(window.t('Hide unchanged lines'))}</div>${pre(lines)}`;
   let html = '';
   if (!first) html += pre(lines.slice(0, 3));
-  html += `<div class="gap">… ${lines.length - (first ? 0 : 3) - (last ? 0 : 3)} unchanged lines …</div>`;
+  html += `<div class="gap" data-expand="${pi}" title="${esc(window.t('Show the unchanged lines'))}">… ${lines.length - (first ? 0 : 3) - (last ? 0 : 3)} unchanged lines …</div>`;
   if (!last) html += pre(lines.slice(-3));
   return html;
+}
+
+const conflictPending = (c) => c.choices.filter((x) => !x.touched).length;
+
+function conflictBarHtml(c) {
+  const blocks = c.choices.length, pending = conflictPending(c);
+  return `<button class="primary" data-cact="save" ${pending ? 'disabled' : ''}>Save &amp; mark resolved</button>
+    <span class="cstat">${pending ? `${pending} conflict(s) still need a choice` : 'Ready to save'}</span>
+    <span class="cnav"><button data-cact="prev" title="Previous conflict (Alt+Up)">▲</button><button data-cact="next" title="Next conflict (Alt+Down)">▼</button>
+    <button data-cact="all-ours" title="Take ours in every conflict that is still undecided">Ours for all pending</button><button data-cact="all-theirs" title="Take theirs in every conflict that is still undecided">Theirs for all pending</button></span>`;
+}
+
+function conflictTitleHtml(c) {
+  const blocks = c.choices.length, pending = conflictPending(c);
+  return `<span>${esc(c.path)} — ${blocks ? `${blocks - pending}/${blocks} resolved` : 'no conflict markers'}</span>`;
 }
 
 function renderConflict() {
   const c = state.conflict;
   const right = $('#detail-right');
+  const keepScroll = right.scrollTop;
   const lang = langFor(c.path);
   const blocks = c.parts.filter((p) => p.type === 'conflict');
-  const pending = c.choices.filter((x) => !x.kind).length;
   const hasMarkers = blocks.length > 0;
   let ci = 0;
   const body = c.parts.map((p, pi) => {
-    if (p.type === 'text') return contextHtml(p.lines, pi === 0, pi === c.parts.length - 1, lang);
+    if (p.type === 'text') return contextHtml(p.lines, pi, pi === 0, pi === c.parts.length - 1, lang, c.expanded);
     const i = ci++;
     const ch = c.choices[i];
-    const btn = (k, label) => `<button data-cres="${i}" data-kind="${k}" class="${ch.kind === k ? 'primary' : ''}">${label}</button>`;
-    return `<div class="cblock ${ch.kind ? 'done' : ''}">
-      <div class="chead"><span>Conflict ${i + 1} of ${blocks.length}</span><span class="cbtns">${btn('ours', 'Use ours')}${btn('theirs', 'Use theirs')}${btn('both', 'Use both')}${btn('custom', 'Edit…')}</span></div>
-      <div class="csides">${sideHtml('ours' + (ch.kind === 'ours' || ch.kind === 'both' ? ' picked' : ''), 'Ours · ' + (p.oursLabel || 'HEAD'), p.ours, lang)}${sideHtml('theirs' + (ch.kind === 'theirs' || ch.kind === 'both' ? ' picked' : ''), 'Theirs · ' + (p.theirsLabel || ''), p.theirs, lang)}</div>
-      ${p.base ? `<details class="cbase"><summary>Base</summary><pre>${codeHtml(p.base, lang)}</pre></details>` : ''}
-      ${ch.kind === 'custom' ? `<textarea class="ctext" data-ctext="${i}" spellcheck="false">${esc(ch.text)}</textarea>` : ''}
+    const marks = conflictMarks(p);
+    const btn = (k, label, tip) => `<button data-cres="${i}" data-kind="${k}" title="${esc(tip)}">${label}</button>`;
+    const result = blockLines(p, ch, false).map(stripCr).join('\n');
+    return `<div class="cblock ${ch.touched ? 'done' : ''}${i === c.cur ? ' cur' : ''}" data-cblock="${i}">
+      <div class="chead"><span>Conflict ${i + 1} of ${blocks.length}${ch.auto ? ` <small class="cauto" title="${esc(window.t('Settled automatically — you can still change it'))}">· ${esc(window.t(ch.auto))}</small>` : ''}</span>
+        <span class="cbtns">${btn('ours', 'Use ours', 'Take every line of ours')}${btn('theirs', 'Use theirs', 'Take every line of theirs')}${btn('both', 'Use both', 'Ours first, then theirs')}${btn('both-rev', 'Both (theirs first)', 'Theirs first, then ours')}${p.base ? btn('base', 'Use base', 'Go back to the common ancestor') : ''}${btn('none', 'Use none', 'Drop both sides')}${btn('reset', 'Reset', 'Undo the choices for this conflict')}</span></div>
+      <div class="csides">${sideHtml(i, 'ours', 'Ours · ' + (p.oursLabel || 'HEAD'), p, ch, lang, marks)}${sideHtml(i, 'theirs', 'Theirs · ' + (p.theirsLabel || ''), p, ch, lang, marks)}</div>
+      ${p.base ? `<details class="cbase"><summary>Base</summary><pre>${codeHtml(p.base.map(stripCr), lang)}</pre></details>` : ''}
+      <div class="cresult"><div class="clabel"><span>Result</span><small>${esc(window.t('Tick the lines to keep (from either side), or type the final text here'))}</small></div>
+        <textarea class="ctext" data-ctext="${i}" rows="${Math.min(14, Math.max(2, result.split('\n').length))}" spellcheck="false" placeholder="${esc(window.t('Nothing chosen yet'))}">${esc(result)}</textarea></div>
     </div>`;
   }).join('');
-  right.innerHTML = `<div class="diff-title"><span>${esc(c.path)} — ${hasMarkers ? `${blocks.length - pending}/${blocks.length} resolved` : 'no conflict markers'}</span>
+  right.innerHTML = `<div class="diff-title"><span class="ctitle">${conflictTitleHtml(c)}</span>
     <span class="seg"><button data-cact="tool" title="Open in your external merge tool">Merge tool</button><button data-cact="ours">Take ours</button><button data-cact="theirs">Take theirs</button><button data-cact="delete">Delete file</button>${hasMarkers ? '' : '<button data-cact="add" class="primary">Mark resolved</button>'}</span></div>` +
-    (hasMarkers ? `<div class="cbar"><button class="primary" data-cact="save" ${pending ? 'disabled' : ''}>Save &amp; mark resolved</button><span>${pending ? `${pending} conflict(s) still need a choice` : 'Ready to save'}</span></div>` : '') +
+    (hasMarkers ? `<div class="cbar">${conflictBarHtml(c)}</div>` : '') +
     `<div class="conflict">${body || '<div class="empty">This file cannot be shown as text (deleted, binary or one-sided change). Use the buttons above.</div>'}</div>`;
+  right.scrollTop = keepScroll;
 }
+
+// Moves to the next / previous conflict of the file (wrapping around).
+function jumpConflict(dir) {
+  const c = state.conflict;
+  if (!c || !c.choices.length) return;
+  const els = [...document.querySelectorAll('#detail-right .cblock')];
+  if (!els.length) return;
+  const top = $('#detail-right').getBoundingClientRect().top + 40;
+  let at = els.findIndex((e) => e.getBoundingClientRect().bottom > top);
+  if (at < 0) at = els.length - 1;
+  let to = dir > 0 ? at + 1 : at - 1;
+  // Already on the block at the top of the view? Then step from it; otherwise the nearest one below / above.
+  if (dir > 0 && els[at].getBoundingClientRect().top > top) to = at;
+  if (dir < 0 && els[at].getBoundingClientRect().top < top - 4) to = at;
+  to = (to + els.length) % els.length;
+  c.cur = to;
+  els.forEach((e, k) => e.classList.toggle('cur', k === to));
+  els[to].scrollIntoView({ block: 'start', behavior: 'smooth' });
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!e.altKey || e.ctrlKey || e.metaKey || !state.file || state.file.area !== 'conflict' || !state.conflict) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); jumpConflict(e.key === 'ArrowDown' ? 1 : -1); }
+});
 
 async function conflictClick(e) {
   const c = state.conflict;
   if (!c) return;
+  const gap = e.target.closest('[data-expand]');
+  if (gap) {
+    const pi = +gap.dataset.expand;
+    if (!c.expanded.delete(pi)) c.expanded.add(pi);
+    return renderConflict();
+  }
   const res = e.target.closest('[data-cres]');
   if (res) {
-    const i = +res.dataset.cres, kind = res.dataset.kind, blk = c.parts.filter((p) => p.type === 'conflict')[i];
-    const ch = c.choices[i];
-    if (kind === 'custom' && ch.kind !== 'custom') ch.text = (ch.kind === 'theirs' ? blk.theirs : ch.kind === 'both' ? [...blk.ours, ...blk.theirs] : blk.ours).join('\n');
-    ch.kind = kind;
+    const i = +res.dataset.cres, blk = c.parts.filter((p) => p.type === 'conflict')[i];
+    applyPreset(blk, c.choices[i], res.dataset.kind);
+    c.cur = i;
     return renderConflict();
   }
   const act = e.target.closest('[data-cact]');
   if (!act) return;
   const path = c.path;
+  const blocks = c.parts.filter((p) => p.type === 'conflict');
   switch (act.dataset.cact) {
+    case 'prev': return jumpConflict(-1);
+    case 'next': return jumpConflict(1);
+    case 'all-ours':
+    case 'all-theirs':
+      blocks.forEach((b, i) => { if (!c.choices[i].touched) applyPreset(b, c.choices[i], act.dataset.cact === 'all-ours' ? 'ours' : 'theirs'); });
+      return renderConflict();
     case 'tool': return openMergeTool([path]);
     case 'ours': return run('Take ours', async () => { await git(['checkout', '--ours', '--', path]); await git(['add', '--', path]); });
     case 'theirs': return run('Take theirs', async () => { await git(['checkout', '--theirs', '--', path]); await git(['add', '--', path]); });
@@ -176,15 +288,45 @@ async function conflictClick(e) {
     case 'add': return run('Mark resolved', () => git(['add', '--', path]));
     case 'save':
       return run('Resolve ' + path, async () => {
-        await window.api.writeFile(state.repo, path, resolvedText(c.parts, c.choices));
+        await window.api.writeFile(state.repo, path, resolvedText(c.parts, c.choices, c.crlf));
         await git(['add', '--', path]);
       });
   }
 }
 
+// Ticking a line (or a whole side) rebuilds that conflict's result from the ticked lines.
+$('#detail-right').addEventListener('change', (e) => {
+  const c = state.conflict;
+  if (!c || !state.file || state.file.area !== 'conflict') return;
+  const one = e.target.closest('[data-cl]');
+  const all = e.target.closest('[data-call]');
+  if (!one && !all) return;
+  const idx = +(one ? one.dataset.cl : all.dataset.call);
+  const side = (one || all).dataset.side;
+  const ch = c.choices[idx];
+  if (one) ch[side][+one.dataset.k] = one.checked;
+  else ch[side] = ch[side].map(() => all.checked);
+  if (ch.edited !== null) ch.edited = null;
+  ch.touched = true;
+  ch.auto = '';
+  c.cur = idx;
+  renderConflict();
+});
+
+// Typing in a result box keeps the focus: only the counters around it are refreshed.
 $('#detail-right').addEventListener('input', (e) => {
   const t = e.target.closest('[data-ctext]');
-  if (t && state.conflict) state.conflict.choices[+t.dataset.ctext].text = t.value;
+  const c = state.conflict;
+  if (!t || !c) return;
+  const ch = c.choices[+t.dataset.ctext];
+  ch.edited = t.value;
+  ch.touched = true;
+  ch.auto = '';
+  t.closest('.cblock').classList.add('done');
+  const title = document.querySelector('#detail-right .ctitle');
+  if (title) title.innerHTML = conflictTitleHtml(c);
+  const bar = document.querySelector('#detail-right .cbar');
+  if (bar) bar.innerHTML = conflictBarHtml(c);
 });
 
 /* ---------- external merge tool ---------- */

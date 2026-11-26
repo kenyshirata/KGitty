@@ -257,6 +257,18 @@ document.addEventListener('keydown', (e) => {
   wcSelectAll();
 }, true);
 
+// Delete in the Unstaged list discards the picked files (or the open one), after asking.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Delete' || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+  if (!wcFocused || state.sel.type !== 'wc' || overlayOpen() || typingTarget(e.target) || state.busy) return;
+  let paths = pickedPaths('unstaged');
+  if (!paths.length && state.file && state.file.area === 'unstaged') paths = [state.file.path];
+  paths = paths.filter((p) => state.status.some((f) => f.path === p && f.unstaged));
+  if (!paths.length) return;
+  e.preventDefault();
+  discardPaths(paths);
+}, true);
+
 /* ---------- All Commits: Commit / Changes / File Tree ---------- */
 
 

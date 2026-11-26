@@ -337,21 +337,43 @@ function graphSvg(g, wc) {
 
 /* ---------- rendering ---------- */
 
+// The sections under "All Commits", in the order and with the visibility chosen in Preferences › Sidebar.
+const SB_SECTIONS = [['branches', 'Branches'], ['remotes', 'Remotes'], ['tags', 'Tags'], ['stashes', 'Stashes'], ['submodules', 'Submodules'], ['worktrees', 'Worktrees'], ['lfs', 'Git LFS'], ['flow', 'Git Flow']];
+// Out of the box only the first five sections are shown; Worktrees, Git LFS and Git Flow can be turned on in Preferences.
+const SB_DEFAULT_HIDDEN = ['worktrees', 'lfs', 'flow'];
+function sbLayout() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem('sbLayout')) || {}; } catch { /* ignore */ }
+  const ids = SB_SECTIONS.map(([id]) => id);
+  const order = [...(Array.isArray(saved.order) ? saved.order : []).filter((id) => ids.includes(id))];
+  for (const id of ids) if (!order.includes(id)) order.push(id);
+  return { order, hidden: (Array.isArray(saved.hidden) ? saved.hidden : SB_DEFAULT_HIDDEN).filter((id) => ids.includes(id)) };
+}
+function setSbLayout(l) {
+  try { localStorage.setItem('sbLayout', JSON.stringify(l)); } catch { /* ignore */ }
+  renderSidebar();
+}
+
+// Text typed in the sidebar's Filter box: only branches, remotes, tags and stashes whose name contains it are listed.
+let sbFilter = '';
+const sbMatch = (list, key = 'name') => (sbFilter ? list.filter((x) => String(x[key]).toLowerCase().includes(sbFilter)) : list);
+
 function renderSidebar() {
   const sb = $('#sb-refs');
   const n = state.status.length;
   const sect = (title, items) => items.length ? `<div class="sb-head">${title}</div>${items.join('')}` : '';
+  const parts = {
+    branches: () => sect('Branches', refTree('branch', sbMatch(state.branches), (b) => b.track === '[gone]', (b, label, d) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${branchIcon(b.track === '[gone]')}${esc(label)}<span class="ab">${esc(trackText(b.track))}</span></div>`)),
+    remotes: () => sect('Remotes', refTree('remote', sbMatch(state.remotes), null, (b, label, d) => `<div class="sb-item" data-kind="remote" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(BRANCH_SVG)}${esc(label)}</div>`)),
+    tags: () => sect('Tags', refTree('tag', sbMatch(state.tags), null, (b, label, d) => `<div class="sb-item" data-kind="tag" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(TAG_SVG)}${esc(label)}</div>`)),
+    stashes: () => sect('Stashes', sbMatch(state.stashes, 'msg').map((b) => `<div class="sb-item ${state.sel.type === 'stash' && state.sel.ref === b.ref ? 'active' : ''}" data-kind="stash" data-name="${esc(b.ref)}" title="${esc(b.msg)}">${icon(STASH_SVG)}${esc(b.msg)}</div>`)),
+    submodules: () => (sbFilter ? '' : submoduleSection()), worktrees: () => (sbFilter ? '' : worktreeSection()), lfs: () => (sbFilter ? '' : lfsSection()), flow: () => (sbFilter ? '' : flowSection()),
+  };
+  const layout = sbLayout();
   sb.innerHTML =
     `<div class="sb-item wc ${state.sel.type === 'wc' ? 'active' : ''}" data-act="wc">Local Changes${n ? `<span class="count">${n}</span>` : ''}</div>` +
     `<div class="sb-item wc ${['commit', 'log', 'stash'].includes(state.sel.type) ? 'active' : ''}" data-act="log">All Commits</div>` +
-    sect('Branches', refTree('branch', state.branches, (b) => b.track === '[gone]', (b, label, d) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${branchIcon(b.track === '[gone]')}${esc(label)}<span class="ab">${esc(trackText(b.track))}</span></div>`)) +
-    sect('Remotes', refTree('remote', state.remotes, null, (b, label, d) => `<div class="sb-item" data-kind="remote" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(BRANCH_SVG)}${esc(label)}</div>`)) +
-    sect('Tags', refTree('tag', state.tags, null, (b, label, d) => `<div class="sb-item" data-kind="tag" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(TAG_SVG)}${esc(label)}</div>`)) +
-    sect('Stashes', state.stashes.map((b) => `<div class="sb-item ${state.sel.type === 'stash' && state.sel.ref === b.ref ? 'active' : ''}" data-kind="stash" data-name="${esc(b.ref)}" title="${esc(b.msg)}">${icon(STASH_SVG)}${esc(b.msg)}</div>`)) +
-    submoduleSection() +
-    worktreeSection() +
-    lfsSection() +
-    flowSection();
+    layout.order.filter((id) => !layout.hidden.includes(id)).map((id) => parts[id]()).join('');
   applySbSections();
   applySbPicked();
 }
@@ -433,7 +455,7 @@ function refTree(kind, refs, alert, leaf) {
     for (const name of [...node.dirs.keys()].sort(cmp)) {
       const full = path ? `${path}/${name}` : name;
       const key = `${kind}:${full}`;
-      const open = sbExpanded.has(key);
+      const open = !!sbFilter || sbExpanded.has(key);
       const isRemote = kind === 'remote' && depth === 0;
       const ico = isRemote ? REMOTE_SVG : open ? FOLDER_OPEN_SVG : FOLDER_SVG;
       out.push(`<div class="sb-item sb-folder" data-act="sb-folder" data-key="${esc(key)}" title="${esc(full)}" style="padding-left:${8 + depth * 14}px"><span class="sb-chev${open ? ' open' : ''}">${CHEVRON_SVG}</span><span class="sb-ico${isRemote ? ' remote' : ''}">${ico}${!open && hasAlert(node.dirs.get(name)) ? '<span class="br-alert" title="Contains branches whose remote no longer exists">!</span>' : ''}</span><span data-no-i18n>${esc(name)}</span></div>`);
@@ -864,12 +886,20 @@ async function unstage(paths) {
   });
 }
 
-async function discard(path) {
-  const f = state.status.find((x) => x.path === path);
-  if (!(await confirm2('Discard changes', `Discard changes to ${path}? This cannot be undone.`, true))) return;
+const discard = (path) => discardPaths([path]);
+
+// Throws away the changes of one or more files in the working copy, after one confirmation.
+async function discardPaths(paths) {
+  const files = paths.map((p) => state.status.find((x) => x.path === p)).filter(Boolean);
+  if (!files.length) return;
+  const what = files.length === 1 ? files[0].path : window.t('{0} file(s)').replace('{0}', files.length);
+  const extra = files.some((f) => f.untracked) ? ' Untracked files are deleted.' : '';
+  if (!(await confirm2('Discard changes', `Discard changes to ${what}? This cannot be undone.${extra}`, true))) return;
+  const untracked = files.filter((f) => f.untracked).map((f) => f.path);
+  const tracked = files.filter((f) => !f.untracked).map((f) => f.path);
   await run('Discard', async () => {
-    if (f && f.untracked) await git(['clean', '-f', '--', path]);
-    else await git(['restore', '--', path]);
+    if (tracked.length) await git(['restore', '--', ...tracked]);
+    if (untracked.length) await git(['clean', '-fd', '--', ...untracked]);
   });
 }
 

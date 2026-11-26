@@ -45,7 +45,7 @@ async function loadPrefs(scope) {
   return { name, email, signkey, gpgsign: gpgsign === 'true', format: format || 'openpgp', effective };
 }
 
-const PREF_TABS = [['general', 'General'], ['appearance', 'Appearance'], ['commit', 'Commit'], ['git', 'Git'], ['integration', 'Integration'], ['updates', 'Updates']];
+const PREF_TABS = [['general', 'General'], ['sidebar', 'Sidebar'], ['appearance', 'Appearance'], ['commit', 'Commit'], ['git', 'Git'], ['integration', 'Integration'], ['updates', 'Updates']];
 let prefTab = 'general';
 
 async function prefsDialog(tab) {
@@ -68,6 +68,12 @@ async function prefsDialog(tab) {
     gpgsign: $('#pf-sign').checked, format: $('#pf-fmt').value,
   });
   let go = gitOpts();
+  let sbl = sbLayout();
+  const sbRows = () => sbl.order.map((id, k) => {
+    const label = SB_SECTIONS.find(([x]) => x === id)[1];
+    return `<div class="sbl-row" draggable="true" data-id="${id}"><span class="sbl-grip" title="Drag to reorder">⠿</span><label><input type="checkbox" data-sbvis="${id}"${sbl.hidden.includes(id) ? '' : ' checked'}><span>${esc(label)}</span></label>
+      <span class="sbl-btns"><button data-sbmove="${id}" data-dir="-1" title="Move up"${k === 0 ? ' disabled' : ''}>▲</button><button data-sbmove="${id}" data-dir="1" title="Move down"${k === sbl.order.length - 1 ? ' disabled' : ''}>▼</button></span></div>`;
+  }).join('');
   const draw = () => {
     const d = p;
     const known = HELPERS.some(([v]) => v === helper);
@@ -93,6 +99,12 @@ async function prefsDialog(tab) {
         <label class="cl-opt"><input type="checkbox" id="go-compactLabels" ${go.compactLabels ? 'checked' : ''}> Compact branch labels</label>
         <p class="hint">Automatic fetch runs every 10 minutes for the open repository and never asks for a password.</p>
       </div>
+      </div>
+      <div ${panel('sidebar')}>
+      <div class="pf-sec"><div class="sb-head">Sidebar sections</div>
+        <div id="pf-sbl" class="sbl-list">${sbRows()}</div>
+        <div class="row"><button id="pf-sbl-reset">Restore default order</button></div>
+        <p class="hint">Choose which sections the left sidebar shows and in what order. Local Changes and All Commits stay at the top.</p></div>
       </div>
       <div ${panel('appearance')}>
       <p class="hint">Appearance changes apply immediately, also without Save.</p>
@@ -169,6 +181,41 @@ async function prefsDialog(tab) {
   });
   draw();
   wireAp();
+  // Rows of the sidebar list can also be dragged to a new place.
+  {
+    const list = $('#pf-sbl');
+    let dragId = null;
+    const clearMarks = () => list.querySelectorAll('.sbl-row').forEach((r) => r.classList.remove('dragging', 'drop-before', 'drop-after'));
+    const isAfter = (e, r) => e.clientY > r.getBoundingClientRect().top + r.offsetHeight / 2;
+    list.addEventListener('dragstart', (e) => {
+      const r = e.target.closest('.sbl-row');
+      if (!r) return;
+      dragId = r.dataset.id;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragId);
+      r.classList.add('dragging');
+    });
+    list.addEventListener('dragover', (e) => {
+      if (!dragId) return;
+      e.preventDefault();
+      const r = e.target.closest('.sbl-row');
+      list.querySelectorAll('.drop-before, .drop-after').forEach((x) => x.classList.remove('drop-before', 'drop-after'));
+      if (r && r.dataset.id !== dragId) r.classList.add(isAfter(e, r) ? 'drop-after' : 'drop-before');
+    });
+    list.addEventListener('drop', (e) => {
+      if (!dragId) return;
+      e.preventDefault();
+      const r = e.target.closest('.sbl-row');
+      if (r && r.dataset.id !== dragId) {
+        const order = sbl.order.filter((x) => x !== dragId);
+        order.splice(order.indexOf(r.dataset.id) + (isAfter(e, r) ? 1 : 0), 0, dragId);
+        sbl.order = order;
+        list.innerHTML = sbRows();
+      }
+      dragId = null;
+    });
+    list.addEventListener('dragend', () => { dragId = null; clearMarks(); });
+  }
   drawAvatar();
   const focusTab = () => { const f = ov.querySelector('.pf-panel:not(.hidden) input[type=text], .pf-panel:not(.hidden) select'); (f || ov.querySelector('.pf-tab.on')).focus(); };
   focusTab();
@@ -195,6 +242,7 @@ async function prefsDialog(tab) {
       const upd = { auto: $('#pf-upd-auto').checked };
       try { localStorage.setItem('updateOpts', JSON.stringify(upd)); } catch { /* ignore */ }
       await window.api.setUpdateOpts(upd);
+      setSbLayout(sbl);
       setGitOpts({
         sourceDir: $('#go-sourceDir').value.trim(),
         ...Object.fromEntries(['autoFetch', 'fetchTags', 'tabDirty', 'submodulesOnCheckout', 'pushOnCommit', 'compactLabels'].map((k) => [k, $('#go-' + k).checked])),
@@ -210,6 +258,8 @@ async function prefsDialog(tab) {
     setStatus('Preferences saved');
   };
   ov.onchange = async (e) => {
+    const vis = e.target.closest && e.target.closest('[data-sbvis]');
+    if (vis) { sbl.hidden = sbl.hidden.filter((x) => x !== vis.dataset.sbvis); if (!vis.checked) sbl.hidden.push(vis.dataset.sbvis); return; }
     if (e.target.id === 'pf-lang') return kgSetLanguage(e.target.value);
     if (e.target.id !== 'pf-scope') return;
     const keep = $('#pf-helper').value, gcm = $('#pf-gcm').checked;
@@ -223,6 +273,13 @@ async function prefsDialog(tab) {
     $('#pf-gcm').checked = gcm;
   };
   ov.onclick = async (e) => {
+    const mv = e.target.closest('[data-sbmove]');
+    if (mv) {
+      const k = sbl.order.indexOf(mv.dataset.sbmove), to = k + +mv.dataset.dir;
+      if (to >= 0 && to < sbl.order.length) { [sbl.order[k], sbl.order[to]] = [sbl.order[to], sbl.order[k]]; $('#pf-sbl').innerHTML = sbRows(); }
+      return;
+    }
+    if (e.target.closest('#pf-sbl-reset')) { sbl = { order: SB_SECTIONS.map(([id]) => id), hidden: [...SB_DEFAULT_HIDDEN] }; $('#pf-sbl').innerHTML = sbRows(); return; }
     if (e.target.closest('#go-sourceDir-pick')) {
       const d = await window.api.pickFolder($('#go-sourceDir').value.trim());
       if (d) $('#go-sourceDir').value = d;
