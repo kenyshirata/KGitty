@@ -340,11 +340,11 @@ function graphSvg(g, wc) {
 function renderSidebar() {
   const sb = $('#sidebar');
   const n = state.status.length;
-  const sect = (title, items, tool) => items.length ? `<div class="sb-head">${title}${tool ? '<button class="sb-tool" data-act="bulk-branches" title="Delete multiple branches">🗑</button>' : ''}</div>${items.join('')}` : '';
+  const sect = (title, items) => items.length ? `<div class="sb-head">${title}</div>${items.join('')}` : '';
   sb.innerHTML =
     `<div class="sb-item wc ${state.sel.type === 'wc' ? 'active' : ''}" data-act="wc">Local Changes${n ? `<span class="count">${n}</span>` : ''}</div>` +
     `<div class="sb-item wc ${['commit', 'log', 'stash'].includes(state.sel.type) ? 'active' : ''}" data-act="log">All Commits</div>` +
-    sect('Branches', refTree('branch', state.branches, (b) => b.track === '[gone]', (b, label, d) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${branchIcon(b.track === '[gone]')}${esc(label)}<span class="ab">${esc(trackText(b.track))}</span></div>`), true) +
+    sect('Branches', refTree('branch', state.branches, (b) => b.track === '[gone]', (b, label, d) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${branchIcon(b.track === '[gone]')}${esc(label)}<span class="ab">${esc(trackText(b.track))}</span></div>`)) +
     sect('Remotes', refTree('remote', state.remotes, null, (b, label, d) => `<div class="sb-item" data-kind="remote" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(BRANCH_SVG)}${esc(label)}</div>`)) +
     sect('Tags', refTree('tag', state.tags, null, (b, label, d) => `<div class="sb-item" data-kind="tag" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(TAG_SVG)}${esc(label)}</div>`)) +
     sect('Stashes', state.stashes.map((b) => `<div class="sb-item ${state.sel.type === 'stash' && state.sel.ref === b.ref ? 'active' : ''}" data-kind="stash" data-name="${esc(b.ref)}" title="${esc(b.msg)}">${icon(STASH_SVG)}${esc(b.msg)}</div>`)) +
@@ -352,7 +352,38 @@ function renderSidebar() {
     worktreeSection() +
     lfsSection() +
     flowSection();
+  applySbSections();
   applySbPicked();
+}
+
+// Every section of the sidebar (Branches, Remotes, Tags, Stashes, Submodules...) folds away under its heading;
+// the folded ones are remembered across restarts by their English title.
+const sbFolded = (() => {
+  try { return new Set(JSON.parse(localStorage.getItem('sbFolded') || '[]')); } catch { return new Set(); }
+})();
+function applySbSections() {
+  let folded = false;
+  for (const el of [...$('#sidebar').children]) {
+    if (el.classList.contains('sb-head')) {
+      const t = [...el.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
+      const title = t ? t.textContent.trim() : '';
+      if (!title) { folded = false; continue; }
+      folded = sbFolded.has(title);
+      el.dataset.sect = title;
+      el.classList.add('sb-sect');
+      const w = document.createElement('span');
+      w.className = 'sb-title';
+      w.innerHTML = `<span class="sb-chev${folded ? '' : ' open'}">${CHEVRON_SVG}</span>`;
+      w.append(t.textContent);
+      el.replaceChild(w, t);
+    } else if (folded) el.classList.add('sb-hidden');
+    else if (el.dataset.act === 'wc' || el.dataset.act === 'log') folded = false;
+  }
+}
+function toggleSbSection(title) {
+  if (!sbFolded.delete(title)) sbFolded.add(title);
+  try { localStorage.setItem('sbFolded', JSON.stringify([...sbFolded])); } catch { /* ignore */ }
+  renderSidebar();
 }
 
 const SVG = (body) => `<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
@@ -1089,7 +1120,8 @@ $('#tb-reflog').onclick = () => showReflog();
 $('#search').oninput = (e) => { state.filter = e.target.value.trim(); renderList(); };
 
 $('#sidebar').onclick = (e) => {
-  if (e.target.closest('[data-act=bulk-branches]')) return deleteBranchesDialog();
+  const sh = e.target.closest('.sb-sect');
+  if (sh && !e.target.closest('.sb-tool')) return toggleSbSection(sh.dataset.sect);
   if (e.target.closest('[data-act=add-submodule]')) return addSubmodule();
   if (e.target.closest('[data-act=add-worktree]')) return addWorktreeDialog();
   if (e.target.closest('[data-act=flow-init]')) return flowInit();

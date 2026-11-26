@@ -659,3 +659,9 @@ body { display: flex; flex-direction: column; }
 .tbp-ico { display: flex; }
 .tbp-ico svg { display: block; width: 18px; height: 18px; }
 .tbp-ico .tb-glyph { width: 18px; height: 18px; font-size: 15px; }
+
+/* ---------- collapsible sidebar sections ---------- */
+.sb-sect { cursor: pointer; }
+.sb-sect:hover { color: var(--fg); }
+.sb-title { display: flex; align-items: center; gap: 5px; }
+.sb-hidden { display: none !important; }
