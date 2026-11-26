@@ -2,7 +2,35 @@
 
 A desktop Git client built with Electron, with an interface modelled on [Fork](https://git-fork.com). It runs the `git` you already have installed, so it behaves exactly like the command line — it just makes the history, the staging area and the less friendly commands easy to see and use.
 
-> Status: personal project, version 0.1.0. Developed and tested on Windows; the code has no Windows-only parts except the installer configuration.
+> Status: personal project. Developed and tested on Windows; the code has no Windows-only parts except the installer configuration.
+
+## Screenshots
+
+The repository in these pictures is a made-up demo (fake people and code), not a real project.
+
+**History** — the commit graph with branch and tag badges, a sidebar for branches, tags and submodules, and the details of the selected commit below.
+
+![The commit graph, the sidebar and the details of a merge commit](docs/screenshots/history.png)
+
+**Changes of a commit** — the files a commit touched, as a tree or a flat list, with a unified or side-by-side diff, syntax highlighting and word-level highlighting.
+
+![The files and the diff of a commit](docs/screenshots/commit-diff.png)
+
+**Local changes** — staged and unstaged files on their own screen, with stage, discard and line-by-line staging buttons on every hunk. Pick several files with Ctrl, Shift or Ctrl+A and stage or discard them together.
+
+![Unstaged and staged files, a diff with stage and discard buttons, and the commit box](docs/screenshots/local-changes.png)
+
+**Merge conflicts** — both sides of each conflict side by side, a checkbox on every line, the words that differ highlighted, and an editable result box. Take one side, both, or only the lines you tick, then adjust the text by hand.
+
+![The conflict resolver with ticked lines and the result box](docs/screenshots/conflicts.png)
+
+**Search** — filter the commit list by message, author, path or diff content, in the whole repository or only the current branch.
+
+![The commit search panel with its options](docs/screenshots/search.png)
+
+**Themes** — ten themes, from system light and dark to Dracula, Nord, Solarized and a high-contrast one.
+
+![The light theme](docs/screenshots/light-theme.png)
 
 ## Requirements
 
@@ -46,14 +74,16 @@ Set `KGITTY_UPDATE_URL` to a folder that serves `latest.yml` to test updates aga
 ## Features
 
 **History**
-- Commit graph with lanes, branch/tag badges, author avatars (initials, optional Gravatar) and a filter box
+- Commit graph with lanes, branch/tag badges, author avatars (initials, optional Gravatar) and no limit on the number of commits
+- Commit search by message, author, path or diff content, in the repository or the current branch
+- Double-click a commit, or a branch in the sidebar, to check it out
 - Commit details with a changed-file list, as a tree or a flat list, plus a file-tree view of the commit
 - File history (`--follow`) and line-by-line blame
 - Reflog panel
 - Tabs for several repositories, and a repository manager with groups, folder scanning and live branch/status info
 
 **Working copy**
-- Staged and unstaged areas on their own screen, with stage/unstage/discard by file, hunk or single line
+- Staged and unstaged areas on their own screen, with stage/unstage/discard by file, hunk or single line; select several files with Ctrl, Shift or Ctrl+A, and press Delete to discard (after a confirmation)
 - Commit message split into subject and description, amend, and `Ctrl+Enter` to commit
 - Unified and side-by-side diffs with syntax highlighting and word-level change highlighting
 - Image diffs: side by side, swipe, onion skin and difference
@@ -61,13 +91,14 @@ Set `KGITTY_UPDATE_URL` to a folder that serves `latest.yml` to test updates aga
 
 **Branches and history editing**
 - Checkout, merge, rebase onto a branch, rename, delete (also several at once, with protected branches)
+- Lean branching from the Branch button: start a branch on `main`, sync it by rebasing, finish it by merging
 - Interactive rebase (pick, reword, edit, squash, fixup, drop, reorder) with squash-message editing
 - Push, force push with lease, stash dialog, tags
 - Undo and redo for destructive operations
 - Git Flow (feature, release and hotfix) implemented with plain git, using the same `gitflow.*` configuration as git-flow-avh
 
 **Conflicts**
-- Merge-conflict resolver with syntax highlighting, per-block choices (ours, theirs, both, custom edit)
+- Merge-conflict resolver with syntax highlighting, both sides shown for every conflict, a checkbox on each line, an editable result, word-level highlighting, next/previous conflict (`Alt+Up` / `Alt+Down`), "ours/theirs for all pending" and automatic settling of trivial conflicts
 - Hand conflicted files to an external merge tool (VS Code, Beyond Compare, KDiff3, Meld, P4Merge, WinMerge or a custom command)
 
 **Everything else**
@@ -75,6 +106,10 @@ Set `KGITTY_UPDATE_URL` to a folder that serves `latest.yml` to test updates aga
 - Sign-in dialog for HTTPS and SSH passwords, tokens and passphrases (stored by your Git credential helper)
 - Preferences: identity (global or per repository), commit signing, credential helper, merge tool
 - Appearance settings: ten themes (system, light, dark, Dracula, Nord, One Dark, Monokai, Solarized Dark/Light, high contrast), accent colour, interface zoom, code font and size with ligatures, row density, and configurable commit-list columns and date format
+- Tabs you can drag to reorder, and a tab menu to close, rename, colour, open in the console or file explorer, or move to another workspace
+- Workspaces: named sets of open tabs
+- A sidebar whose sections (branches, remotes, tags, stashes, submodules, worktrees, Git LFS, Git Flow) you can show, hide and reorder in Preferences, with a filter box for branches
+- Several toolbar icon packs (Lines, GitHub Octicons, Phosphor, Material, Tabler, Solid, Colourful and Classic)
 - Resizable panels that remember their size
 - Interface in 9 languages: English, Português (Brasil), Español, Français, Deutsch, Русский, 简体中文, 日本語 and 한국어 — automatic by default, changeable in Preferences
 - Automatic updates from GitHub Releases: a bar offers the new version, downloads it on request and installs it on restart
