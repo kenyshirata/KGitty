@@ -43,7 +43,7 @@ function appearanceHtml() {
     <div class="ap-sec"><div class="sb-head">Commit list</div>
       <div class="ap-grid">
         <label>Columns</label><div class="ap-cols" data-ap="cols"></div>
-        <label>Date format</label><select id="ap-datefmt"><option value="absolute" ${ap0.dateFmt === 'absolute' ? 'selected' : ''}>Absolute (06 Oct 2026)</option><option value="relative" ${ap0.dateFmt === 'relative' ? 'selected' : ''}>Relative (3 days ago)</option></select>
+        <label>Date format</label><select id="ap-datefmt"><option value="absolute" ${ap0.dateFmt === 'absolute' ? 'selected' : ''}>Absolute (06 Oct 2026 14:30)</option><option value="relative" ${ap0.dateFmt === 'relative' ? 'selected' : ''}>Relative (3 days ago)</option></select>
         <label>Show</label><span><label class="cl-opt" style="display:inline;margin-right:16px"><input type="checkbox" id="ap-refs" ${ap0.showRefs ? 'checked' : ''}> Branch and tag badges</label><label class="cl-opt" style="display:inline;margin-right:16px"><input type="checkbox" id="ap-avatars" ${avOpts.show ? 'checked' : ''}> Author avatars</label><label class="cl-opt" style="display:inline" title="Sends a SHA-256 hash of each author's e-mail address to gravatar.com"><input type="checkbox" id="ap-gravatar" ${avOpts.gravatar ? 'checked' : ''}> Photos from Gravatar</label></span>
       </div>
     </div>

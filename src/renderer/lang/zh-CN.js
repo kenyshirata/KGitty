@@ -160,7 +160,7 @@ kgLang("zh-CN", "简体中文", {
   "Commit list": "提交列表",
   "Columns": "列",
   "Date format": "日期格式",
-  "Absolute (06 Oct 2026)": "绝对日期（2026年10月6日）",
+  "Absolute (06 Oct 2026 14:30)": "绝对日期（06 10月 2026 14:30）",
   "Relative (3 days ago)": "相对时间（3 天前）",
   "Show": "显示",
   "Branch and tag badges": "分支和标签徽章",

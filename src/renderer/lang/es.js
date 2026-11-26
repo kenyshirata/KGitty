@@ -160,7 +160,7 @@ kgLang("es", "Español", {
   "Commit list": "Lista de commits",
   "Columns": "Columnas",
   "Date format": "Formato de fecha",
-  "Absolute (06 Oct 2026)": "Absoluta (06 oct 2026)",
+  "Absolute (06 Oct 2026 14:30)": "Absoluta (06 oct 2026 14:30)",
   "Relative (3 days ago)": "Relativa (hace 3 días)",
   "Show": "Mostrar",
   "Branch and tag badges": "Etiquetas de rama y tag",

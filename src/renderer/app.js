@@ -363,7 +363,7 @@ function renderSidebar() {
   const n = state.status.length;
   const sect = (title, items) => items.length ? `<div class="sb-head">${title}</div>${items.join('')}` : '';
   const parts = {
-    branches: () => sect('Branches', refTree('branch', sbMatch(state.branches), (b) => b.track === '[gone]', (b, label, d) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${branchIcon(b.track === '[gone]')}${esc(label)}<span class="ab">${esc(trackText(b.track))}</span></div>`)),
+    branches: () => sect('Branches', refTree('branch', sbMatch(state.branches), (b) => b.track === '[gone]', (b, label, d) => `<div class="sb-item ${b.current ? 'current' : ''}" data-kind="branch" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${trackText(b.track) ? `<span class="ab">${esc(trackText(b.track))}</span>` : ''}${branchIcon(b.track === '[gone]')}${esc(label)}</div>`)),
     remotes: () => sect('Remotes', refTree('remote', sbMatch(state.remotes), null, (b, label, d) => `<div class="sb-item" data-kind="remote" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(BRANCH_SVG)}${esc(label)}</div>`)),
     tags: () => sect('Tags', refTree('tag', sbMatch(state.tags), null, (b, label, d) => `<div class="sb-item" data-kind="tag" data-name="${esc(b.name)}" title="${esc(b.name)}"${indent(d)}>${icon(TAG_SVG)}${esc(label)}</div>`)),
     stashes: () => sect('Stashes', sbMatch(state.stashes, 'msg').map((b) => `<div class="sb-item ${state.sel.type === 'stash' && state.sel.ref === b.ref ? 'active' : ''}" data-kind="stash" data-name="${esc(b.ref)}" title="${esc(b.msg)}">${icon(STASH_SVG)}${esc(b.msg)}</div>`)),
@@ -605,13 +605,21 @@ function updateSyncBadges() {
 function trackText(t) {
   if (!t) return '';
   // A branch whose remote is gone shows the alert badge on its icon instead of a mark here.
-  return t.replace(/ahead (\d+)/, '↑$1').replace(/behind (\d+)/, '↓$1').replace(/[\[\],]/g, '').replace('gone', '').trim();
+  return t.replace(/ahead (\d+)/, '$1↑').replace(/behind (\d+)/, '$1↓').replace(/[\[\],]/g, '').replace('gone', '').trim();
 }
 
+// "26 nov 2026": day, month cut to three letters (in the interface language) and year.
 function fmtDate(ms) {
   const d = new Date(ms);
-  return d.toLocaleDateString(kgLocale(), { day: '2-digit', month: 'short', year: 'numeric' });
+  const month = d.toLocaleDateString(kgLocale(), { month: 'short' }).replace(/\./g, '').trim().slice(0, 3);
+  return `${String(d.getDate()).padStart(2, '0')} ${month} ${d.getFullYear()}`;
 }
+
+// "26 nov 2026 10:53": the same with the time of day (24 hours).
+const fmtDateTime = (ms) => {
+  const d = new Date(ms);
+  return `${fmtDate(ms)} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
 
 // The remote branch a local branch is published as: its upstream if that still exists, otherwise a remote
 // branch with the same name. Null when the branch exists only locally.
@@ -642,7 +650,7 @@ function badges(c) {
 // Relative dates ("3 days ago") for the log; the exact date and time stay available as a tooltip.
 let relFmt = null, relLocale = '';
 function fmtCommitDate(ms) {
-  if (kgGetAppearance().dateFmt !== 'relative') return fmtDate(ms);
+  if (kgGetAppearance().dateFmt !== 'relative') return fmtDateTime(ms);
   if (relLocale !== kgLocale()) { relLocale = kgLocale(); relFmt = new Intl.RelativeTimeFormat(relLocale, { numeric: 'auto' }); }
   const s = Math.round((ms - Date.now()) / 1000);
   for (const [unit, secs] of [['year', 31536000], ['month', 2592000], ['week', 604800], ['day', 86400], ['hour', 3600], ['minute', 60]]) {

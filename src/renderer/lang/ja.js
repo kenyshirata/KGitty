@@ -160,7 +160,7 @@ kgLang("ja", "日本語", {
   "Commit list": "コミット一覧",
   "Columns": "列",
   "Date format": "日付の形式",
-  "Absolute (06 Oct 2026)": "絶対 (2026年10月6日)",
+  "Absolute (06 Oct 2026 14:30)": "絶対 (06 10月 2026 14:30)",
   "Relative (3 days ago)": "相対 (3 日前)",
   "Show": "表示",
   "Branch and tag badges": "ブランチとタグのバッジ",

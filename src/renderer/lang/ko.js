@@ -160,7 +160,7 @@ kgLang("ko", "한국어", {
   "Commit list": "커밋 목록",
   "Columns": "열",
   "Date format": "날짜 형식",
-  "Absolute (06 Oct 2026)": "절대 (2026년 10월 6일)",
+  "Absolute (06 Oct 2026 14:30)": "절대 (06 10월 2026 14:30)",
   "Relative (3 days ago)": "상대 (3일 전)",
   "Show": "표시",
   "Branch and tag badges": "브랜치 및 태그 배지",
