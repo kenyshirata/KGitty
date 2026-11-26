@@ -19,6 +19,9 @@ function createWindow() {
     // Packaged builds take the icon embedded in the .exe; running from source uses the one in build/.
     ...(fs.existsSync(DEV_ICON) ? { icon: DEV_ICON } : {}),
     autoHideMenuBar: true,
+    // The menus and the title live in the page's own top bar; Windows draws only the window buttons over it.
+    titleBarStyle: 'hidden',
+    titleBarOverlay: { color: nativeTheme.shouldUseDarkColors ? '#1e1f22' : '#ffffff', symbolColor: nativeTheme.shouldUseDarkColors ? '#dddddd' : '#222222', height: 31 },
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -235,6 +238,11 @@ ipcMain.handle('write-file', (_e, repo, rel, text) => {
 });
 
 ipcMain.handle('set-zoom', (e, f) => { e.sender.setZoomFactor(Math.min(2, Math.max(0.6, +f || 1))); });
+
+ipcMain.handle('set-titlebar-colors', (e, color, symbolColor) => {
+  const w = BrowserWindow.fromWebContents(e.sender);
+  if (w && typeof w.setTitleBarOverlay === 'function' && /^#[0-9a-f]{3,8}$/i.test(color) && /^#[0-9a-f]{3,8}$/i.test(symbolColor)) w.setTitleBarOverlay({ color, symbolColor, height: 31 });
+});
 
 ipcMain.handle('set-theme-source', (_e, pref) => {
   if (['system', 'light', 'dark'].includes(pref)) nativeTheme.themeSource = pref;

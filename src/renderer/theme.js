@@ -68,6 +68,7 @@
     var dark = document.getElementById('hl-dark'), light = document.getElementById('hl-light');
     if (dark && light) { dark.disabled = base !== 'dark'; light.disabled = base !== 'light'; }
     if (window.api && window.api.setThemeSource) window.api.setThemeSource(pal ? base : pref);
+    setTimeout(function () { if (window.kgSyncTitleBar) window.kgSyncTitleBar(); }, 0);
   }
 
   window.getThemePref = stored;

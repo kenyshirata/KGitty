@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld('api', {
   installUpdate: () => ipcRenderer.invoke('update-install'),
   setZoom: (f) => ipcRenderer.invoke('set-zoom', f),
   setThemeSource: (pref) => ipcRenderer.invoke('set-theme-source', pref),
+  setTitleBarColors: (color, symbolColor) => ipcRenderer.invoke('set-titlebar-colors', color, symbolColor),
   reveal: (p) => ipcRenderer.invoke('reveal', p),
   openWithOptions: (repo) => ipcRenderer.invoke('open-with-options', repo),
   openConsole: (repo) => ipcRenderer.invoke('open-console', repo),

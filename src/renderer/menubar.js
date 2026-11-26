@@ -240,3 +240,14 @@ window.addEventListener('blur', closeMenu);
 window.addEventListener('resize', closeMenu);
 
 renderMenubar();
+
+// The window title shown in the middle of the top bar, and the colours of the window buttons Windows draws over it.
+const titleText = document.getElementById('tb-title-text');
+const syncTitle = () => { titleText.textContent = document.title || 'KGitty'; };
+new MutationObserver(syncTitle).observe(document.querySelector('title'), { childList: true });
+syncTitle();
+window.kgSyncTitleBar = () => {
+  const cs = getComputedStyle(document.documentElement);
+  if (window.api && window.api.setTitleBarColors) window.api.setTitleBarColors(cs.getPropertyValue('--bg').trim(), cs.getPropertyValue('--fg').trim());
+};
+window.kgSyncTitleBar();

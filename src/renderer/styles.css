@@ -509,7 +509,11 @@ body.resizing, body.resizing * { user-select: none !important; }
 /* ---------- menu bar ---------- */
 body { display: flex; flex-direction: column; }
 #welcome, #app { height: auto; flex: 1; min-height: 0; }
-.menubar { display: flex; align-items: stretch; height: 26px; padding: 0 4px; background: var(--bg); border-bottom: 1px solid var(--border); flex-shrink: 0; user-select: none; -webkit-app-region: no-drag; }
+.titlebar { position: relative; display: flex; align-items: stretch; height: 32px; padding-right: calc(100vw - env(titlebar-area-width, 100vw)); background: var(--bg); border-bottom: 1px solid var(--border); flex-shrink: 0; user-select: none; -webkit-app-region: drag; }
+.menubar { display: flex; align-items: stretch; padding: 0 4px; -webkit-app-region: no-drag; }
+.tb-title { position: absolute; left: 50%; top: 0; bottom: 0; transform: translateX(-50%); display: flex; align-items: center; gap: 7px; max-width: 40%; color: var(--dim); pointer-events: none; }
+.tb-title img { flex-shrink: 0; }
+.tb-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mb-top { display: flex; align-items: center; padding: 0 9px; cursor: default; color: var(--fg); border-radius: 4px; margin: 2px 0; }
 .mb-top:hover, .mb-top.open { background: var(--bg3); }
 .mb-drop { position: fixed; z-index: 70; min-width: 260px; padding: 5px 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 8px 28px var(--shadow); user-select: none; }
