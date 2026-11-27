@@ -39,8 +39,10 @@ jobs:
           if ($files.Count -ne 3) { throw "Expected the installer, its blockmap and latest.yml, found: $($files -join ', ')" }
           Write-Host "Files: $($files -join ', ')"
           $pre = @(); if ($TAG -match '-') { $pre = @('--prerelease') }
-          $names = @(gh release view $TAG --json assets --jq '.assets[].name' 2>$null)
-          if ($LASTEXITCODE -eq 0) {
+          # Decide by what gh prints (the tag name) rather than by its exit code.
+          $found = "$(gh release view $TAG --json tagName --jq .tagName 2>$null)".Trim()
+          Write-Host "Existing release: '$found'"
+          if ($found -eq $TAG) {
             # The release exists already (re-run): replace its files.
             Write-Host 'Release exists, uploading the files'
             gh release upload $TAG @files --clobber
