@@ -2,6 +2,7 @@ name: Release
 
 # Pushing a tag such as v0.2.0 builds the Windows installer and publishes it as a GitHub release.
 # The app checks that release (latest.yml) to offer automatic updates.
+# A tag with a suffix (v0.3.0-rc.1) is published as a pre-release, which the updater ignores.
 on:
   push:
     tags:
@@ -20,7 +21,29 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Build and publish
-        run: npx electron-builder --win nsis --publish always
+
+      # Only build here. electron-builder's own publisher uploads the installer and its metadata in parallel and the
+      # parallel uploads race to create the release, which once left it without the installer and latest.yml.
+      - name: Build the installer
+        run: npx electron-builder --win nsis --publish never
+
+      - name: Publish the release
+        shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          $files = @(Get-ChildItem dist -File | Where-Object { $_.Name -match '^KGitty-Setup-.*\.exe(\.blockmap)?$' -or $_.Name -eq 'latest.yml' } | ForEach-Object { $_.FullName })
+          if ($files.Count -ne 3) { throw "Expected the installer, its blockmap and latest.yml, found: $($files -join ', ')" }
+          $pre = @(); if ($TAG -match '-') { $pre = @('--prerelease') }
+          gh release view $TAG *> $null
+          if ($LASTEXITCODE -eq 0) {
+            # The release exists already (re-run): replace its files.
+            gh release upload $TAG @files --clobber
+          } else {
+            gh release create $TAG @files --title $TAG --generate-notes @pre
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'Publishing the release failed' }
+          # The release must carry all three files before the job counts as done.
+          $names = (gh release view $TAG --json assets --jq '.assets[].name') -join ' '
+          foreach ($f in $files) { if ($names -notlike "*$([IO.Path]::GetFileName($f))*") { throw "Missing from the release: $f" } }
