@@ -35,6 +35,9 @@ jobs:
         run: |
           # gh reports "not found" on stderr; do not let that stop the script (Actions runs pwsh with errors fatal).
           $ErrorActionPreference = 'Continue'
+          # The tag arrives as an environment variable; in PowerShell that is $env:TAG, a plain $TAG would be empty.
+          $TAG = $env:TAG
+          if (-not $TAG) { throw 'No tag name to publish' }
           $files = @(Get-ChildItem dist -File | Where-Object { $_.Name -match '^KGitty-Setup-.*\.exe(\.blockmap)?$' -or $_.Name -eq 'latest.yml' } | ForEach-Object { $_.FullName })
           if ($files.Count -ne 3) { throw "Expected the installer, its blockmap and latest.yml, found: $($files -join ', ')" }
           Write-Host "Files: $($files -join ', ')"
