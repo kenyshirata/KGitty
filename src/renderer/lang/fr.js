@@ -861,4 +861,11 @@ kgLang("fr", "Français", {
   "More branching actions": "Autres actions sur les branches",
   "Already on {0}": "Déjà sur {0}",
   "Check out {0} with a detached HEAD?": "Basculer sur {0} avec un HEAD détaché ?",
+  "Recent Stashes": "Stashes récents",
+  "Save Snapshot…": "Enregistrer un instantané…",
+  "Save snapshot": "Enregistrer un instantané",
+  "Stores the current changes to tracked files as a stash and leaves them in the working copy.": "Enregistre les modifications actuelles des fichiers suivis comme un stash et les laisse dans la copie de travail.",
+  "No stashes": "Aucun stash",
+  "There are no local changes to save.": "Aucune modification locale à enregistrer.",
+  "Recent stashes and snapshots": "Stashes récents et instantanés",
 });

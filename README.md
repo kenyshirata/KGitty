@@ -36,7 +36,7 @@ The repository in these pictures is a made-up demo (fake people and code), not a
 
 - [Git](https://git-scm.com) on your `PATH`
 - [Git LFS](https://git-lfs.com) (optional, only for the LFS features)
-- [Node.js](https://nodejs.org) 18 or newer, to run from source
+- [Node.js](https://nodejs.org) 22.12 or newer, to run from source
 
 ## Running from source
 

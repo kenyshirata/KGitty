@@ -861,4 +861,11 @@ kgLang("ko", "한국어", {
   "More branching actions": "더 많은 브랜치 작업",
   "Already on {0}": "이미 {0}입니다",
   "Check out {0} with a detached HEAD?": "{0}을(를) detached HEAD로 체크아웃할까요?",
+  "Recent Stashes": "최근 스태시",
+  "Save Snapshot…": "스냅샷 저장…",
+  "Save snapshot": "스냅샷 저장",
+  "Stores the current changes to tracked files as a stash and leaves them in the working copy.": "추적 중인 파일의 현재 변경 사항을 스태시로 저장하고 작업 복사본에는 그대로 둡니다.",
+  "No stashes": "스태시 없음",
+  "There are no local changes to save.": "저장할 로컬 변경 사항이 없습니다.",
+  "Recent stashes and snapshots": "최근 스태시와 스냅샷",
 });

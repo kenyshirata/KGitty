@@ -2,6 +2,9 @@
 // Git submodules: list them in the sidebar, add / initialise / update / sync / remove, and open one as its own tab.
 
 async function loadSubmodules() {
+  // `git submodule status` is slow on Windows (about a second), so skip it for repositories without a .gitmodules file.
+  const gm = await window.api.readFile(state.repo, '.gitmodules');
+  if (!gm.ok) { state.submodules = []; return; }
   const [status, cfg] = await Promise.all([
     window.api.git(state.repo, ['submodule', 'status']),
     window.api.git(state.repo, ['config', '-f', '.gitmodules', '--get-regexp', '^submodule\\..*\\.(path|url|branch)$']),

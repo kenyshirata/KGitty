@@ -861,4 +861,11 @@ kgLang("zh-CN", "简体中文", {
   "More branching actions": "更多分支操作",
   "Already on {0}": "已在 {0}",
   "Check out {0} with a detached HEAD?": "以分离 HEAD 方式检出 {0}？",
+  "Recent Stashes": "最近的储藏",
+  "Save Snapshot…": "保存快照…",
+  "Save snapshot": "保存快照",
+  "Stores the current changes to tracked files as a stash and leaves them in the working copy.": "将已跟踪文件的当前更改保存为储藏，并保留在工作副本中。",
+  "No stashes": "没有储藏",
+  "There are no local changes to save.": "没有可保存的本地更改。",
+  "Recent stashes and snapshots": "最近的储藏和快照",
 });

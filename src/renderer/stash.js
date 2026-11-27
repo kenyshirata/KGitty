@@ -140,3 +140,30 @@ $('#detail-left').addEventListener('click', (e) => {
   const b = e.target.closest('[data-st]');
   if (b && state.sel.type === 'stash') stashAction(b.dataset.st);
 });
+
+/* ---------- drop-down next to the Stash button ---------- */
+
+// Recent stashes (click one to look at it) and "Save Snapshot…": a stash that leaves the working copy untouched.
+async function saveSnapshot() {
+  if (state.busy || !state.repo) return;
+  const v = await modal({ title: 'Save snapshot', body: '<p class="hint">Stores the current changes to tracked files as a stash and leaves them in the working copy.</p>',
+    fields: [{ label: 'Message (optional)', value: '' }], buttons: [{ label: 'Cancel', value: false }, { label: 'Save snapshot', value: true, primary: true }] });
+  if (!v) return;
+  const msg = (v[0] || '').trim() || `Snapshot on ${state.head || 'HEAD'}`;
+  await run('Save snapshot', async () => {
+    const hash = (await git(['stash', 'create', msg])).trim();
+    if (!hash) throw new Error('There are no local changes to save.');
+    await git(['stash', 'store', '-m', msg, hash]);
+  });
+}
+
+function stashMenu() {
+  if (!state.repo) return;
+  const items = [{ header: true, label: 'Recent Stashes' }];
+  if (!state.stashes.length) items.push({ label: 'No stashes', off: true, run: () => {} });
+  for (const s of state.stashes.slice(0, 6)) items.push({ label: s.msg, raw: true, run: () => selectStash(s.ref) });
+  items.push('-', { label: 'Save Snapshot…', run: () => saveSnapshot() });
+  toolbarMenu($('#tb-stash-menu'), items);
+}
+
+$('#tb-stash-menu').onclick = () => stashMenu();

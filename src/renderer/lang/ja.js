@@ -861,4 +861,11 @@ kgLang("ja", "日本語", {
   "More branching actions": "その他のブランチ操作",
   "Already on {0}": "既に {0} です",
   "Check out {0} with a detached HEAD?": "{0} を detached HEAD でチェックアウトしますか？",
+  "Recent Stashes": "最近のスタッシュ",
+  "Save Snapshot…": "スナップショットを保存…",
+  "Save snapshot": "スナップショットを保存",
+  "Stores the current changes to tracked files as a stash and leaves them in the working copy.": "追跡中ファイルの現在の変更をスタッシュとして保存し、作業コピーにもそのまま残します。",
+  "No stashes": "スタッシュなし",
+  "There are no local changes to save.": "保存するローカルの変更がありません。",
+  "Recent stashes and snapshots": "最近のスタッシュとスナップショット",
 });

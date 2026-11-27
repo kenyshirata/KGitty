@@ -26,7 +26,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false,
+      sandbox: true,
     },
   }));
   // Keyboard shortcuts live in the renderer; the default menu would claim Ctrl+R / Ctrl+W for itself.
@@ -35,10 +35,14 @@ function createWindow() {
     const devtools = input.key === 'F12' || (input.control && input.shift && input.key.toLowerCase() === 'i');
     if (input.type === 'keyDown' && devtools) win.webContents.toggleDevTools();
   });
+  // Links open in the default browser, and only web addresses: never file:, custom protocols or anything else.
   win.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    if (/^https?:\/\//i.test(url)) shell.openExternal(url);
     return { action: 'deny' };
   });
+  // The window only ever shows index.html; any navigation away from it (a stray link, a redirect) is refused.
+  win.webContents.on('will-navigate', (e) => e.preventDefault());
+  win.webContents.on('will-redirect', (e) => e.preventDefault());
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
 }
 
@@ -181,11 +185,17 @@ ipcMain.handle('rebase-interactive', (_e, repo, base, items) => {
   });
 });
 
-// File access is limited to paths inside the given repository.
+// File access is limited to paths inside the given repository, also after symbolic links are followed: a link in
+// the repository that points elsewhere (for example at a file in the user's profile) is refused.
 function repoPath(repo, rel) {
   const root = path.resolve(repo);
   const p = path.resolve(root, rel);
   if (p !== root && !p.startsWith(root + path.sep)) throw new Error('Path outside repository');
+  const same = process.platform === 'win32' ? (a) => a.toLowerCase() : (a) => a;
+  const realRoot = fs.realpathSync(root);
+  // A file that does not exist yet (about to be written) is judged by its folder.
+  const real = fs.existsSync(p) ? fs.realpathSync(p) : path.join(fs.realpathSync(path.dirname(p)), path.basename(p));
+  if (same(real) !== same(realRoot) && !same(real).startsWith(same(realRoot) + path.sep)) throw new Error('Path outside repository');
   return p;
 }
 

@@ -861,4 +861,11 @@ kgLang("ru", "Русский", {
   "More branching actions": "Другие действия с ветками",
   "Already on {0}": "Уже на {0}",
   "Check out {0} with a detached HEAD?": "Перейти на {0} в состоянии detached HEAD?",
+  "Recent Stashes": "Последние stash",
+  "Save Snapshot…": "Сохранить снимок…",
+  "Save snapshot": "Сохранить снимок",
+  "Stores the current changes to tracked files as a stash and leaves them in the working copy.": "Сохраняет текущие изменения отслеживаемых файлов как stash и оставляет их в рабочей копии.",
+  "No stashes": "Нет stash",
+  "There are no local changes to save.": "Нет локальных изменений для сохранения.",
+  "Recent stashes and snapshots": "Последние stash и снимки",
 });
