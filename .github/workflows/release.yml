@@ -33,17 +33,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.ref_name }}
         run: |
+          # gh reports "not found" on stderr; do not let that stop the script (Actions runs pwsh with errors fatal).
+          $ErrorActionPreference = 'Continue'
           $files = @(Get-ChildItem dist -File | Where-Object { $_.Name -match '^KGitty-Setup-.*\.exe(\.blockmap)?$' -or $_.Name -eq 'latest.yml' } | ForEach-Object { $_.FullName })
           if ($files.Count -ne 3) { throw "Expected the installer, its blockmap and latest.yml, found: $($files -join ', ')" }
+          Write-Host "Files: $($files -join ', ')"
           $pre = @(); if ($TAG -match '-') { $pre = @('--prerelease') }
-          gh release view $TAG *> $null
+          $names = @(gh release view $TAG --json assets --jq '.assets[].name' 2>$null)
           if ($LASTEXITCODE -eq 0) {
             # The release exists already (re-run): replace its files.
+            Write-Host 'Release exists, uploading the files'
             gh release upload $TAG @files --clobber
           } else {
+            Write-Host 'Creating the release'
             gh release create $TAG @files --title $TAG --generate-notes @pre
           }
-          if ($LASTEXITCODE -ne 0) { throw 'Publishing the release failed' }
+          if ($LASTEXITCODE -ne 0) { throw "Publishing the release failed (exit $LASTEXITCODE)" }
           # The release must carry all three files before the job counts as done.
-          $names = (gh release view $TAG --json assets --jq '.assets[].name') -join ' '
-          foreach ($f in $files) { if ($names -notlike "*$([IO.Path]::GetFileName($f))*") { throw "Missing from the release: $f" } }
+          $names = @(gh release view $TAG --json assets --jq '.assets[].name')
+          Write-Host "Assets: $($names -join ', ')"
+          foreach ($f in $files) { if ($names -notcontains [IO.Path]::GetFileName($f)) { throw "Missing from the release: $f" } }
